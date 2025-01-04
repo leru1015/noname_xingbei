@@ -3270,12 +3270,12 @@ export class Library {
 				link_style2: {
 					name: "横置样式",
 					intro: "设置角色被横置时的样式",
-					init: "chain",
+					init: "rotate",
 					unfrequent: true,
 					item: {
-						chain: "铁索",
+						//chain: "铁索",
 						rotate: "横置",
-						mark: "标记",
+						//mark: "标记",
 					},
 					onclick(style) {
 						var list = [];
