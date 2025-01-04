@@ -3217,7 +3217,7 @@ export class Library {
 				},
 				skill_animation_type: {
 					name: "技能特效",
-					intro: "开启后觉醒技、限定技将显示全屏文字",
+					intro: "开启后发动部分技能将显示全屏文字",
 					init: "default",
 					unfrequent: true,
 					item: {
