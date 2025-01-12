@@ -44,22 +44,7 @@ window.noname_package = {
 		xianjian: "仙剑奇侠传",
 	},
 	card: {
-		standard: "标准",
-		extra: "军争",
-		guozhan: "国战",
-		yingbian: "应变篇",
-		yongjian: "用间篇",
-		sp: "忠胆英杰",
-		zhulu: "逐鹿天下",
-		yunchou: "运筹帷幄",
-		zhenfa: "阵法",
-		swd: "轩辕剑",
-		gujian: "古剑奇谭",
-		hearth: "炉石传说",
-		gwent: "昆特牌",
-		mtg: "万智牌",
-		xianxia: "线下卡牌",
-		huanlekapai: "欢乐卡牌",
+		
 	},
 	play: {
 		boss: "诸神降临",
