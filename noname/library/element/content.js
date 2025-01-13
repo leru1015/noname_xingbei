@@ -2752,14 +2752,14 @@ export const Content = {
 			}
 			player.storage[current].hp = player.hp;
 			player.storage[current].maxHp = player.maxHp;
-			player.storage[current].hujia = player.hujia;
+			player.storage[current].zhiLiao = player.zhiLiao;
 			player.storage[current].hs = player.getCards("h");
 			player.storage[current].es = player.getVCards("e");
 			player.lose(player.getCards("he"), ui.special)._triggered = null;
 
 			var cfg = player.storage[event.directresult];
 			player.storage.subplayer.name2 = event.directresult;
-			player.reinit(current, event.directresult, [cfg.hp, cfg.maxHp, cfg.hujia]);
+			player.reinit(current, event.directresult, [cfg.hp, cfg.maxHp, cfg.zhiLiao]);
 			if (player.name == event.directresult || player.name1 == event.directresult) {
 				const groupx = cfg.group || "qun";
 				player.group = groupx;
@@ -2779,12 +2779,12 @@ export const Content = {
 			} else {
 				player.storage[current].hp = player.hp;
 				player.storage[current].maxHp = player.maxHp;
-				player.storage[current].hujia = player.hujia;
+				player.storage[current].zhiLiao = player.zhiLiao;
 				player.storage[current].hs = player.getCards("h");
 				player.storage[current].es = player.getVCards("e");
 				player.lose(player.getCards("he"), ui.special)._triggered = null;
 			}
-			player.reinit(current, player.storage.subplayer.name, [player.storage.subplayer.hp, player.storage.subplayer.maxHp, player.storage.subplayer.hujia]);
+			player.reinit(current, player.storage.subplayer.name, [player.storage.subplayer.hp, player.storage.subplayer.maxHp, player.storage.subplayer.zhiLiao]);
 			if (goon) {
 				const groupx = player.storage.subplayer.group || "qun";
 				player.group = groupx;
@@ -2852,7 +2852,7 @@ export const Content = {
 				name2: event.directresult,
 				hp: player.hp,
 				maxHp: player.maxHp,
-				hujia: player.hujia,
+				zhiLiao: player.zhiLiao,
 				skills: event.list.slice(0),
 				hs: player.getCards("h"),
 				es: player.getVCards("e"),
@@ -2860,7 +2860,7 @@ export const Content = {
 				group: player.group,
 			};
 			player.removeSkill(event.list);
-			player.reinit(source, name, [cfg.hp, cfg.maxHp, cfg.hujia]);
+			player.reinit(source, name, [cfg.hp, cfg.maxHp, cfg.zhiLiao]);
 			if (player.name == name || player.name1 == name) {
 				const groupx = cfg.group || "qun";
 				player.group = groupx;
@@ -9043,29 +9043,26 @@ export const Content = {
 		}
 		event.trigger("changeHp");
 	},
-	changeHujia: function () {
+	changeZhiLiao: function () {
 		if (num > 0) {
-			game.log(player, "获得了" + get.cnNumber(num) + "点护甲");
+			game.log(player, "获得了" + get.cnNumber(num) + "点治疗");
 		} else if (num < 0) {
-			if (-num > player.hujia) {
-				num = -player.hujia;
+			if (-num > player.zhiLiao) {
+				num = -player.zhiLiao;
 				event.num = num;
 			}
 			switch (
 				event.type //log moved here
 			) {
 				case "damage":
-					game.log(player, "的护甲抵挡了" + get.cnNumber(-num) + "点伤害");
+					game.log(player, "的治疗抵挡了" + get.cnNumber(-num) + "点伤害");
 					break;
 				case "lose":
-					game.log(player, "失去了" + get.cnNumber(-num) + "点护甲");
+					game.log(player, "失去了" + get.cnNumber(-num) + "点治疗");
 					break;
 			}
 		}
-		player.hujia += num;
-		//if(player.hujia<0){
-		//	player.hujia=0;
-		//}
+		player.zhiLiao += num;
 		player.update();
 	},
 	dying: function () {

@@ -3685,7 +3685,7 @@ export class Click {
 				const hpTextDiv = ui.create.div(".text", hpDiv),
 					infoMaxHP = get.infoMaxHp(nameInfoHP);
 				hpTextDiv.innerHTML = infoHP == infoMaxHP ? `×${infoHP}` : `×${infoHP}/${infoMaxHP}`;
-				const infoShield = get.infoHujia(nameInfoHP);
+				const infoShield = get.infoZhiLaio(nameInfoHP);
 				if (infoShield) {
 					ui.create.div(".shield", hpDiv);
 					const shieldTextDiv = ui.create.div(".text", hpDiv);

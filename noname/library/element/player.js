@@ -288,7 +288,7 @@ export class Player extends HTMLDivElement {
 	/**
 	 * @type { number }
 	 */
-	hujia;
+	zhiLiao;
 	/**
 	 * @type { number }
 	 */
@@ -2474,7 +2474,7 @@ export class Player extends HTMLDivElement {
 
 		var hp1 = info.hp;
 		var maxHp1 = info.maxHp;
-		var hujia1 = info.hujia;
+		var zhiLiao1 = info.zhiLiao;
 
 		this.name = character;
 		this.name1 = character;
@@ -2487,7 +2487,7 @@ export class Player extends HTMLDivElement {
 		this.group = info.group;
 		this.hp = hp1;
 		this.maxHp = maxHp1;
-		this.hujia = hujia1;
+		this.zhiLiao = zhiLiao1;
 		this.node.intro.innerHTML = lib.config.intro;
 		this.node.name.dataset.nature = get.groupnature(this.group);
 		lib.setIntro(this);
@@ -2513,8 +2513,8 @@ export class Player extends HTMLDivElement {
 			this.name2 = character2;
 			var hp2 = info2.hp;
 			var maxHp2 = info2.maxHp;
-			var hujia2 = info2.hujia;
-			this.hujia += hujia2;
+			var zhiLiao2 = info2.zhiLiao;
+			this.zhiLiao += zhiLiao2;
 			var double_hp;
 			if (_status.connectMode || (get.mode() == "single" && _status.mode == "changban")) {
 				double_hp = "pingjun";
@@ -2949,7 +2949,7 @@ export class Player extends HTMLDivElement {
 				this.maxHp = maxHp[1];
 				this.hp = maxHp[0];
 				if (typeof maxHp[2] == "number") {
-					this.hujia = maxHp[2];
+					this.zhiLiao = maxHp[2];
 				}
 			} else {
 				var num;
@@ -3029,7 +3029,7 @@ export class Player extends HTMLDivElement {
 		delete this.group;
 		delete this.hp;
 		delete this.maxHp;
-		delete this.hujia;
+		delete this.zhiLiao;
 
 		if (this.name2) {
 			delete this.singleHp;
@@ -3339,7 +3339,7 @@ export class Player extends HTMLDivElement {
 			expandedSlots: this.expandedSlots,
 			views: [],
 			position: parseInt(this.dataset.position),
-			hujia: this.hujia,
+			zhiLiao: this.zhiLiao,
 			side: this.side,
 			identityShown: this.identityShown,
 			identityNode: [this.node.identity.innerHTML, this.node.identity.dataset.color],
@@ -3459,16 +3459,16 @@ export class Player extends HTMLDivElement {
 		if (_status.video && arguments.length == 0) return;
 		if (this.hp >= this.maxHp) this.hp = this.maxHp;
 		game.broadcast(
-			function (player, hp, maxHp, hujia) {
+			function (player, hp, maxHp, zhiLiao) {
 				player.hp = hp;
 				player.maxHp = maxHp;
-				player.hujia = hujia;
+				player.zhiLiao = hzhiLiaoujia;
 				player.$update();
 			},
 			this,
 			this.hp,
 			this.maxHp,
-			this.hujia
+			this.zhiLiao
 		);
 		this.$update(...arguments);
 	}
@@ -3476,13 +3476,14 @@ export class Player extends HTMLDivElement {
 		if (this.hp >= this.maxHp) this.hp = this.maxHp;
 		var hp = this.node.hp;
 		hp.style.transition = "none";
+		/*
 		if (!_status.video) {
 			if (this.hujia) {
 				this.markSkill("ghujia");
 			} else {
 				this.unmarkSkill("ghujia");
 			}
-		}
+		}*/
 		if (!this.storage.nohp) {
 			const hidden = this.classList.contains("unseen_show") || this.classList.contains("unseen2_show");
 			const maxHp = hidden ? 1 : this.maxHp;
@@ -3572,7 +3573,7 @@ export class Player extends HTMLDivElement {
 			}
 		}
 		if (!_status.video) {
-			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.hujia]);
+			game.addVideo("update", this, [this.countCards("h"), this.hp, this.maxHp, this.zhiLiao]);
 		}
 		this.updateMarks();
 		game.callHook("checkTipBottom", [this]);
@@ -3880,7 +3881,7 @@ export class Player extends HTMLDivElement {
 		return (
 			prefix +
 			dedent`
-			${this.name}+${this.sex}+${this.group}+${this.hp}+${this.maxHp}+${this.hujia}+${"[" + this.skills.join(",") + "]"}+${this.name1}+${this.name2}]
+			${this.name}+${this.sex}+${this.group}+${this.hp}+${this.maxHp}+${this.zhiLiao}+${"[" + this.skills.join(",") + "]"}+${this.name1}+${this.name2}]
 		`
 		);
 	}
@@ -6717,14 +6718,14 @@ export class Player extends HTMLDivElement {
 	 * @param { number } [limit] 护甲上限
 	 * @returns { GameEventPromise }
 	 */
-	changeHujia(num, type, limit) {
-		var next = game.createEvent("changeHujia");
+	changeZhiLiao(num, type, limit) {
+		var next = game.createEvent("changeZhiLiao");
 		if (typeof num != "number") {
 			num = 1;
 		}
 		if (limit === true) limit = 5;
-		if (typeof limit == "number" && this.hujia + num > parseInt(limit)) {
-			num = Math.max(0, parseInt(limit) - this.hujia);
+		if (typeof limit == "number" && this.zhiLiao + num > parseInt(limit)) {
+			num = Math.max(0, parseInt(limit) - this.zhiLiao);
 		}
 		if (typeof type != "string") {
 			if (num > 0) type = "gain";
@@ -6734,7 +6735,7 @@ export class Player extends HTMLDivElement {
 		next.num = num;
 		next.player = this;
 		next.type = type;
-		next.setContent("changeHujia");
+		next.setContent("changeZhiLiao");
 		return next;
 	}
 	getBuff() {
@@ -8118,7 +8119,7 @@ export class Player extends HTMLDivElement {
 		cfg.skills = cfg.skills || [];
 		cfg.hp = cfg.hp || 1;
 		cfg.maxHp = cfg.maxHp || 1;
-		cfg.hujia = cfg.hujia || 0;
+		cfg.zhiLiao = cfg.zhiLiao || 0;
 		cfg.sex = cfg.sex || "male";
 		cfg.group = cfg.group || "qun";
 		cfg.skill = cfg.skill || _status.event.name;
@@ -8143,7 +8144,7 @@ export class Player extends HTMLDivElement {
 						subplayer: true,
 					},
 				};
-				lib.character[skill] = [cfg.sex, cfg.group, parseFloat(cfg.hp) + "/" + parseFloat(cfg.maxHp) + "/" + parseFloat(cfg.hujia), cfg.skills, ["tempname:" + cfg.name].concat(lib.character[cfg.name].trashBin || [])];
+				lib.character[skill] = [cfg.sex, cfg.group, parseFloat(cfg.hp) + "/" + parseFloat(cfg.maxHp) + "/" + parseFloat(cfg.zhiLiao), cfg.skills, ["tempname:" + cfg.name].concat(lib.character[cfg.name].trashBin || [])];
 				if (Array.isArray(cfg.image)) {
 					cfg.image.forEach(image => lib.character[skill][4].push(image));
 				} else if (typeof cfg.image == "string") {

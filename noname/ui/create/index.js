@@ -2961,7 +2961,7 @@ export class Create {
 					ui.create.div(node.node.hp);
 					var hp = infoitem.hp,
 						maxHp = infoitem.maxHp,
-						hujia = infoitem.hujia;
+						zhiLiao = infoitem.zhiLiao;
 					var str = get.numStr(hp);
 					if (hp !== maxHp) {
 						str += "/";
@@ -2975,14 +2975,15 @@ export class Create {
 					} else {
 						node.node.hp.dataset.condition = "high";
 					}
+					/*
 					if (hujia > 0) {
 						ui.create.div(node.node.hp, ".shield");
 						ui.create.div(".text", get.numStr(hujia), node.node.hp);
-					}
+					}*/
 				} else {
 					var hp = infoitem.hp,
 						maxHp = infoitem.maxHp,
-						shield = infoitem.hujia;
+						shield = infoitem.zhiLiao;
 					if (maxHp > 14) {
 						if (hp !== maxHp || shield > 0) node.node.hp.innerHTML = infoitem[2];
 						else node.node.hp.innerHTML = get.numStr(infoitem[2]);

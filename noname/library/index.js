@@ -13197,7 +13197,8 @@ export class Library {
 						player.identityShown = info.identityShown;
 						player.hp = info.hp;
 						player.maxHp = info.maxHp;
-						player.hujia = info.hujia;
+						player.zhiLiao = info.zhiLiao;
+						//player.hujia = info.hujia;
 						player.sex = info.sex;
 						player.side = info.side;
 						player.phaseNumber = info.phaseNumber;

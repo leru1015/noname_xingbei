@@ -3657,7 +3657,7 @@ export class Game extends GameCompatible {
 			if (player && info) {
 				player.hp = info[1];
 				player.maxHp = info[2];
-				player.hujia = info[3];
+				player.zhiLiao = info[3];
 				player.update(info[0]);
 			} else {
 				console.log(player);

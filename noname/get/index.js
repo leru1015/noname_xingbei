@@ -476,7 +476,7 @@ export class Get extends GetCompatible {
 		}
 		return 0;
 	}
-	infoHujia(hp) {
+	infoZhiLiao(hp) {
 		if (typeof hp == "string" && hp.includes("/")) {
 			const num = hp.split("/")[2];
 			if (num) {
@@ -5398,7 +5398,7 @@ export class Get extends GetCompatible {
 			name = "icedamage";
 		}
 		var eff = get.effect(target, { name: name }, player, viewer);
-		if (eff > 0 && target.hujia > 0) return eff / 1.3;
+		if (eff > 0 && target.zhiLiao > 0) return eff / 1.3;
 		return eff;
 	}
 	/**
