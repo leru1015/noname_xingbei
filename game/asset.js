@@ -1,4 +1,6 @@
-window.noname_asset_list = [
+window.noname_asset_list
+=
+[
 	"v1.0.0",
 	"audio/card/default.mp3",
 	"audio/voice/female/0.mp3",
@@ -57,11 +59,20 @@ window.noname_asset_list = [
 	"image/background/wuming_bg.jpg",
 
 	"image/card/cardtempname_bg.png",
-
 	"image/card/shield.png",
-
-
 	"image/card/tiesuo_mark.png",
+	
+	"image/card/moDan.png",
+	"image/card/shengDun.png",
+	"image/card/shengGuang.png",
+	"image/card/shuiLianZhan.png",
+	"image/card/xuRuo.png",
+	"image/card/zhongDu.png",
+	"image/card/anMie.png",
+	"image/card/diLieZhan.png",
+	"image/card/fengShenZhan.png",
+	"image/card/huoYanZhan.png",
+	"image/card/leiGuangZhan.png",
 	
 	
 	"image/emotion/guojia_emotion/1.gif",
@@ -246,4 +257,6 @@ window.noname_asset_list = [
 	"theme/woodden/wood2.jpg",
 	"theme/woodden/wood2.png",
 ];
-window.noname_skin_list = {};
+window.noname_skin_list
+=
+{};
