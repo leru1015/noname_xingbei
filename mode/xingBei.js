@@ -1,5 +1,9 @@
-'use strict';
-game.import('mode',function(lib,game,ui,get,ai,_status){
+import { lib, game, ui, get, ai, _status } from "../noname.js";
+export const type = "mode";
+/**
+ * @type { () => importModeConfig }
+ */
+export default () => {
 	return {
 		name:'xingBei',
 		start:function(){
@@ -81,11 +85,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			//game.changeShiQi(game.shiQiMax,true,false);
 			//game.changeShiQi(game.shiQiMax,false,false);
             'step 4'
-            for(var i=0;i<game.players.length;i++){
-                game.players[i].storage.moDan=false;
-                game.players[i].storage.zhongDu=[];
-            }
-
             game.broadcastAll(function(){
                 ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
                 //ui.updateShiQiInfo();
@@ -424,14 +423,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(ui.cheat2&&ui.cheat2.dialog==_status.event.dialog){
 								return;
 							}
-							if(game.changeCoin){
-								game.changeCoin(-3);
-							}
 							var buttons=ui.create.div('.buttons');
 							var node=_status.event.dialog.buttons[0].parentNode;
 							_status.event.dialog.buttons=ui.create.buttons(list.randomGets(choose_number),'character',buttons);
 							_status.event.dialog.content.insertBefore(buttons,node);
-							buttons.animate('start');
+							buttons.addTempClass('start');
 							node.remove();
 							game.uncheck();
 							game.check();
@@ -442,7 +438,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						lib.onfree.push(function(){
 							event.dialogxx=ui.create.characterDialog('heightset');
 							if(ui.cheat2){
-								ui.cheat2.animate('controlpressdownx',500);
+								ui.cheat2.addTempClass('controlpressdownx',500);
 								ui.cheat2.classList.remove('disabled');
 							}
 						});
@@ -453,9 +449,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					ui.create.cheat2=function(){
 						ui.cheat2=ui.create.control('自由选角',function(){
 							if(this.dialog==_status.event.dialog){
-								if(game.changeCoin){
-									game.changeCoin(50);
-								}
 								this.dialog.close();
 								_status.event.dialog=this.backup;
 								this.backup.open();
@@ -463,14 +456,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								game.uncheck();
 								game.check();
 								if(ui.cheat){
-									ui.cheat.animate('controlpressdownx',500);
+									ui.cheat.addTempClass('controlpressdownx',500);
 									ui.cheat.classList.remove('disabled');
 								}
 							}
 							else{
-								if(game.changeCoin){
-									game.changeCoin(-10);
-								}
 								this.backup=_status.event.dialog;
 								_status.event.dialog.close();
 								_status.event.dialog=_status.event.getParent().dialogxx;
@@ -2801,6 +2791,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 trigger:{player:"zhiLiao"},
                 forced:true,
                 priority:1,
+                init:function(player){
+                    player.storage.zhongDu=[];
+                },
                 filter:function(event,player){
                     if(player.zhiLiao<=0) return false;
                     return true;
@@ -3123,6 +3116,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
                 trigger:{target:'useCardToPlayered'},
 				firstDo:true,
                 forced:true,
+                init:function(player){
+                    player.storage.moDan=false;
+                },
                 filter:function(event,player){
                     if(event.card.name=='moDan'){
                         return true;
@@ -4493,4 +4489,4 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			
 		}
 	};
-});
+};
