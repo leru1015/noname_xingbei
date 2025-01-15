@@ -3290,16 +3290,14 @@ export default () => {
 			},
 			_tiLian:{
 				subSkill:{
-					r:{
-						//marktext:'石',
+					baoShi:{
 						intro:{
 							name:'宝石',
 							content:'mark',
 						},
                         markimage:'image/card/xingShi/baoShi.png',
 					},
-					b:{
-						//marktext:'晶',
+					shuiJing:{
 						intro:{
 							name:'水晶',
 							content:'mark',
@@ -3311,7 +3309,7 @@ export default () => {
 				type:'teShu',
 				filter:function(event,player){
 					if(event.getParent('phaseUse').canTeShu==false) return false;
-                    var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
+                    var nengLiang_num=player.countMark('_tiLian_baoShi')+player.countMark('_tiLian_shuiJing');
                     var empty_nengliang=player.getNengLiangLimit()-nengLiang_num;
 					if(player.side==true){
 						return game.hongZhanJi.length>=1&&empty_nengliang>=1;
@@ -3327,7 +3325,11 @@ export default () => {
 						}else if(player.side==false){
 							var list=game.lanZhanJi;
 						}
-						dialog.add([list,'tdnodes']);
+						var listx=[];
+						for(var i=0;i<list.length;i++){
+							listx.push([list[i],get.translation(list[i])]);
+						}
+						dialog.add([listx,'tdnodes']);
 						return dialog;
 						
 					},
@@ -3341,11 +3343,11 @@ export default () => {
 								event.trigger('tiLian');
 								'step 1'
 								for(var i=0;i<event.links.length;i++){
-									if(event.links[i]=='宝石'){
-										player.addMark('_tiLian_r');
+									if(event.links[i]=='baoShi'){
+										player.addMark('_tiLian_baoShi');
 										player.changeZhanJi('baoShi',-1);
-									}else if(event.links[i]=='水晶'){
-										player.addMark('_tiLian_b');
+									}else if(event.links[i]=='shuiJing'){
+										player.addMark('_tiLian_shuiJing');
 										player.changeZhanJi('shuiJing',-1);
 									}
 								}
@@ -3354,7 +3356,7 @@ export default () => {
 					},
 					select:function(){
 						var player=_status.event.player;
-						var nengLiang_num=player.countMark('_tiLian_r')+player.countMark('_tiLian_b');
+						var nengLiang_num=player.countMark('_tiLian_baoShi')+player.countMark('_tiLian_shuiJing');
 						if(player.getNengLiangLimit()-nengLiang_num==1){
 							var range=[1,1];
 						}else if(player.getNengLiangLimit()-nengLiang_num>=2){
@@ -5100,23 +5102,23 @@ export default () => {
 
 				removeBiShaShuiJing:function(){
 					'step 0'
-                    if(player.hasMark('_tiLian_b')&&player.hasMark('_tiLian_r')){
+                    if(player.hasMark('_tiLian_shuiJing')&&player.hasMark('_tiLian_baoShi')){
                         var list=['baoShi','shuiJing'];
                         player.chooseControl(list).set('prompt','选择要移除的星石').set('ai',function(){
 							return 1;
 						});
-                    }else if(player.hasMark('_tiLian_b')){
-                        player.removeMark('_tiLian_b');
+                    }else if(player.hasMark('_tiLian_shuiJing')){
+                        player.removeMark('_tiLian_shuiJing');
                         return;
-                    }else if(player.hasMark('_tiLian_r')){
-                        player.removeMark('_tiLian_r');
+                    }else if(player.hasMark('_tiLian_baoShi')){
+                        player.removeMark('_tiLian_baoShi');
                         return;
                     }
                     'step 1'
                     if(result.control=='宝石'){
-                        player.removeMark('_tiLian_r');
+                        player.removeMark('_tiLian_baoShi');
                     }else if(result.control=='水晶'){
-                        player.removeMark('_tiLian_b');
+                        player.removeMark('_tiLian_shuiJing');
                     }
 				},
 				
@@ -5465,14 +5467,14 @@ export default () => {
 
 
 				canBiShaShuiJing:function(){//能够使用必杀星石
-					if(this.hasMark('_tiLian_b')||this.hasMark('_tiLian_r')){
+					if(this.hasMark('_tiLian_shuiJing')||this.hasMark('_tiLian_baoShi')){
                         return true;
                     }else{
 						return false;
 					}
 				},
 				canBiShaBaoShi:function(){//能否使用必杀宝石
-					if(this.hasMark('_tiLian_r')){
+					if(this.hasMark('_tiLian_baoShi')){
                         return true;
                     }else{
 						return false;
@@ -5485,7 +5487,7 @@ export default () => {
 					return next;
 				},
 				removeBiShaBaoShi:function(){//移除宝石
-					this.removeMark('_tiLian_r');
+					this.removeMark('_tiLian_baoShi');
 				},
 				changeNengLiang:function(color,num){//改变能量
 					if(typeof num!='number'||!num) num=1;
@@ -5521,7 +5523,7 @@ export default () => {
 					return this.countMark('_tiLian_'+color);
 				},
 				countNengLiangAll:function(){//统计所有能量数
-					return this.countMark('_tiLian_r')+this.countMark('_tiLian_b');
+					return this.countMark('_tiLian_baoShi')+this.countMark('_tiLian_shuiJing');
 				},
 				damageFaShu:function(){//法术伤害，damage简单套皮
 					var num,source;
