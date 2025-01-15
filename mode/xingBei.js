@@ -3203,7 +3203,13 @@ export default () => {
 						}else if(player.side==false){
 							var list=game.lanZhanJi;
 						}
-						dialog.add([list,'tdnodes']);
+						var listx=[];
+						for(var i=0;i<list.length;i++){
+							listx.push([list[i],get.translation(list[i])]);
+						}
+						dialog.add([
+							listx,'tdnodes'
+						]);
 						return dialog;
 					},
 					backup:function(links,player){
@@ -3219,20 +3225,21 @@ export default () => {
 								'step 2'
 								var dict={};
 								for(var i=0;i<event.links.length;i++){
-									if(event.links[i]=='宝石'){
-										dict['r']=(dict['r']||0)+1;
-									}else if(event.links[i]=='水晶'){
-										dict['b']=(dict['b']||0)+1;
+									if(event.links[i]=='baoShi'){
+										dict['baoShi']=(dict['baoShi']||0)+1;
+									}else if(event.links[i]=='shuiJing'){
+										dict['shuiJing']=(dict['shuiJing']||0)+1;
 									}
 								}
-								if(dict['r']>0){
-									var next=player.removeZhanJi('r',dict['r']);
+								if(dict['baoShi']>0){
+									var next=player.removeZhanJi('baoShi',dict['baoShi']);
 								}
-								if(dict['b']>0){
-									var next=player.removeZhanJi('b',dict['b']);
+								if(dict['shuiJing']>0){
+									var next=player.removeZhanJi('shuiJing',dict['shuiJing']);
 								}
 								'step 3'
 								player.changeXingBei(1);
+								'step 4'
 								player.changeShiQi(-1,!player.side);
 							},
 						}
@@ -3240,10 +3247,10 @@ export default () => {
 					select:3,
 					check:function(button,player){
 						switch(button.link){
-							case '水晶':{
+							case 'shuiJing':{
 								return 2;
 							}
-							case '宝石':{
+							case 'baoShi':{
 								return 1;
 							}
 						}
