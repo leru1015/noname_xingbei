@@ -296,27 +296,27 @@ export class Game extends GameCompatible {
 	/**
 	 * 判断卡牌信息/事件是否有某个属性
 	 */
-	hasNature(item, nature, player) {
-		var natures = get.natureList(item, player);
-		if (!nature) return natures.length > 0;
-		if (nature == "linked") return natures.some(n => lib.linked.includes(n));
-		return get.is.sameNature(natures, nature);
+	hasDuYou(item, duYou, player) {
+		var duYous = get.duYouList(item, player);
+		if (!duYou) return duYous.length > 0;
+		if (duYou == "linked") return duYous.some(n => lib.linked.includes(n));
+		return get.is.sameDuYou(duYous, duYou);
 	}
 	/**
 	 * 设置卡牌信息/事件的属性
 	 */
-	setNature(item, nature, addNature) {
-		if (!nature) nature = [];
-		if (!addNature) {
-			item.nature = get.nature(nature);
-			if (!item.nature.length) delete item.nature;
+	setDuYou(item, duYou, addNature) {
+		if (!duYou) duYou = [];
+		if (!addDuYou) {
+			item.duYou = get.duYou(duYou);
+			if (!item.duYou.length) delete item.duYou;
 		} else {
-			let natures = Array.isArray(nature) ? nature : nature.split(lib.natureSeparator);
-			let _nature = get.natureList(item, false);
+			let duYous = Array.isArray(duYou) ? duYou : duYou.split(lib.natureSeparator);
+			let _nature = get.duYouList(item, false);
 			_nature.addArray(natures);
-			item.nature = _nature.join(lib.natureSeparator);
+			item.duYou = _nature.join(lib.natureSeparator);
 		}
-		return item.nature;
+		return item.duYou;
 	}
 	/**
 	 * 洗牌
@@ -1830,7 +1830,7 @@ export class Game extends GameCompatible {
 			sex = sex == "female" ? "female" : "male";
 		}
 		if (!lib.config.background_audio || (get.type(card) == "equip" && !lib.config.equip_audio)) return;
-		let nature = get.natureList(card)[0];
+		let nature = get.duYouList(card)[0];
 		if (lib.natureAudio[card.name]) {
 			let useAudio = lib.natureAudio[card.name][nature];
 			if (useAudio === "default") {
@@ -4040,6 +4040,66 @@ export class Game extends GameCompatible {
 				}
 			}
 		},
+
+		changeShiQi:function(content){
+			var side=content[1];
+			var num=content[0];
+			if(side==true){
+				game.hongShiQi+=num;
+			}else if(side==false){
+				game.lanShiQi+=num;
+			}
+			ui.updateShiQiInfo();
+		},
+		changeZhanJi:function(content){
+			var num=content[0];
+			var xingShi=content[1];
+			var side=content[2];
+
+			if(num>0){
+				if(side==true){
+					for(let i=0;i<num;i++){
+						game.hongZhanJi.push(xingShi);
+					}
+				}else if(side==false){
+					for(let i=0;i<num;i++){
+						game.lanZhanJi.push(xingShi);
+					}
+				}
+			}else if(num<0){
+				num=-num;
+				if(side==true){
+					for(let i=0;i<num;i++){
+						let index = game.hongZhanJi.indexOf(xingShi);  
+						if (index !== -1) {  
+							game.hongZhanJi.splice(index, 1);  
+						}
+					}
+					
+				}else if(side==false){
+					for(let i=0;i<num;i++){
+						let index = game.lanZhanJi.indexOf(xingShi);  
+						if (index !== -1) {  
+							game.lanZhanJi.splice(index, 1);  
+						}
+					}
+					
+				}	
+			}
+			game.hongZhanJi.sort();
+			game.lanZhanJi.sort();
+			ui.updateShiQiInfo();
+		},
+		changeXingBei:function(content){
+			var num=content[0];
+			var side=content[1];
+			if(side==true){
+				game.hongXingBei+=num;
+			}else if(side==false){
+				game.lanXingBei+=num;
+			}
+			ui.updateShiQiInfo();
+		}
 	};
 	reload() {
 		if (_status) {
@@ -7742,8 +7802,33 @@ export class Game extends GameCompatible {
 		Array.from(arguments).forEach(value => {
 			const itemtype = get.itemtype(value);
 			if (itemtype == "player" || itemtype == "players") {
+				/*
 				str += `<span class="bluetext">${get.translation(value)}</span>`;
 				str2 += get.translation(value);
+				*/
+				if(itemtype=='player'){
+					if(value.side==true){
+						var c='red';
+					}else{
+						var c='blue'
+					}
+					str+=`<span style="color:${c};">${get.translation(value)}</span>`;
+					str2+=get.translation(value);
+				}else{
+					for(let i=0;i<value.length;i++){
+						if(value[i].side==true){
+							var c='red';
+						}else{
+							var c='blue'
+						}
+						str+=`<span style="color:${c};">${get.translation(value[i])}</span>`;
+						str2+=get.translation(value[i]);
+						if(i!=value.length-1){
+							str+='、';
+							str2+='、';
+						}
+					}
+				}
 			} else if (itemtype == "cards" || itemtype == "card" || (typeof value == "object" && value && value.name)) {
 				str += `<span class="yellowtext">${get.translation(value)}</span>`;
 				str2 += get.translation(value);
@@ -7753,16 +7838,27 @@ export class Game extends GameCompatible {
 					str += get.translation(value);
 					str2 += get.translation(value);
 				}
-			} else if (typeof value == "string") {
-				if (value[0] == "【" && value[value.length - 1] == "】") {
-					str += `<span class="greentext">${get.translation(value)}</span>`;
-					str2 += get.translation(value);
-				} else if (value[0] == "#") {
-					str += `<span class="${color.get(value[1]) || ""}text">${get.translation(value.slice(2))}</span>`;
-					str2 += get.translation(value.slice(2));
-				} else {
-					str += get.translation(value);
-					str2 += get.translation(value);
+			} else if(typeof value=='string'){
+				if(value[0]=='【'&&value[value.length-1]=='】'){
+					str+=`<span class="greentext">${get.translation(value)}</span>`;
+					str2+=get.translation(value);
+				}
+				else if(value[0]=='#'){
+					str+=`<span class="${color.get(value[1])||''}text">${get.translation(value.slice(2))}</span>`;
+					str2+=get.translation(value.slice(2));
+				}else if(value[0]=='['&&value[value.length-1]==']'){
+					str+=`<span style="color:skyblue;">${get.translation(value)}</span>`;
+					str2+=get.translation(value);
+				}else if(value=='宝石'){
+					str+=`<span style="color:OrangeRed;">${get.translation(value)}</span>`;
+					str2+=get.translation(value);
+				}else if(value=='水晶'){
+					str+=`<span style="color:PowderBlue;">${get.translation(value)}</span>`;
+					str2+=get.translation(value);
+				}
+				else{
+					str+=get.translation(value);
+					str2+=get.translation(value);
 				}
 			} else {
 				str += value;

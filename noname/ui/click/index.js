@@ -3034,7 +3034,7 @@ export class Click {
 				if (cards.length == 1) {
 					const firstCard = cards[0];
 					if (!resultCard.suit) resultCard.suit = get.suit(firstCard);
-					if (!resultCard.number) resultCard.number = get.number(firstCard);
+					if (!resultCard.number) resultCard.number = get.mingGe(firstCard);
 				}
 			}
 			const skillDialog = gameEvent.skillDialog;
@@ -3685,7 +3685,7 @@ export class Click {
 				const hpTextDiv = ui.create.div(".text", hpDiv),
 					infoMaxHP = get.infoMaxHp(nameInfoHP);
 				hpTextDiv.innerHTML = infoHP == infoMaxHP ? `×${infoHP}` : `×${infoHP}/${infoMaxHP}`;
-				const infoShield = get.infoZhiLaio(nameInfoHP);
+				const infoShield = get.infoZhiLiao(nameInfoHP);
 				if (infoShield) {
 					ui.create.div(".shield", hpDiv);
 					const shieldTextDiv = ui.create.div(".text", hpDiv);

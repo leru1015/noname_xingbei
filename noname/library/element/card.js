@@ -139,18 +139,18 @@ export class Card extends HTMLDivElement {
 		}
 		return destroyed;
 	}
-	hasNature(nature, player) {
-		return game.hasNature(this, nature, player);
+	hasDuYou(nature, player) {
+		return game.hasDuYou(this, nature, player);
 	}
 	//只针对【杀】起效果
 	addNature(nature) {
 		let natures = [];
 		if (!this.nature) this.nature = "";
 		else {
-			natures.addArray(get.natureList(this.nature));
+			natures.addArray(get.duYouList(this.nature));
 		}
-		natures.addArray(get.natureList(nature));
-		this.nature = get.nature(natures);
+		natures.addArray(get.duYouList(nature));
+		this.nature = get.duYou(natures);
 		this.classList.add(nature);
 		let str = get.translation(this.nature) + "杀";
 		this.node.name.innerText = str;
@@ -170,10 +170,10 @@ export class Card extends HTMLDivElement {
 	}
 	removeNature(nature) {
 		if (!this.nature) return;
-		let natures = get.natureList(this.nature);
+		let natures = get.duYouList(this.nature);
 		natures.remove(nature);
 		if (!natures.length) delete this.nature;
-		else this.nature = get.nature(natures);
+		else this.nature = get.duYou(natures);
 		this.classList.remove(nature);
 		let str = get.translation(this.nature) + "杀";
 		this.node.name.innerText = str;
@@ -251,7 +251,7 @@ export class Card extends HTMLDivElement {
 					let suffix = card[2].slice(4);
 					let natureList = suffix.split("_");
 					card[2] = "sha";
-					card[3] = get.nature(natureList);
+					card[3] = get.duYou(natureList);
 				}
 			}
 		} else if (typeof card == "object") {
@@ -378,7 +378,7 @@ export class Card extends HTMLDivElement {
 					do {
 						let nature = card[3];
 						if (bg == "sha" && typeof nature == "string") {
-							let natures = get.natureList(nature),
+							let natures = get.duYouList(nature),
 								_bg;
 							for (const n of natures)
 								if (lib.natureBg.has(n)) _bg = n;
@@ -400,7 +400,7 @@ export class Card extends HTMLDivElement {
 		) {
 			if (card[3])
 				this.node.background.setBackground(
-					bg + "_" + get.natureList(card[3])[0],
+					bg + "_" + get.duYouList(card[3])[0],
 					"card"
 				);
 			else this.node.background.setBackground(bg, "card");
@@ -489,7 +489,7 @@ export class Card extends HTMLDivElement {
 		} else if (get.dynamicVariable(lib.card[bg].image, this) == "card") {
 			if (card[3])
 				this.setBackground(
-					bg + "_" + get.natureList(card[3])[0],
+					bg + "_" + get.duYouList(card[3])[0],
 					"card"
 				);
 			else this.setBackground(bg, "card");
@@ -565,7 +565,7 @@ export class Card extends HTMLDivElement {
 			name = "";
 			let nature = card[3];
 			if (nature) {
-				let natures = get.natureList(nature);
+				let natures = get.duYouList(nature);
 				natures.sort(lib.sort.nature);
 				for (let nature of natures) {
 					name +=
@@ -588,7 +588,7 @@ export class Card extends HTMLDivElement {
 			get.translation(card[0]) + mingGe + " " + name;
 		this.classList.add("card");
 		if (card[3]) {
-			let natures = get.natureList(card[3]);
+			let natures = get.duYouList(card[3]);
 			natures.forEach((n) => {
 				if (n) this.classList.add(n);
 			});

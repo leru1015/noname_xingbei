@@ -3457,19 +3457,18 @@ export class Player extends HTMLDivElement {
 	}
 	update() {
 		if (_status.video && arguments.length == 0) return;
-		if (this.hp >= this.maxHp) this.hp = this.maxHp;
-		game.broadcast(
-			function (player, hp, maxHp, zhiLiao) {
-				player.hp = hp;
-				player.maxHp = maxHp;
-				player.zhiLiao = hzhiLiaoujia;
-				player.$update();
-			},
-			this,
-			this.hp,
-			this.maxHp,
-			this.zhiLiao
-		);
+		this.hp=this.zhiLiao;
+		if(this.hp>=this.maxHp){
+			this.maxHp=this.hp;
+		}else{
+			this.maxHp=this.getZhiLiaoLimit();
+		}
+		game.broadcast(function(player,hp,maxHp,zhiLiao){
+			player.hp=hp;
+			player.maxHp=maxHp;
+			player.zhiLiao=zhiLiao;
+			player.update();
+		},this,this.hp,this.maxHp,this.zhiLiao);
 		this.$update(...arguments);
 	}
 	$update() {
@@ -4422,13 +4421,13 @@ export class Player extends HTMLDivElement {
 								}
 							} else if (j == "number") {
 								if (typeof arg2[j] == "object") {
-									if (arg2[j].includes(get.number(cards[i])) == false) {
+									if (arg2[j].includes(get.mingGe(cards[i])) == false) {
 										cards.splice(i, 1);
 										i--;
 										break;
 									}
 								} else if (typeof arg2[j] == "string") {
-									if (get.number(cards[i]) != arg2[j]) {
+									if (get.mingGe(cards[i]) != arg2[j]) {
 										cards.splice(i, 1);
 										i--;
 										break;
@@ -4845,7 +4844,7 @@ export class Player extends HTMLDivElement {
 					var getn = function (card) {
 						//会赢吗？会赢的！
 						if (player.hasSkillTag("forceWin", null, { card })) return 13 * (Boolean(event.small) ? -1 : 1);
-						return get.number(card) * (Boolean(event.small) ? -1 : 1);
+						return get.mingGe(card) * (Boolean(event.small) ? -1 : 1);
 					};
 					if (source && source != player) {
 						if (get.attitude(player, source) > 1) {
@@ -4876,7 +4875,7 @@ export class Player extends HTMLDivElement {
 					var player = get.owner(card);
 					var getn = function (card) {
 						if (player.hasSkill("tianbian") && get.suit(card) == "heart") return 13;
-						return get.number(card);
+						return get.mingGe(card);
 					};
 					var event = _status.event.getParent();
 					var to = player == event.player ? event.target : event.player;
@@ -6533,11 +6532,12 @@ export class Player extends HTMLDivElement {
 				next._triggered = null;
 				next.notrigger = true;
 			} else if (argument == "unreal") next.unreal = true;
+			/*
 			else if (get.itemtype(argument) == "nature" && argument != "stab") next.nature = argument;
 			else if (get.itemtype(argument) == "natures") {
 				const natures = argument.split(lib.natureSeparator).remove("stab");
 				if (natures.length) next.nature = natures.join(lib.natureSeparator);
-			}
+			}*/
 		}
 		if (!next.card && !noCard) next.card = event.card;
 		if (!next.cards && !noCard) next.cards = event.cards;
@@ -6548,6 +6548,7 @@ export class Player extends HTMLDivElement {
 		if (typeof next.num != "number") next.num = (event.baseDamage || 1) + (event.extraDamage || 0);
 		next.original_num = next.num;
 		next.change_history = [];
+		/*
 		next.hasNature = function (nature) {
 			if (!nature) return Boolean(this.nature && this.nature.length > 0);
 			let natures = get.natureList(nature),
@@ -6556,7 +6557,8 @@ export class Player extends HTMLDivElement {
 			return get.is.sameNature(natures, naturesx);
 		};
 		if (next.hasNature("poison")) delete next._triggered;
-		else if (next.unreal) next._triggered = 2;
+		*/
+		if (next.unreal) next._triggered = 2;
 		next.setContent("damage");
 		next.filterStop = function () {
 			if (this.source && this.source.isDead()) delete this.source;
@@ -9429,11 +9431,12 @@ export class Player extends HTMLDivElement {
 	 * @returns { number }
 	 */
 	getHandcardLimit() {
-		var num = Math.max(this.hp, 0);
-		num = game.checkMod(this, num, "maxHandcardBase", this);
-		num = game.checkMod(this, num, "maxHandcard", this);
-		num = game.checkMod(this, num, "maxHandcardFinal", this);
-		return Math.max(0, num);
+		var num=game.handcardLimit;
+		num=game.checkMod(this,num,'maxHandcardBase',this);
+		num=game.checkMod(this,num,'maxHandcard',this);
+		num=game.checkMod(this,num,'maxHandcardFinal',this);
+		num=game.checkMod(this,num,'maxHandcardWuShi',this);
+		return Math.max(0,num);
 	}
 	getEnemies(func, includeDie) {
 		var player = this;
@@ -11461,7 +11464,7 @@ export class Player extends HTMLDivElement {
 		} else if (info.subtype === "equip4") {
 			cardShownName += "-";
 		}
-		const cardx = isViewAsCard ? game.createCard(card.name, cards.length == 1 ? get.suit(cards[0]) : "none", cards.length == 1 ? get.number(cards[0]) : 0) : cards[0];
+		const cardx = isViewAsCard ? game.createCard(card.name, cards.length == 1 ? get.suit(cards[0]) : "none", cards.length == 1 ? get.mingGe(cards[0]) : 0) : cards[0];
 		cardx.fix();
 		const cardSymbol = Symbol("card");
 		cardx.cardSymbol = cardSymbol;

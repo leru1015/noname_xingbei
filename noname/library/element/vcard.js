@@ -33,10 +33,10 @@ export class VCard {
 		// @ts-ignore
 		else if (get.itemtype(suitOrCard) == "card") {
 			this.name = get.name(suitOrCard, owner);
-			this.suit = get.suit(suitOrCard, owner);
-			this.color = get.color(suitOrCard, owner);
-			this.number = get.number(suitOrCard, owner);
-			this.nature = get.nature(suitOrCard, owner);
+			this.xiBie = get.xiBie(suitOrCard, owner);
+			//this.color = get.color(suitOrCard, owner);
+			this.mingGe = get.mingGe(suitOrCard, owner);
+			this.duYou = get.duYou(suitOrCard, owner);
 			/**
 			 * @type { boolean }
 			 */
@@ -72,15 +72,16 @@ export class VCard {
 				 */
 				this.cards = numberOrCards.slice();
 				if (noCards) {
-					if (!lib.suits.includes(this.suit)) this.suit = get.suit(this, owner);
-					if (!Object.keys(lib.color).includes(this.color)) this.color = get.color(this, owner);
-					if (typeof this.number != "number") this.number = get.number(this, owner);
-					if (!this.nature) this.nature = get.nature(this, owner);
+					if (!lib.xiBies.includes(this.xiBie)) this.xiBie = get.xiBie(this, owner);
+					//if (!Object.keys(lib.color).includes(this.color)) this.color = get.color(this, owner);
+					//if (typeof this.number != "number") this.number = get.mingGe(this, owner);
+					if (! this.mingGe) this.mingGe = get.mingGe(this, owner);
+					if (!this.duYou) this.duYou = get.duYou(this, owner);
 				}
 			} else if (numberOrCards === "unsure" && !this.isCard) {
-				if (!this.suit) this.suit = "unsure";
-				if (!this.color) this.color = "unsure";
-				if (!this.number) this.number = "unsure";
+				if (!this.xiBie) this.xiBie = "unsure";
+				//if (!this.color) this.color = "unsure";
+				if (!this.mingGe) this.mingGe = "unsure";
 			}
 			const info = get.info(this, false);
 			if (info) {
@@ -95,17 +96,17 @@ export class VCard {
 		if (!this.storage) this.storage = {};
 		if (!this.cards) this.cards = [];
 	}
-	sameSuitAs(card) {
-		return get.suit(this) == get.suit(card);
+	sameXiBieAs(card) {
+		return get.xiBie(this) == get.xiBie(card);
 	}
-	differentSuitFrom(card) {
-		return get.suit(this) != get.suit(card);
+	differentXiBieFrom(card) {
+		return get.xiBie(this) != get.xiBie(card);
 	}
-	sameNumberAs(card) {
-		return get.number(this) == get.number(card);
+	sameMingGeAs(card) {
+		return get.mingGe(this) == get.mingGe(card);
 	}
-	differentNumberFrom(card) {
-		return get.number(this) != get.number(card);
+	differentMingGeFrom(card) {
+		return get.mingGe(this) != get.mingGe(card);
 	}
 	sameNameAs(card) {
 		return get.name(this) == get.name(card);
@@ -116,11 +117,12 @@ export class VCard {
 	/**
 	 * @param { Player } player
 	 */
-	hasNature(nature, player) {
-		const natures = get.natureList(this, player);
-		if (!nature) return natures.length > 0;
-		if (nature == "linked") return natures.some((n) => lib.linked.includes(n));
-		return get.is.sameNature(natures, nature);
+	//hasDuYou(nature, player) {
+	hasDuYou(duYou, player) {
+		const duYous = get.duYouList(this, player);
+		if (!duYou) return duYous.length > 0;
+		if (duYou == "linked") return duYous.some((n) => lib.linked.includes(n));
+		return get.is.sameNature(duYous, duYou);
 	}
 	/**
 	 * 返回一个键值，用于在缓存中作为键名。

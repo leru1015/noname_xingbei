@@ -6,6 +6,55 @@ import { ui } from "../ui/index.js";
 import { get } from "./index.js";
 
 export class Is {
+	//星杯
+	xiDong(event){
+		//判断事件是否为行动事件
+		return event.action==true||event.getParent().action==true||event.getParent().name=='chooseToUse'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
+	}
+	//useSkill||useCard
+	gongJi(event){
+		return get.type(event.card)=='gongJi'&&event.targets_x.length>0	;
+	}
+	yingZhanGongJi(event){
+		if(!get.is.gongJi(event)) return false;
+		if(get.is.xiDong(event)) return false;
+		return true;
+	}
+	zhuDongGongJi(event){
+		if(!get.is.gongJi(event)) return false;
+		if(!get.is.xiDong(event)) return false;
+		return true;
+	}
+	gongJiXingDong(event){
+		if(!get.is.gongJi(event)) return false;
+		if(!get.is.xiDong(event)) return false;
+		return true;
+	}
+	faShuXingDong(event){
+		if(event.name=='useSkill'){
+			var info=get.info(event.skill);
+			return info.type=='faShu';
+		}else if(event.name=='useCard'){
+			if(get.type(event.card)=='faShu'){
+				return get.is.xiDong(event);
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+	//damge
+	gongJiShangHai(event){
+		return !event.faShu;
+	}
+	faShuShangHai(event){
+		if(event.faShu==true){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	/**
 	 * 判断是否为进攻坐骑
 	 * @param { Card | VCard } card
@@ -75,7 +124,7 @@ export class Is {
 		const naturesList = processedArguments.map(card => {
 			if (typeof card == "string") return card.split(lib.natureSeparator);
 			else if (Array.isArray(card)) return card;
-			return get.natureList(card || {});
+			return get.duYouList(card || {});
 		});
 		const testingNaturesList = naturesList.slice(0, naturesList.length - 1);
 		if (every) return testingNaturesList.every((natures, index) => naturesList.slice(index + 1).every(testingNatures => testingNatures.length == natures.length && testingNatures.every(nature => natures.includes(nature))));
@@ -108,7 +157,7 @@ export class Is {
 		const naturesList = processedArguments.map(card => {
 			if (typeof card == "string") return card.split(lib.natureSeparator);
 			else if (Array.isArray(card)) return card;
-			return get.natureList(card || {});
+			return get.duYouList(card || {});
 		});
 		const testingNaturesList = naturesList.slice(0, naturesList.length - 1);
 		if (every) return testingNaturesList.every((natures, index) => naturesList.slice(index + 1).every(testingNatures => testingNatures.every(nature => !natures.includes(nature))));

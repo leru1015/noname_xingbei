@@ -184,7 +184,7 @@ export class Character {
 			this.group = data[1];
 			this.hp = get.infoHp(data[2]);
 			this.maxHp = get.infoMaxHp(data[2]);
-			this.zhiLiao = get.infoZhiLaio(data[2]);
+			this.zhiLiao = get.infoZhiLiao(data[2]);
 			this.skills = get.copy(data[3] || []);
 			if (data[4]) this.setPropertiesFromTrash(data[4]);
 			if (data.length > 5) this.extraModeData = data[5];
@@ -327,7 +327,7 @@ export class Character {
 	set 2(hp) {
 		this.hp = get.infoHp(hp);
 		this.maxHp = get.infoMaxHp(hp);
-		this.zhiLiao = get.infoZhiLaio(hp);
+		this.zhiLiao = get.infoZhiLiao(hp);
 	}
 
 	/**

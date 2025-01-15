@@ -3651,7 +3651,8 @@ export const Content = {
 		game.phaseNumber++;
 		//初始化阶段列表
 		if (!event.phaseList) {
-			event.phaseList = ["phaseZhunbei", "phaseJudge", "phaseDraw", "phaseUse", "phaseDiscard", "phaseJieshu"];
+			//event.phaseList = ["phaseZhunbei", "phaseJudge", "phaseDraw", "phaseUse", "phaseDiscard", "phaseJieshu"];
+			event.phaseList = [ "phaseUse"];
 		}
 		if (typeof event.num != "number") {
 			event.num = 0;
@@ -3692,6 +3693,23 @@ export const Content = {
 			changeHp: [],
 			everything: [],
 		});
+
+		//xingBei设置
+		player.storage.gongJiOrFaShu=1;
+		player.storage.faShu=0;
+		player.storage.gongJi=0;
+		//判断是否有可启动技
+		var skills=player.skills;
+		for(var i=0;i<skills.length;i++){
+			var info=get.info(skills[i]);
+			var flag=false;
+			if(info.type=='qiDong'){
+				if(info.filter(event,player)) flag=true;
+				if(flag) break;
+			}
+		}
+		player.storage.qiDong=flag;
+
 		var players = game.players.slice(0).concat(game.dead);
 		for (var i = 0; i < players.length; i++) {
 			var current = players[i];
@@ -3767,9 +3785,10 @@ export const Content = {
 				game.send("server", "config", lib.configOL);
 			}
 		}
-		game.log();
+		game.log('————————————————————');
 		game.log(player, "的回合开始");
 		player._noVibrate = true;
+		/*
 		if (get.config("identity_mode") != "zhong" && get.config("identity_mode") != "purple" && !_status.connectMode) {
 			var num;
 			switch (get.config("auto_identity")) {
@@ -3794,7 +3813,7 @@ export const Content = {
 				_status.identityShown = true;
 				game.showIdentity(false);
 			}
-		}
+		}*/
 		player.ai.tempIgnore = [];
 		if (ui.land && ui.land.player == player) {
 			game.addVideo("destroyLand");
@@ -4071,6 +4090,7 @@ export const Content = {
 		if (_status.noclearcountdown !== "direct") _status.noclearcountdown = true;
 		if (event.type == "phase") {
 			if (event.isMine()) {
+				/*
 				event.endButton = ui.create.control("结束回合", "stayleft", function () {
 					var evt = _status.event;
 					if (evt.name != "chooseToUse" || evt.type != "phase") return;
@@ -4078,7 +4098,7 @@ export const Content = {
 						ui.click.cancel();
 					}
 					ui.click.cancel();
-				});
+				});*/
 				event.fakeforce = true;
 			} else {
 				if (event.endButton) {
@@ -5050,9 +5070,9 @@ export const Content = {
 		event.lose_list = lose_list;
 		event.getNum = function (card) {
 			for (var i of event.lose_list) {
-				if (i[1].contains && i[1].includes(card)) return get.number(card, i[0]);
+				if (i[1].contains && i[1].includes(card)) return get.mingGe(card, i[0]);
 			}
-			return get.number(card, false);
+			return get.mingGe(card, false);
 		};
 		event.cardlist = cards;
 		event.cards = cards;
@@ -5233,9 +5253,9 @@ export const Content = {
 		event.lose_list = lose_list;
 		event.getNum = function (card) {
 			for (var i of event.lose_list) {
-				if (i[1].contains && i[1].includes(card)) return get.number(card, i[0]);
+				if (i[1].contains && i[1].includes(card)) return get.mingGe(card, i[0]);
 			}
-			return get.number(card, false);
+			return get.mingGe(card, false);
 		};
 		event.cardlist = cards;
 		event.cards = cards;
@@ -5403,9 +5423,9 @@ export const Content = {
 		game.log(target, "的拼点牌为", event.card2);
 		var getNum = function (card) {
 			for (var i of event.lose_list) {
-				if (i[1].includes(card)) return get.number(card, i[0]);
+				if (i[1].includes(card)) return get.mingGe(card, i[0]);
 			}
-			return get.number(card, false);
+			return get.mingGe(card, false);
 		};
 		event.num1 = getNum(event.card1);
 		event.num2 = getNum(event.card2);
@@ -7268,7 +7288,7 @@ export const Content = {
 				}
 			} else {
 				var config = {};
-				var nature = get.natureList(card)[0];
+				var nature = get.duYouList(card)[0];
 				if (nature || (card.classList && card.classList.contains(nature))) config.color = nature;
 				if (event.addedTarget) {
 					player.line2(targets.concat(event.addedTargets), config);
@@ -9531,7 +9551,7 @@ export const Content = {
 		event.result = {
 			card: player.judging[0],
 			name: player.judging[0].name,
-			number: get.number(player.judging[0]),
+			number: get.mingGe(player.judging[0]),
 			suit: get.suit(player.judging[0]),
 			color: get.color(player.judging[0]),
 			node: event.node,

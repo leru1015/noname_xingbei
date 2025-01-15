@@ -322,7 +322,7 @@ export class Create {
 	cardTempName(card, applyNode) {
 		let getApplyNode = applyNode || card;
 		let cardName = get.name(card);
-		let cardNature = get.nature(card);
+		let cardDuYou = get.duYou(card);
 		let tempname = get.translation(cardName);
 		let cardTempNameConfig = lib.config.cardtempname;
 		let node = getApplyNode._tempName || ui.create.div(".tempname", getApplyNode);
@@ -2337,16 +2337,16 @@ export class Create {
 			}
 			if (game.me.hasSkillTag("sortCardByNum")) {
 				var getn = function (card) {
-					var num = get.number(card, game.me);
-					if (num < 3) return 13 + num;
-					return num;
+					var mingGe = get.mingGe(card, game.me);
+					//if (num < 3) return 13 + num;
+					return mingGe;
 				};
 				hs.sort((a, b) => getn(b) - getn(a));
 			} else
 				hs.sort(function (b, a) {
 					if (a.name != b.name) return lib.sort.card(a.name, b.name);
-					else if (a.suit != b.suit) return lib.suit.indexOf(a) - lib.suit.indexOf(b);
-					else return a.number - b.number;
+					else if (a.xiBie != b.xiBie) return lib.xiBie.indexOf(a.xiBie) - lib.xiBie.indexOf(b.xiBie);
+					else return lib.mingGe.indexOf(a.mingGe) - lib.mingGe.indexOf(b.mingGe);
 				});
 			game.me.directgain(hs, false);
 		});
@@ -2462,7 +2462,7 @@ export class Create {
 									result,
 									Object.groupBy(typeResult[key], card => {
 										if (get.name(card) !== "sha") return;
-										let perfix = get.translation(get.nature(card));
+										let perfix = get.translation(get.duYou(card));
 										if (perfix == "") perfix = "普通";
 										return perfix + "杀";
 									})
@@ -2887,9 +2887,9 @@ export class Create {
 			if (item.style.color) {
 				node.style.color = item.style.color;
 			}
-			if (item.nature) {
-				let natures = get.natureList(item.nature);
-				natures.forEach(n => node.classList.add(n));
+			if (item.duYou) {
+				let duYous = get.duYouList(item.duYou);
+				duYous.forEach(n => node.classList.add(n));
 			}
 			if (!noclick) {
 				lib.setIntro(node);

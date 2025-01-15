@@ -310,7 +310,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				selectTarget:1,
 				filterTarget:function(card,player,target){
-					if(game.moDan_shunShiZhen==true){
+					if(game.moDanFangXiang=='zuo'){
 						var mubiao=player;
 						while(mubiao.storage.moDan==true||mubiao.side==player.side){
 							mubiao=mubiao.getPrevious();
@@ -318,7 +318,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						if(target==mubiao){
 							return true;
 						}
-					}else{
+					}else if(game.moDanFangXiang=='you'){
 						var mubiao=player;
 						while(mubiao.storage.moDan==true||mubiao.side==player.side){
 							mubiao=mubiao.getNext();
