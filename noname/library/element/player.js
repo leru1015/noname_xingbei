@@ -2791,7 +2791,8 @@ export class Player extends HTMLDivElement {
 				this.key = info[4];
 				this.roomempty = false;
 				str += get.modetrans(config);
-				str += " 模式　";
+				str += ' '+get.translation(config.choose_mode);
+				str += " 模式 ";
 				for (var i = str.length; i < 11; i++) str += "　";
 				this.version = config.version;
 				if (config.gameStarted) {
