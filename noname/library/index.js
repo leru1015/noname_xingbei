@@ -9726,8 +9726,8 @@ export class Library {
 		xueGroupColor:"#7D0101",
 		yongGroupColor:"#C6813C",
 		jiGroupColor:"#A5BE7D",
-		shengGroupColor:"#3170A6",
-		huanGroupColor:"#353148",
+		shengGroupColor:"#22A3C3",
+		huanGroupColor:"#635282",
 
 
 		'3xing':'3星',
