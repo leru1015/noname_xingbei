@@ -5860,9 +5860,9 @@ export class Game extends GameCompatible {
 			td = document.createElement("td");
 			td.innerHTML = "出牌";
 			tr.appendChild(td);
-			td = document.createElement("td");
-			td.innerHTML = "杀敌";
-			tr.appendChild(td);
+			//td = document.createElement("td");
+			//td.innerHTML = "杀敌";
+			//tr.appendChild(td);
 			table.appendChild(tr);
 			for (i = 0; i < game.players.length; i++) {
 				tr = document.createElement("tr");
@@ -5899,6 +5899,7 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+				/*
 				td = document.createElement("td");
 				num = 0;
 				for (j = 0; j < game.players[i].stat.length; j++) {
@@ -5906,6 +5907,7 @@ export class Game extends GameCompatible {
 				}
 				td.innerHTML = num;
 				tr.appendChild(td);
+				*/
 				table.appendChild(tr);
 			}
 			dialog.add(ui.create.div(".placeholder"));
