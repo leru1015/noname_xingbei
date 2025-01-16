@@ -790,14 +790,13 @@ export default () => {
 						game._characterDialogID=id;
 						var dialog=ui.create.dialog('请选择角色');
 						dialog.videoId=id;
-						var players,friends;//分别记录自己和队友的可选角色
+						var players;
 						var player=game.me;
 						for(var i in choice){
 							var current=lib.playerOL[i];
 							if(current==player) players=choice[i];
-							//else if(current.side==player.side) friends=choice[i];
 						}
-						dialog.addText('你的选将框');
+						//dialog.addText('你的选将框');
 						var buttons=ui.create.div('.buttons',dialog.content);
 						dialog.players=ui.create.buttons(players,'character',buttons)
 						dialog.buttons=dialog.buttons.concat(dialog.players);
@@ -819,7 +818,7 @@ export default () => {
 							if(ui.selected.buttons.length) return 0;
 							var dialog=get.idDialog(game._characterDialogID);
 							//if(dialog.friends&&dialog.friends.includes(button)) return 0;
-							if(dialog.classList.includes('glow2')) return 1+Math.random();
+							//if(dialog.classList.includes('glow2')) return 1+Math.random();
 							return 0.5+Math.random();
 						});
 						//修改点击按钮后的反应
@@ -829,12 +828,12 @@ export default () => {
 								var origin=button._link,choice=button.link;
 								//选择按钮时自动取消选择上一个按钮
 								if(dialog.players.includes(button)){
-									if(!button.classList.includes('selected')){
+									if(!button.classList.contains('selected')){
 										button.classList.add('selected');
 										ui.selected.buttons.add(button);
 										game._playerChoice=button;
 										for(var other of dialog.players){
-											if(other!=button&&other.classList.includes('selected')){
+											if(other!=button&&other.classList.contains('selected')){
 												other.classList.remove('selected');
 												ui.selected.buttons.remove(other);
 											}
@@ -846,29 +845,17 @@ export default () => {
 						},add:{}});
 						if(game.online) game.resume();
 					}
-					//推荐选将后的回传函数
-					event.recommend=function(player,choice){
-						if(player.name1||game._characterDialogID==undefined) return;
-						var dialog=get.idDialog(game._characterDialogID);
-						if(dialog){
-							for(var button of dialog.players){
-								if(button._link==choice) button.classList.add('glow2');
-								else if(button.classList.includes('glow2')) button.classList.remove('glow2');
-							}
-						}
-					}
+
 					//确认选将后的回传函数
 					event.confirm=function(player,choice){
 						if(!player.name1) player.init(choice,null,null,false);
 						if(game._characterDialogID==undefined) return;
 						var dialog=get.idDialog(game._characterDialogID);
 						if(!dialog) return;
-
 					}
 					//处理result
 					var sendback=function(result,player){
 						var type=typeof result;
-
 						if(result&&type=='object'){
 							var choice=result.links[0];
 							event._choiceMap[player.playerid]=choice;
