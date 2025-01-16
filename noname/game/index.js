@@ -2754,7 +2754,8 @@ export class Game extends GameCompatible {
 		},
 		init: function (players) {
 			if (game.chess) return;
-			if (lib.config.mode == "versus") {
+			//if (lib.config.mode == "versus") {
+			if (lib.config.mode == "xingBei") {
 				players.bool = players.pop();
 			}
 			ui.arena.setNumber(players.length);
@@ -2767,7 +2768,8 @@ export class Game extends GameCompatible {
 			ui.handcards2 = game.me.node.handcards2;
 			ui.handcards1Container.appendChild(ui.handcards1);
 			ui.handcards2Container.appendChild(ui.handcards2);
-			if (lib.config.mode == "versus") {
+			//if (lib.config.mode == "versus") {
+			if (lib.config.mode == "xingBei") {
 				if (players.bool) {
 					ui.arena.setNumber(parseInt(ui.arena.dataset.number) + 1);
 					for (var i = 0; i < game.players.length; i++) {
@@ -2817,7 +2819,8 @@ export class Game extends GameCompatible {
 					game.players[i].setIdentity(players[i].identity);
 					game.players[i].dataset.position = players[i].position;
 					game.players[i].node.action.innerHTML = "行动";
-				} else if (lib.config.mode == "versus") {
+				//} else if (lib.config.mode == "versus") {
+				} else if (lib.config.mode == "xingBei") {
 					game.players[i].init(players[i].name, players[i].name2);
 					game.players[i].node.identity.firstChild.innerHTML = players[i].identity;
 					game.players[i].node.identity.dataset.color = players[i].color;
@@ -2848,7 +2851,8 @@ export class Game extends GameCompatible {
 				game.playerMap[game.players[i].dataset.position] = game.players[i];
 			}
 
-			if (lib.config.mode == "versus") {
+			//if (lib.config.mode == "versus") {
+			if (lib.config.mode == "xingBei") {
 				if (players.bool) {
 					game.onSwapControl();
 				}
@@ -5722,6 +5726,7 @@ export class Game extends GameCompatible {
 		if (game.addOverDialog) {
 			game.addOverDialog(dialog, result);
 		}
+		/*
 		if (typeof _status.coin == "number" && !_status.connectMode) {
 			let coeff = Math.random() * 0.4 + 0.8;
 			let added = 0;
@@ -5837,7 +5842,7 @@ export class Game extends GameCompatible {
 			if (ui.ladder && game.getLadderName) {
 				ui.ladder.innerHTML = game.getLadderName(lib.storage.ladder.current);
 			}
-		}
+		}*/
 		// if(true){
 		if (game.players.length) {
 			table = document.createElement("table");

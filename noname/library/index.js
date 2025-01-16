@@ -3583,7 +3583,8 @@ export class Library {
 			name: "显示",
 			config: {
 				update: function (config, map) {
-					if (lib.config.mode == "versus" || lib.config.mode == "chess" || lib.config.mode == "tafang" || lib.config.mode == "boss") {
+					//if (lib.config.mode == "versus" || lib.config.mode == "chess" || lib.config.mode == "tafang" || lib.config.mode == "boss") {
+					if (lib.config.mode == "xingBei" || lib.config.mode == "chess" || lib.config.mode == "tafang" || lib.config.mode == "boss") {
 						map.show_handcardbutton.show();
 					} else {
 						map.show_handcardbutton.hide();
@@ -11691,6 +11692,7 @@ export class Library {
 				return true;
 			},
 			content: function () {
+				console.log("autoswap", trigger);
 				game.swapPlayerAuto(player);
 			},
 		},
