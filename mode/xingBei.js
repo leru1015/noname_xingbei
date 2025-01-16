@@ -5680,6 +5680,34 @@ export default () => {
 			}
 		},
 		get:{
+			characterGets:function(list,num){
+				var result=[];
+				if(!num){
+					return list;
+				}else{
+					result=list.randomRemove(num);
+				}
+				if(result.includes('hongLianQiShi')&&result.includes('shengDianQiShi')){
+					var num=Math.random();
+					if(num<0.5){
+						result=result.filter(item=>item!='hongLianQiShi');
+					}else{
+						result=result.filter(item=>item!='shengDianQiShi');
+					}
+					result.push(list.randomRemove());
+				}
+				if(result.includes('shengNv')&&result.includes('jinGuiZhiNv')){
+					var num=Math.random();
+					if(num<0.5){
+						result=result.filter(item=>item!='shengNv');
+					}else{
+						result=result.filter(item=>item!='jinGuiZhiNv');
+					}
+					result.push(list.randomRemove());
+				}
+				return result;
+			},
+
 			rawAttitude:function(from,to){
 				if(from.side==to.side){
 					if(to.identity=='zhu'){
