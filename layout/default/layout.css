@@ -2053,7 +2053,7 @@ div:not(.handcards) > .card > .info > span,
 .button.character.newstyle > .identity {
 	/*display: none;*/
 	border: none;
-	background: none !important;
+	/*background: none !important;*/
 	/*box-shadow: none;*/
 	left: auto;
 	right: 6px;
