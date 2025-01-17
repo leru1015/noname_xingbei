@@ -3630,13 +3630,14 @@ export class Library {
 						map.popequip.hide();
 						map.filternode_button.hide();
 					}
+					/*
 					if (lib.config.show_card_prompt) {
 						map.hide_card_prompt_basic.show();
 						map.hide_card_prompt_equip.show();
 					} else {
 						map.hide_card_prompt_basic.hide();
 						map.hide_card_prompt_equip.hide();
-					}
+					}*/
 					if (lib.config.show_log != "off") {
 						map.clear_log.show();
 					} else {
@@ -3831,6 +3832,7 @@ export class Library {
 					init: true,
 					unfrequent: true,
 				},
+				/*
 				hide_card_prompt_basic: {
 					name: "隐藏基本牌信息",
 					intro: "不显示基本牌名称",
@@ -3842,7 +3844,7 @@ export class Library {
 					intro: "不显示装备牌名称",
 					init: false,
 					unfrequent: true,
-				},
+				},*/
 				show_phase_prompt: {
 					name: "显示阶段信息",
 					intro: "在当前回合不同阶段开始时显示阶段名称",
