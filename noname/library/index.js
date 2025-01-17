@@ -3584,11 +3584,12 @@ export class Library {
 			config: {
 				update: function (config, map) {
 					//if (lib.config.mode == "versus" || lib.config.mode == "chess" || lib.config.mode == "tafang" || lib.config.mode == "boss") {
+						/*
 					if (lib.config.mode == "xingBei" || lib.config.mode == "chess" || lib.config.mode == "tafang" || lib.config.mode == "boss") {
 						map.show_handcardbutton.show();
 					} else {
 						map.show_handcardbutton.hide();
-					}
+					}*/
 					if (lib.config.touchscreen) {
 						map.pop_logv.hide();
 					} else {
@@ -4186,6 +4187,7 @@ export class Library {
 						}
 					},
 				},
+				/*
 				show_handcardbutton: {
 					name: "显示手牌按钮",
 					init: true,
@@ -4194,6 +4196,7 @@ export class Library {
 						game.saveConfig("show_handcardbutton", bool);
 					},
 				},
+				*/
 				/*
 				show_giveup: {
 					name: "显示投降按钮",
