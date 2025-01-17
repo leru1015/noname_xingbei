@@ -4266,11 +4266,12 @@ export class Library {
 					init: true,
 					unfrequent: true,
 				},*/
+				/*
 				show_discardpile: {
 					name: "暂停时显示弃牌堆",
 					init: false,
 					unfrequent: true,
-				},
+				},*/
 				show_extensionmaker: {
 					name: "显示制作扩展",
 					init: true,
