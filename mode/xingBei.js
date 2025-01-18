@@ -2521,6 +2521,7 @@ export default () => {
 					var dict=player.storage.wuFaXingDong;
 					if(dict['认可']>=dict['否认']){
 						event.getParent('phaseUse').canTeShu=false
+						event.getParent('phaseUse').firstAtion=true;
 						var num=player.getCards('h').length;
 						player.discard(player.getCards('h'));
 						player.draw(num);
@@ -2582,6 +2583,7 @@ export default () => {
 							var dict=player.storage.wuFaXingDong;
 							if(dict['认可']>=dict['否认']){
 								event.getParent('phaseUse').canTeShu=false
+								event.getParent('phaseUse').firstAtion=true;
 								var num=player.getCards('h').length;
 								player.discard(player.getCards('h'));
 								player.draw(num);
@@ -2636,6 +2638,7 @@ export default () => {
 							var dict=player.storage.wuFaXingDong;
 							if(dict['认可']>=dict['否认']){
 								event.getParent('phaseUse').canTeShu=false
+								event.getParent('phaseUse').firstAtion=true;
 								var num=player.getCards('h').length;
 								player.discard(player.getCards('h'));
 								player.draw(num);
@@ -3333,6 +3336,8 @@ export default () => {
 					}
 					player.storage.qiDong=flag;
 
+					event.first=firstAtion;//首次行动
+
 					const stat = player.getStat();
 					for (let i in stat.skill) {
 						let bool = false;
@@ -3360,9 +3365,6 @@ export default () => {
 						event.logged = true;
 					}
 
-					if(!event.flag){
-						event.flag=false;
-					}
 					if(player.storage.gongJiOrFaShu>0){
 						var next=player.gongJiOrFaShu().set('action',true);
 					}else if(player.storage.faShu>0){
@@ -3374,62 +3376,28 @@ export default () => {
 						if(!lib.config.show_phaseuse_prompt){
 							next.set('prompt',false);
 						}
-						if(!event.flag){
-							next.set('type','phase');
-							event.flag=true;
+						if(event.firstAtion){
+							//next.set('type','phase');
+							next.set('firstAtion',event.firstAtion);
+							event.firstAtion=false;
 						}
-						if(event.qiDong){
-							next.set('type','qiDong');
-							event.qiDong=false;
-						}
-						
 					}
-					"step 1"
-					/*
-					if(result.bool&&!event.skipped&&(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
-						event.goto(0);
-					}*/
+
+					"step 4";
+					if(result.name=='gongJiOrFaShu'){
+						player.storage.gongJiOrFaShu--;
+					}else if(result.name=='faShu'){
+						player.storage.faShu--;
+					}else if(result.name=='gongJi'){
+						player.storage.gongJi--;
+					}
 					if(!event.skipped&&(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
-						if(result.bool){
-							event.goto(0);
-						}else{
-							if(result.name=='gongJiOrFaShu'){
-								player.storage.gongJiOrFaShu--;
-							}else if(result.name=='faShu'){
-								player.storage.faShu--;
-							}else if(result.name=='gongJi'){
-								player.storage.gongJi--;
-							}
-							if(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0){
-								event.goto(0);
-							}
-						}
-						
+						event.goto(3);
 					}
-					game.broadcastAll(function(){
-						if(ui.tempnowuxie){
-							ui.tempnowuxie.close();
-							delete ui.tempnowuxie;
-						}
-					});
-					"step 2"
-					var stat=player.getStat();
-					for(var i in stat.skill){
-						var bool=false;
-						var info=lib.skill[i];
-						if(!info) continue;
-						if(info.enable!=undefined){
-							if(typeof info.enable=='string'&&info.enable=='phaseUse') bool=true;
-							else if(typeof info.enable=='object'&&info.enable.includes('phaseUse')) bool=true;
-						}
-						if(bool) stat.skill[i]=0;
-					}
-					for(var i in stat.card){
-						var bool=false;
-						var info=lib.card[i];
-						if(!info) continue;
-						if(info.updateUsable=='phaseUse') stat.card[i]=0;
-					}
+					"step 5";
+					event.trigger("phaseUseEnd");
+					"step 6";
+					event.trigger("phaseUseAfter");
 				},
 				chooseToDiscard:function(){
 					"step 0"
@@ -3709,25 +3677,7 @@ export default () => {
 					}
 
 					//xingBei
-					if(event.parent&&!event.action){
-						event.set('action',event.parent.action);					
-					}
-					if(event.action){
-						var type=get.type(card);
-						if(type=='faShu'){
-							if(player.storage.faShu>0){
-								player.storage.faShu--;
-							}else if(player.storage.gongJiOrFaShu>0){
-								player.storage.gongJiOrFaShu--;
-							}
-						}else if(type=='gongJi'){
-							if(player.storage.gongJi>0){
-								player.storage.gongJi--;
-							}else if(player.storage.gongJiOrFaShu>0){
-								player.storage.gongJiOrFaShu--;
-							}
-						}
-					}
+					
 
 					if(targets.length){
 						//var str=(targets.length==1&&targets[0]==player)?'#b自己':targets;
