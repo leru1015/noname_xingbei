@@ -66,7 +66,29 @@ export default () => {
                 ui.updateShiQiInfo();
             });
 			"step 3"
-			if(_status.connectMode) _status.mode=lib.configOL.versus_mode;
+			if(_status.connectMode){
+				_status.mode=lib.configOL.versus_mode;
+				game.zhanJiList={hongShiQi:game.hongShiQi,lanShiQi:game.lanShiQi,hongZhanJi:game.hongZhanJi,lanZhanJi:game.lanZhanJi,hongXingBei:game.hongXingBei,lanXingBei:game.lanXingBei};
+                _status.onreconnect=[function(zhanJiList){
+                    var players=game.players;
+                    for(var i=0;i<players.length;i++){
+                        if(players[i].side==true){
+                            players[i].node.identity.firstChild.innerHTML='红';
+                        }
+                        else{
+                            players[i].node.identity.firstChild.innerHTML='蓝';
+                        }
+                    }
+					game.hongShiQi=zhanJiList['hongShiQi'];
+					game.lanShiQi=zhanJiList['lanShiQi'];
+					game.hongZhanJi=zhanJiList['hongZhanJi'];
+					game.lanZhanJi=zhanJiList['lanZhanJi'];
+					game.hongXingBei=zhanJiList['hongXingBei'];
+					game.lanXingBei=zhanJiList['lanXingBei'];
+                    ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
+                    ui.updateShiQiInfo();
+                },game.zhanJiList];
+			};
 			var players=get.players(lib.sort.position);
 			var info=[];
 			for(var i=0;i<players.length;i++){
@@ -548,27 +570,6 @@ export default () => {
 			},
 
 			chooseCharacterOL:function(){
-				game.zhanJiList={hongShiQi:game.hongShiQi,lanShiQi:game.lanShiQi,hongZhanJi:game.hongZhanJi,lanZhanJi:game.lanZhanJi,hongXingBei:game.hongXingBei,lanXingBei:game.lanXingBei};
-                _status.onreconnect=[function(zhanJiList){
-                    var players=game.players;
-                    for(var i=0;i<players.length;i++){
-                        if(players[i].side==true){
-                            players[i].node.identity.firstChild.innerHTML='红';
-                        }
-                        else{
-                            players[i].node.identity.firstChild.innerHTML='蓝';
-                        }
-                    }
-					game.hongShiQi=zhanJiList['hongShiQi'];
-					game.lanShiQi=zhanJiList['lanShiQi'];
-					game.hongZhanJi=zhanJiList['hongZhanJi'];
-					game.lanZhanJi=zhanJiList['lanZhanJi'];
-					game.hongXingBei=zhanJiList['hongXingBei'];
-					game.lanXingBei=zhanJiList['lanXingBei'];
-                    ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
-                    ui.updateShiQiInfo();
-                },game.zhanJiList];
-
 				if(lib.configOL.versus_mode=='4v4'){
 					game.chooseCharacterOLDuoXuanYi();
 				}else{
