@@ -2520,6 +2520,7 @@ export default () => {
 					"step 3"
 					var dict=player.storage.wuFaXingDong;
 					if(dict['认可']>=dict['否认']){
+						event.getParent('phaseUse').canTeShu=false
 						var num=player.getCards('h').length;
 						player.discard(player.getCards('h'));
 						player.draw(num);
@@ -2580,6 +2581,7 @@ export default () => {
 							"step 3"
 							var dict=player.storage.wuFaXingDong;
 							if(dict['认可']>=dict['否认']){
+								event.getParent('phaseUse').canTeShu=false
 								var num=player.getCards('h').length;
 								player.discard(player.getCards('h'));
 								player.draw(num);
@@ -2633,6 +2635,7 @@ export default () => {
 							"step 3"
 							var dict=player.storage.wuFaXingDong;
 							if(dict['认可']>=dict['否认']){
+								event.getParent('phaseUse').canTeShu=false
 								var num=player.getCards('h').length;
 								player.discard(player.getCards('h'));
 								player.draw(num);
@@ -4163,33 +4166,6 @@ export default () => {
 						player.stat[player.stat.length-1].allSkills++;
 					}
 
-					//xingBei
-					if(event.getParent()&&!event.action){
-						event.action=event.getParent().action;
-					}
-					if(event.action){
-						var type=get.info(event.skill).type;
-						if(type=='teShu'){
-							player.storage.gongJiOrFaShu--;
-						}else if(type=='qiDong'){
-							event.getParent(2).qiDong=true;
-						}else if(type=='wuFaXingDong'){//使用无法行动时的设置
-							event.getParent(2).flag=false;
-							event.getParent(2).canTeShu=false
-						}else if(type=='faShu'){
-							if(player.storage.faShu>0){
-								player.storage.faShu--;
-							}else if(player.storage.gongJiOrFaShu>0){
-								player.storage.gongJiOrFaShu--;
-							}
-						}else if(type=='gongJi'){
-							if(player.storage.gongJi>0){
-								player.storage.gongJi--;
-							}else if(player.storage.gongJiOrFaShu>0){
-								player.storage.gongJiOrFaShu--;
-							}
-						}
-					}
 
 					if(info.prepare){
 						switch(info.prepare){
