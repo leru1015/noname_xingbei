@@ -3694,22 +3694,6 @@ export const Content = {
 			everything: [],
 		});
 
-		//xingBei设置
-		player.storage.gongJiOrFaShu=1;
-		player.storage.faShu=0;
-		player.storage.gongJi=0;
-		//判断是否有可启动技
-		var skills=player.skills;
-		for(var i=0;i<skills.length;i++){
-			var info=get.info(skills[i]);
-			var flag=false;
-			if(info.type=='qiDong'){
-				if(info.filter(event,player)) flag=true;
-				if(flag) break;
-			}
-		}
-		player.storage.qiDong=flag;
-
 		var players = game.players.slice(0).concat(game.dead);
 		for (var i = 0; i < players.length; i++) {
 			var current = players[i];

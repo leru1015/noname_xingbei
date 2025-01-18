@@ -3316,11 +3316,50 @@ export default () => {
 		element:{
 			content:{
 				phaseUse:function(){
-					"step 0"
-					if(!event.logged){
-						game.log(player,'进入了行动阶段');
-						event.logged=true;
+					"step 0";
+					//xingBei设置
+					player.storage.gongJiOrFaShu=1;
+					player.storage.faShu=0;
+					player.storage.gongJi=0;
+					//判断是否有可启动技
+					var skills=player.skills;
+					for(var i=0;i<skills.length;i++){
+						var info=get.info(skills[i]);
+						var flag=false;
+						if(info.type=='qiDong'){
+							if(info.filter(event,player)) flag=true;
+							if(flag) break;
+						}
 					}
+					player.storage.qiDong=flag;
+
+					const stat = player.getStat();
+					for (let i in stat.skill) {
+						let bool = false;
+						const info = lib.skill[i];
+						if (!info) continue;
+						if (info.enable != undefined) {
+							if (typeof info.enable == "string" && info.enable == "phaseUse") bool = true;
+							else if (typeof info.enable == "object" && info.enable.includes("phaseUse")) bool = true;
+						}
+						if (bool) stat.skill[i] = 0;
+					}
+					for (let i in stat.card) {
+						let bool = false;
+						const info = lib.card[i];
+						if (!info) continue;
+						if (info.updateUsable == "phaseUse") stat.card[i] = 0;
+					}
+					"step 1";
+					event.trigger("phaseUseBefore");
+					"step 2";
+					event.trigger("phaseUseBegin");
+					"step 3";
+					if (!event.logged) {
+						game.log(player, "进入了出牌阶段");
+						event.logged = true;
+					}
+
 					if(!event.flag){
 						event.flag=false;
 					}
