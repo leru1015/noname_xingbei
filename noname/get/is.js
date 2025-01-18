@@ -9,7 +9,7 @@ export class Is {
 	//星杯
 	xiDong(event){
 		//判断事件是否为行动事件
-		return event.action==true||event.getParent().action==true||event.getParent().name=='chooseToUse'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
+		return event.action==true||event.getParent().action==true||event.getParent().name=='gongJiOrFaShu'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
 	}
 	//useSkill||useCard
 	gongJi(event){
