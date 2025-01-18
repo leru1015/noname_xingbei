@@ -14206,6 +14206,14 @@ export class Library {
 				nature: "purplemm",
 			},
 		],
+		[
+			"三版",
+			{
+				showName: "三",
+				color: "#ffff99",
+				nature: "firemm",
+			},
+		],
 	]);
 	groupnature = {
 		shen: "shen",
