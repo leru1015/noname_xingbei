@@ -3683,7 +3683,8 @@ export class Click {
 				const hpDiv = ui.create.div(".hp", characterIntroTable),
 					nameInfoHP = nameInfo[2],
 					infoHP = get.infoHp(nameInfoHP);
-				hpDiv.dataset.condition = infoHP < 4 ? "mid" : "high";
+				//hpDiv.dataset.condition = infoHP < 4 ? "mid" : "high";
+				hpDiv.dataset.condition = 'xing';
 				ui.create.div(hpDiv);
 				const hpTextDiv = ui.create.div(".text", hpDiv),
 					infoMaxHP = get.infoMaxHp(nameInfoHP);

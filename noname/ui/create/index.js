@@ -2968,13 +2968,16 @@ export class Create {
 						str += get.numStr(maxHp);
 					}
 					var textnode = ui.create.div(".text", str, node.node.hp);
+					/*
 					if (infoitem[2] == 0) {
 						node.node.hp.hide();
 					} else if (get.infoHp(infoitem[2]) <= 3) {
 						node.node.hp.dataset.condition = "mid";
 					} else {
 						node.node.hp.dataset.condition = "high";
-					}
+					}*/
+					node.node.hp.dataset.condition = "xing";
+
 					/*
 					if (hujia > 0) {
 						ui.create.div(node.node.hp, ".shield");
