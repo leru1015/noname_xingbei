@@ -3351,7 +3351,7 @@ export default () => {
 						if(result.bool){
 							event.goto(0);
 						}else{
-							if(result.name=='chooseToUse'){
+							if(result.name=='gongJiOrFaShu'){
 								player.storage.gongJiOrFaShu--;
 							}else if(result.name=='faShu'){
 								player.storage.faShu--;
