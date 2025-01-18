@@ -2198,7 +2198,7 @@ export default () => {
 				return item.xiBie;
 			},
 			setMingGe:(item,mingGe)=>{
-				item.number=mingGe;
+				item.mingGe=mingGe;
 				return item.mingGe;
 			},
 
