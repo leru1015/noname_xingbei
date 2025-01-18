@@ -548,7 +548,8 @@ export default () => {
 			},
 
 			chooseCharacterOL:function(){
-                _status.onreconnect=[function(){
+				game.zhanJiList={hongShiQi:game.hongShiQi,lanShiQi:game.lanShiQi,hongZhanJi:game.hongZhanJi,lanZhanJi:game.lanZhanJi,hongXingBei:game.hongXingBei,lanXingBei:game.lanXingBei};
+                _status.onreconnect=[function(zhanJiList){
                     var players=game.players;
                     for(var i=0;i<players.length;i++){
                         if(players[i].side==true){
@@ -558,9 +559,15 @@ export default () => {
                             players[i].node.identity.firstChild.innerHTML='蓝';
                         }
                     }
+					game.hongShiQi=zhanJiList['hongShiQi'];
+					game.lanShiQi=zhanJiList['lanShiQi'];
+					game.hongZhanJi=zhanJiList['hongZhanJi'];
+					game.lanZhanJi=zhanJiList['lanZhanJi'];
+					game.hongXingBei=zhanJiList['hongXingBei'];
+					game.lanXingBei=zhanJiList['lanXingBei'];
                     ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
                     ui.updateShiQiInfo();
-                }];
+                },game.zhanJiList];
 
 				if(lib.configOL.versus_mode=='4v4'){
 					game.chooseCharacterOLDuoXuanYi();
@@ -2338,6 +2345,12 @@ export default () => {
 						}
 					}
 				}
+
+				if(game.zhanJiList){
+					game.zhanJiList['hongShiQi']=game.hongShiQi;
+					game.zhanJiList['lanShiQi']=game.lanShiQi;
+				}
+
 				ui.updateShiQiInfo();
 				game.broadcast(function(hongShiQi,lanShiQi){
 					game.hongShiQi=hongShiQi;
@@ -2391,6 +2404,12 @@ export default () => {
 				}
 				game.hongZhanJi.sort();
 				game.lanZhanJi.sort();
+
+				if(game.zhanJiList){
+					game.zhanJiList['hongZhanJi']=game.hongZhanJi;
+					game.zhanJiList['lanZhanJi']=game.lanZhanJi;
+				}
+
 				ui.updateShiQiInfo();
 				game.broadcast(function(hongZhanJi,lanZhanJi){
 					game.hongZhanJi=hongZhanJi;
@@ -2423,6 +2442,12 @@ export default () => {
 						}
 					}
 				}
+
+				if(game.zhanJiList){
+					game.zhanJiList['hongXingBei']=game.hongXingBei;
+					game.zhanJiList['lanXingBei']=game.lanXingBei;
+				}
+
 				ui.updateShiQiInfo();
 				game.broadcast(function(hongXingBei,lanXingBei){
 					game.hongXingBei=hongXingBei;
@@ -4974,6 +4999,12 @@ export default () => {
 							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
 						}
 					}
+
+					if(game.zhanJiList){
+						game.zhanJiList['hongXingBei']=game.hongXingBei;
+						game.zhanJiList['lanXingBei']=game.lanXingBei;
+					}
+
 					ui.updateShiQiInfo();
 					game.broadcast(function(hongXingBei,lanXingBei){
 						game.hongXingBei=hongXingBei;
@@ -5018,6 +5049,12 @@ export default () => {
 							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
 						}
 					}
+
+					if(game.zhanJiList){
+						game.zhanJiList['hongShiQi']=game.hongShiQi;
+						game.zhanJiList['lanShiQi']=game.lanShiQi;
+					}
+
 					ui.updateShiQiInfo();
 					game.broadcast(function(hongShiQi,lanShiQi){
 						game.lanShiQi=lanShiQi;
@@ -5071,6 +5108,12 @@ export default () => {
 					}
 					game.hongZhanJi.sort();
 					game.lanZhanJi.sort();
+
+					if(game.zhanJiList){
+						game.zhanJiList['hongZhanJi']=game.hongZhanJi;
+						game.zhanJiList['lanZhanJi']=game.lanZhanJi;
+					}
+
 					ui.updateShiQiInfo();
 					game.broadcast(function(hongZhanJi,lanZhanJi){
 						game.lanZhanJi=lanZhanJi;
