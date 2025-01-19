@@ -3334,9 +3334,9 @@ export default () => {
 							if(flag) break;
 						}
 					}
-					player.storage.qiDong=flag;
+					event.canQiDong=flag;
 
-					event.first=firstAtion;//首次行动
+					event.firstAction=true;//首次行动
 
 					const stat = player.getStat();
 					for (let i in stat.skill) {
@@ -3366,32 +3366,32 @@ export default () => {
 					}
 
 					if(player.storage.gongJiOrFaShu>0){
-						event.name='gongJiOrFaShu';
+						event.xingDong='gongJiOrFaShu';
 						var next=player.gongJiOrFaShu().set('action',true);
 					}else if(player.storage.faShu>0){
-						event.name='faShu';
+						event.xingDong='faShu';
 						var next=player.faShu().set('action',true).set('prompt','法术行动');
 					}else if(player.storage.gongJi>0){
-						event.name='gongJi';
+						event.xingDong='gongJi';
 						var next=player.gongJi().set('action',true).set('prompt','攻击行动');
 					}
 					if(next){
 						if(!lib.config.show_phaseuse_prompt){
 							next.set('prompt',false);
 						}
-						if(event.firstAtion){
+						if(event.firstAction){
 							next.set('type','phase');
-							next.set('firstAtion',event.firstAtion);
-							event.firstAtion=false;
+							next.set('firstAction',event.firstAction);
+							event.firstAction=false;
 						}
 					}
 
 					"step 4";
-					if(event.name=='gongJiOrFaShu'){
+					if(event.xingDong=='gongJiOrFaShu'){
 						player.storage.gongJiOrFaShu--;
-					}else if(event.name=='faShu'){
+					}else if(event.xingDong=='faShu'){
 						player.storage.faShu--;
-					}else if(event.name=='gongJi'){
+					}else if(event.xingDong=='gongJi'){
 						player.storage.gongJi--;
 					}
 					if(!event.skipped&&(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
