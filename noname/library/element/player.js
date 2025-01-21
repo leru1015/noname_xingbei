@@ -3285,7 +3285,7 @@ export class Player extends HTMLDivElement {
 			function () {
 				dialog.delete();
 			},
-			lib.quickVoice.includes(str) ? 3800 : 2000
+			lib.quickVoice.includes(str) ? 3800 : 3200
 		);
 		var name = get.translation(this.name);
 		var info = [name ? name + "[" + this.nickname + "]" : this.nickname, str];
