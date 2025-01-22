@@ -5074,6 +5074,10 @@ export default () => {
 				},
 				changeShiQi:function(){
 					'step 0'
+					event.trigger('changeShiQiPanDuan');
+					'step 1'
+					event.trigger('changeShiQiQian');
+					'step 2'
 					num=event.num;
 					side=event.side;
 					//增加参数是否存在最大变动值，如果存在则进行限制
@@ -5118,7 +5122,12 @@ export default () => {
 					},game.hongShiQi,game.lanShiQi);
 
 					game.addVideo('changeShiQi',null,[numx,side]);
+					'step 3'
 					game.checkResult();
+					'step 4'
+					event.trigger('changeShiQiJieShu');
+					'step 5'
+					event.trigger('changeShiQiHou');
 				},
 				changeZhanJi:function(){
 					'step 0'
