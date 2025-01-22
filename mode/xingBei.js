@@ -3773,11 +3773,16 @@ export default () => {
 									event.done.set('yuanYin','damage');
 								}
 								if(event.faShu){
-									event.done.set('faShu',event.faShu);
+									event.done.set('faShu',true);
+								}else{
+									event.done.set('faShu',false);
 								}
 								//传递士气最大变动值
 								if(typeof event.shiQiMax=='number'){
 									event.done.set('shiQiMax',event.shiQiMax);
+								}
+								if(event.source){
+									event.done.set('source',event.source);
 								}
 							}
 						}
@@ -4556,14 +4561,9 @@ export default () => {
 					ui.clear();
 				},
 				draw:function(){
-					// if(lib.config.background_audio){
-					// 	game.playAudio('effect','draw');
-					// }
-					// game.broadcast(function(){
-					//     if(lib.config.background_audio){
-					// 		game.playAudio('effect','draw');
-					// 	}
-					// });
+					'step 0'
+					event.trigger('moPaiQian');
+					'step 1'
 					if(typeof event.minnum=='number'&&num<event.minnum){
 						num=event.minnum;
 					}
@@ -4605,11 +4605,15 @@ export default () => {
 							if(event.yuanYin=='damage'){
 								next.set('yuanYin','damage')
 								if(event.faShu===true){
-									next.set('faShu',event.faShu)
+									next.set('faShu',true);
+								}else{
+									next.set('faShu',false)
 								}
 							}
 							if(event.shiQiXiaJiang==false){
 								next.set('shiQiXiaJiang',false);
+							}else{
+								next.set('shiQiXiaJiang',true);
 							}
 							//传递士气最大变动值
 							if(typeof event.shiQiMax=='number'){
@@ -4624,8 +4628,16 @@ export default () => {
 							player.$draw(cards.length);
 						}
 					}
+					//如果有来源，则传递来源
+					if(source){
+						next.set('source',source);
+					}
 					if(event.gaintag) next.gaintag.addArray(event.gaintag);
 					event.result=cards;
+					'step 2'
+					event.trigger('moPaiJiShu');
+					'step 3'
+					event.trigger('moPaiHou');
 				},
 				discard:function(){
 					"step 0"
@@ -4648,13 +4660,18 @@ export default () => {
 							var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
 							if(event.yuanYin=='damage'){
 								next.set('yuanYin','damage');
-							}
-							if(event.faShu){
-								next.set('faShu',event.faShu)
+								if(event.faShu){
+									next.set('faShu',true);
+								}else{
+									next.set('faShu',false)
+								}
 							}
 							//传递士气最大变动值
 							if(typeof event.shiQiMax=='number'){
 								next.set('shiQiMax',event.shiQiMax);
+							}
+							if(event.source){
+								next.set('source',event.source);
 							}
 						}
 					}
@@ -4674,30 +4691,15 @@ export default () => {
 				damage:function(){
 					"step 0"
 					event.forceDie=true;
-					if(event.unreal) event.goto(4)
-					event.trigger('damageBegin0');
+					event.trigger('zaoChengShangHai');
 					'step 1'
-					event.trigger('damageBegin1');
+					event.trigger('shouDaoShangHai');
 					var str=`${num}点${event.faShu?'法术':'攻击'}伤害`;
 					game.log(player,'受到',source,str);
 					"step 2"
-					event.trigger('damageBegin2');
-					"step 3"
-					event.trigger('damageBegin3');
-					"step 4"
-					event.trigger('damageBegin4');
-					"step 5"
 					//检测治疗触发器是否能触发
 					if(event.canZhiLiao!=false&&event.diXiao!=false){
 						event.canZhiLiao=true;
-					}
-					for(var i=0;i<game.players.length;i++){
-						if(event.canZhiLiao==false){
-							break;
-						}
-						if(game.players[i].hasMark('xueQiangWeiTingYuan')){
-							event.canZhiLiao=false;
-						}
 					}
 					if(event.canZhiLiao&&player.zhiLiao>0){
 						var next=game.createEvent('zhiLiao',false);
@@ -4706,15 +4708,14 @@ export default () => {
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
-						next.faShu=event.faShu
+						next.faShu=event.faShu;
+						next.num=num;
 					}
-					"step 6"
-					event.trigger("shiJiShangHai");
-					"step 7"
-					event.trigger('jiangYaoChengShou1');
-					"step 8"
-					event.trigger('jiangYaoChengShou2');
-					"step 9"
+					"step 3"
+					event.trigger('chanShengShangHai');
+					"step 4"
+					event.trigger('chengShouShangHai');
+					"step 5"
 					game.broadcastAll(function(num){
                         if(lib.config.background_audio) game.playAudio('effect','damage'+(num>2?'2':''));
                     },num);
@@ -4739,9 +4740,17 @@ export default () => {
 					player.getHistory('damage').push(event);
 
 					if(!event.unreal){
-						var next=player.draw(num).set('yuanYin','damage').set('faShu',event.faShu);
+						var next=player.draw(num,source).set('yuanYin','damage');
+						if(event.faShu){
+							next.set('faShu',true);
+						}else{
+							next.set('faShu',false);
+						}
+
 						if(event.shiQiXiaJiang==false){
 							next.set('shiQiXiaJiang',false);
+						}else{
+							next.set('shiQiXiaJiang',true);
 						}
 						//传递士气最大变动值
 						if(typeof event.shiQiMax=='number'){
@@ -4750,25 +4759,8 @@ export default () => {
 					}
 					if(event.animate!==false){
 						player.$damage(source);
-						var natures=(event.nature||'').split(lib.natureSeparator);
-						game.broadcastAll(function(natures,player){
-							if(lib.config.animation&&!lib.config.low_performance){
-								if(natures.includes('fire')){
-									player.$fire();
-								}
-								if(natures.includes('thunder')){
-									player.$thunder();
-								}
-							}
-						},natures,player);
-						var numx=Math.max(0,num);
-						player.$damagepop(-numx,natures[0]);
 					}
-					if(event.unreal) event.goto(9)
-					if(!event.notrigger){
-						event.trigger('damage');
-					}
-					"step 10"
+					"step 6"
 					if(source&&lib.config.border_style=='auto'){
 						var dnum=0;
 						for(var j=0;j<source.stat.length;j++){
@@ -4809,9 +4801,12 @@ export default () => {
 							}
 						}
 					}
-					"step 11"
-					if(!event.notrigger) event.trigger('damageSource');
-					
+					"step 7"
+					event.trigger('chengShouShangHaiHou');
+					'step 8'
+					event.trigger('shouDaoShangHaiHou');
+					'step 9'
+					event.trigger('shangHaiJieSuanHou');
 				},
 				gain:function(){
 					"step 0"
@@ -5013,21 +5008,27 @@ export default () => {
 					game.delayx();
 					var num=player.needsToDiscard();
 					if(num>0){
-						var next=player.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+						var next=player.chooseToDiscard(num,true).set('baoPai',true);
 						if(event.yuanYin=='damage'){
 							next.set('yuanYin','damage');
 							if(event.faShu===true){
-								next.set('faShu',event.faShu)
+								next.set('faShu',true);
+							}else{
+								next.set('faShu',false);
 							}
 						}
 						if(event.shiQiXiaJiang==false){
 							next.set('shiQiXiaJiang',false);
+						}else{
+							next.set('shiQiXiaJiang',true);
 						}
 						//传递士气最大变动值
 						if(typeof event.shiQiMax=='number'){
 							next.set('shiQiMax',event.shiQiMax);
 						}
-						
+						if(source){
+							next.set('source',source);
+						}
 					}
 					if(event.updatePile) game.updateRoundNumber();
 				},
