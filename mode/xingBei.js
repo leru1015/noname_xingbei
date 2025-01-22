@@ -3196,6 +3196,23 @@ export default () => {
 		},
 		element:{
 			content:{
+				link: function () {
+					const isLinked = player.isLinked();
+					game.log(player, (isLinked ? "重置" : "横置"));
+					game.broadcastAll(
+						(player, isLinked) => {
+							if (lib.config.background_audio) game.playAudio("effect", "link" + (isLinked ? "_clear" : ""));
+							player.classList.remove("target");
+							player.classList.toggle(get.is.linked2(player) ? "linked2" : "linked");
+							ui.updatej(player);
+							ui.updatem(player);
+						},
+						player,
+						isLinked
+					);
+					game.addVideo("link", player, player.isLinked());
+				},
+
 				createTrigger: function () {
 					"step 0";
 					// console.log('triggering: ' + player.name+ ' \'s skill: ' + event.skill+' in ' + event.triggername)
