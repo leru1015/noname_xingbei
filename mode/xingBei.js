@@ -5166,13 +5166,13 @@ export default () => {
 						if(side==true){
 							for(let i=0;i<num;i++){
 								game.hongZhanJi.push(xingShi);
-								game.log('<span style="color:red;">红方</span>战绩区增加',name);
 							}
+							game.log(`<span style="color:red;">红方</span>战绩区增加了${num}个`,name);
 						}else if(side==false){
 							for(let i=0;i<num;i++){
 								game.lanZhanJi.push(xingShi);
-								game.log('<span style="color:blue;">蓝方</span>战绩区增加为',name);
 							}
+							game.log(`<span style="color:blue;">蓝方</span>战绩区增加了${num}个`,name);
 						}
 					}else if(num<0){
 						num=-num;
@@ -5181,19 +5181,17 @@ export default () => {
 								let index = game.hongZhanJi.indexOf(xingShi);  
 								if (index !== -1) {  
 									game.hongZhanJi.splice(index, 1);  
-									game.log('<span style="color:red;">红方</span>战绩区移除',name);
 								}
 							}
-							
+							game.log(`<span style="color:red;">红方</span>战绩区移除了${num}个`,name);
 						}else if(side==false){
 							for(let i=0;i<num;i++){
 								let index = game.lanZhanJi.indexOf(xingShi);  
 								if (index !== -1) {  
 									game.lanZhanJi.splice(index, 1);  
-									game.log('<span style="color:blue;">蓝方</span>战绩区移除',name);
 								}
 							}
-							
+							game.log(`<span style="color:blue;">蓝方</span>战绩区移除了${num}个`,name);
 						}	
 					}
 					game.hongZhanJi.sort();
