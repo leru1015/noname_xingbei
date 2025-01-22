@@ -5696,19 +5696,50 @@ export default () => {
 				countNengLiangAll:function(){//统计所有能量数
 					return this.countMark('_tiLian_baoShi')+this.countMark('_tiLian_shuiJing');
 				},
-				damageFaShu:function(){//法术伤害，damage简单套皮
-					var num,source;
-					for(var i=0;i<arguments.length;i++){
-						if(typeof arguments[i]=='number'){
-							num=arguments[i];
-						}
-						else if(get.itemtype(arguments[i])=='player'){
-							source=arguments[i];
-						}
+				faShuDamage:function(){//法术伤害
+					const next = game.createEvent("damage");
+					next.faShu = true;
+					next.player = this;
+					let noCard, noSource;
+					const event = _status.event;
+					for (const argument of arguments) {
+						if (get.itemtype(argument) == "cards") next.cards = argument.slice();
+						else if (get.itemtype(argument) == "card") next.card = argument;
+						else if (typeof argument == "number") next.num = argument;
+						else if (get.itemtype(argument) == "player") next.source = argument;
+						else if (argument && typeof argument == "object" && argument.name) next.card = argument;
+						else if (argument == "nocard") noCard = true;
+						else if (argument == "nosource") noSource = true;
+						else if (argument == "notrigger") {
+							next._triggered = null;
+							next.notrigger = true;
+						} else if (argument == "unreal") next.unreal = true;
 					}
-					if(typeof num!='number') num=1;
-					if(get.itemtype(source)!='player') source=this;
-					this.damage(num,source).set('faShu',true);
+					if (!next.card && !noCard) next.card = event.card;
+					if (!next.cards && !noCard) next.cards = event.cards;
+					if (!next.source && !noSource) {
+						const source = event.customSource || event.player;
+						if (source && !source.isDead()) next.source = source;
+					}
+					if (typeof next.num != "number") next.num = (event.baseDamage || 1) + (event.extraDamage || 0);
+					next.original_num = next.num;
+					next.change_history = [];
+					if (next.unreal) next._triggered = 2;
+					next.setContent("damage");
+					next.filterStop = function () {
+						if (this.source && this.source.isDead()) delete this.source;
+						var num = this.original_num;
+						for (var i of this.change_history) num += i;
+						if (num != this.num) this.change_history.push(this.num - num);
+						if (this.num <= 0) {
+							delete this.filterStop;
+							this.trigger("damageZero");
+							this.finish();
+							this._triggered = null;
+							return true;
+						}
+					};
+					return next;
 				},
 				addZhiShiWu:function(zhiShiWu,num,max,forced){//添加指示物
 					if(!this.hasSkill(zhiShiWu)&&!forced) return;
