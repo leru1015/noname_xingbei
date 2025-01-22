@@ -3227,9 +3227,9 @@ export default () => {
 					game.broadcast("closeDialog", event.dialogid);
 					event.dialog.close();
 					'step 2'
-					event.trigger('showCardsJieShu');
+					if(event.name=='showCards') event.trigger('showCardsJieShu');
 					'step 3'
-					event.trigger('showCardsHou');
+					if(event.name=='showCards') event.trigger('showCardsHou');
 				},
 
 				link: function () {
@@ -5652,8 +5652,8 @@ export default () => {
 					next.setContent('changeXingBei');
 					return next;
 				},
-				showGaiPai:function(cards,str){
-					var next=game.createEvent('showGaiPai');
+				showHiddenCards:function(cards,str){
+					var next=game.createEvent('showHiddenCards');
 					next.player=this;
 					next.str=str;
 					if(typeof cards=='string'){
