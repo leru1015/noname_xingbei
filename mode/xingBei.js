@@ -2376,6 +2376,15 @@ export default () => {
             shuiJing:'水晶',
 		},
 		skill:{
+			viewHandcard:{
+				ai:{
+					viewHandcard:true,
+					skillTagFilter:function(player,tag,target){
+						return player.side==target.side;
+					},
+				},
+			},
+
 			_qiDong:{
 				trigger:{player:'triggerEnd'},
 				direct:true,
@@ -2386,49 +2395,6 @@ export default () => {
 				content:function(){
 					trigger.getParent('phaseUse').canTeShu=false;
 					trigger.getParent('phaseUse').qiDongGuo=true;
-				},
-			},
-
-			_gongJiRiZhi:{
-				trigger:{player:'gongJiSheZhi'},
-				direct:true,
-				lastDo:true,
-				filter:function(event,player){
-					return event.canYingZhan==false||event.canShengGuang==false||event.canShengDun==false;
-				},
-				content:function(){
-					var canYingZhan=trigger.canYingZhan;
-					var canShengGuang=trigger.canShengGuang;
-					var canShengDun=trigger.canShengDun;
-
-					var str='本次攻击';
-					if(canYingZhan==false&&canShengGuang==false&&canShengDun==false){
-						str+='强制命中';
-					}else{
-						var list=[canYingZhan,canShengGuang,canShengDun];
-						for(var i=0;i<list.length;i++){
-							if(i==0){
-								if(list[i]==false) str+='无法应战';
-							}else if(i==1){
-								if(list[i]==false) str+='无法被圣光抵消';
-							}else{
-								if(list[i]==false) str+='无法被圣盾抵消';
-							}
-							if(i<list.length-1){
-								if(list[i+1]==false) str+='，';
-							}
-						}
-					}
-					game.log(str);
-				}
-			},
-		
-			viewHandcard:{
-				ai:{
-					viewHandcard:true,
-					skillTagFilter:function(player,tag,target){
-						return player.side==target.side;
-					},
 				},
 			},
 
@@ -2548,32 +2514,74 @@ export default () => {
 					}
 				}
 			},
-			/*
-			_chongZhiAction:{
-				trigger:{player:'phaseBegin'},
+            _faShuXianZhi:{
+                mod:{
+                    cardEnabled:function(card){
+                        if(_status.event.name=='faShu'){
+                            if(get.type(card)!='faShu') return false;
+                        }
+                    }
+                },
+            },
+            _gongJiXianZhi:{
+                mod:{
+                    cardEnabled:function(card){
+                        if(_status.event.name=='gongJi'){
+                            if(get.type(card)!='gongJi') return false;
+                        }
+                    }    
+                }
+            },
+			_gongJiXingShi:{//攻击获得星石
+				trigger:{player:'gongJiMingZhong'},
 				direct:true,
 				firstDo:true,
+				filter:function(event,player){
+					var zhanJi=get.zhanJi(player.side);
+					return zhanJi.length<game.zhanJiMax;
+				},
 				content:function(){
-					player.storage.gongJiOrFaShu=1;
-					player.storage.faShu=0;
-					player.storage.gongJi=0;
-					//player.storage.canTeShu=true;
-					//判断是否有可启动技
-					var skills=player.skills;
-					for(var i=0;i<skills.length;i++){
-						var info=get.info(skills[i]);
-						var flag=false;
-						if(info.type=='qiDong'){
-							if(info.filter(event,player)) flag=true;
-							if(flag) break;
+					if(trigger.yingZhan==true){
+						player.changeZhanJi('shuiJing',1)
+					}else{
+						player.changeZhanJi('baoShi',1)
+                    }
+				},
+			},
+			_gongJiRiZhi:{
+				trigger:{player:'gongJiSheZhi'},
+				direct:true,
+				lastDo:true,
+				filter:function(event,player){
+					return event.canYingZhan==false||event.canShengGuang==false||event.canShengDun==false;
+				},
+				content:function(){
+					var canYingZhan=trigger.canYingZhan;
+					var canShengGuang=trigger.canShengGuang;
+					var canShengDun=trigger.canShengDun;
+
+					var str='本次攻击';
+					if(canYingZhan==false&&canShengGuang==false&&canShengDun==false){
+						str+='强制命中';
+					}else{
+						var list=[canYingZhan,canShengGuang,canShengDun];
+						for(var i=0;i<list.length;i++){
+							if(i==0){
+								if(list[i]==false) str+='无法应战';
+							}else if(i==1){
+								if(list[i]==false) str+='无法被圣光抵消';
+							}else{
+								if(list[i]==false) str+='无法被圣盾抵消';
+							}
+							if(i<list.length-1){
+								if(list[i+1]==false) str+='，';
+							}
 						}
 					}
-					player.storage.qiDong=flag;
-
+					game.log(str);
 				}
 			},
-			*/
-            _zhiLiao:{
+			_zhiLiao:{
                 trigger:{player:"zhiLiao"},
                 forced:true,
                 priority:1,
@@ -2602,36 +2610,6 @@ export default () => {
 					}
                 }
             },
-            _faShuXianZhi:{
-                mod:{
-                    cardEnabled:function(card){
-                        if(_status.event.name=='faShu'){
-                            if(get.type(card)!='faShu') return false;
-                        }
-                    }
-                },
-            },
-            _gongJiXianZhi:{
-                mod:{
-                    cardEnabled:function(card){
-                        if(_status.event.name=='gongJi'){
-                            if(get.type(card)!='gongJi') return false;
-                        }
-                    }    
-                }
-            },
-			/*
-            _qiDong:{
-                forced:true,
-                trigger:{player:'useSkillAfter'},
-                filter:function(event){
-                    var info=get.info(event.skill);
-                    return info.qiDong;
-                },
-                content:function(){
-                    player.chooseToUse(true);
-                }
-            },*/
 
             _xuRuo:{
                 priority:1,//优先级大的先执行
@@ -3146,22 +3124,6 @@ export default () => {
 						},
 					},
 				}
-			},
-			_gongJiXingShi:{//攻击获得星石
-				trigger:{player:'gongJiMingZhong'},
-				direct:true,
-				firstDo:true,
-				filter:function(event,player){
-					var zhanJi=get.zhanJi(player.side);
-					return zhanJi.length<game.zhanJiMax;
-				},
-				content:function(){
-					if(trigger.yingZhan==true){
-						player.changeZhanJi('shuiJing',1)
-					}else{
-						player.changeZhanJi('baoShi',1)
-                    }
-				},
 			},
 		},
 		element:{
