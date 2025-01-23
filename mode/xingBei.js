@@ -6270,21 +6270,40 @@ export default () => {
 					}
 				},
 				/** 
-				 * 设置攻击效果 在攻击设置/攻击前时机调用
+				 * 设置攻击效果 主要在攻击设置/攻击前时机调用
 				*/
-				qingZhiMingZhong:function(){
-					event.canYingZhan=false;
-					event.canShengGuang=false;
-					event.canShengDun=false;
+				qiangZhiMingZhong:function(){
+					if(event.canYingZhan!=undefined){
+						event.canYingZhan=false;
+						event.canShengGuang=false;
+						event.canShengDun=false;
+					}else{
+						event.getParent().canYingZhan=false;
+						event.getParent().canShengGuang=false;
+						event.getParent().canShengDun=false;1
+					}
+					
 				},
 				wuFaYingZhan:function(){
-					event.canYingZhan=false;
+					if(event.canYingZhan!=undefined){
+						event.canYingZhan=false;
+					}else{
+						event.getParent().canYingZhan=false;
+					}
 				},
 				wuFaShengGuang:function(){
-					event.canShengGuang=false;
+					if(event.canShengGuang!=undefined){
+						event.canShengGuang=false;
+					}else{
+						event.getParent().canShengGuang=false;
+					}
 				},
 				wuFaShengDun:function(){
-					event.canShengDun=false;
+					if(event.canShengDun!=undefined){
+						event.canShengDun=false;
+					}else{
+						event.getParent().canShengDun=false;
+					}
 				},
 			},
 		},
