@@ -5253,7 +5253,6 @@ export default () => {
 					//game.checkResult();
 				},
 
-
 				removeBiShaShuiJing:function(){
 					'step 0'
                     if(player.hasMark('_tiLian_shuiJing')&&player.hasMark('_tiLian_baoShi')){
@@ -5296,6 +5295,32 @@ export default () => {
 					'step 3'
 					event.trigger('removeZhiShiWuHou');
 				},
+
+				chooseDraw:function(){
+					'step 0'
+					var num=event.num;
+					var bool=event.bool;
+					var list=[];
+					for(var i=0;i<=num;i++){
+						if((i!=0&&i!=num)&&bool!=true){
+							continue;
+						}
+						list.push(i);
+					}
+					var numx=player.getHandcardLimit()-player.countCards('h');
+					var maxValue = Math.max.apply(null, list);
+					var drawNum = Math.min(numx,maxValue);
+					if(list.includes(numx)==false){
+						drawNum =0;
+					}
+					var next=player.chooseControl(list).set('prompt','选择摸牌数量');
+					next.set('ai',function(){
+						return _status.event.drawNum;
+					});
+					next.set('drawNum',drawNum);
+					'step 1'
+					player.draw(result.control);
+				}
 
 			},
 			player:{
@@ -5938,6 +5963,21 @@ export default () => {
 				countEmptyCards:function(){
 					return this.getHandcardLimit()-this.countCards('h');
 				},
+
+				/**
+				 * 
+				 * @param {*} num 选择可摸牌数 0~num
+				 * @param {*} bool 是否包含0~num中间的数字
+				 * @returns 
+				 */
+				chooseDraw:function(num,bool){
+					var next=game.createEvent('chooseDraw');
+					next.player=this;
+					next.num=num;
+					next.bool=bool;
+					next.setContent('chooseDraw');
+					return next;
+				}
 				
 			},
 			event:{
