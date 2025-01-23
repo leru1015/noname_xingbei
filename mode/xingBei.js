@@ -3406,6 +3406,8 @@ export default () => {
 						})
 					)
 						event.trigger("triggerAfter");
+					'step 6'
+					event.trigger('triggerEnd');
 				},
 
 				phase: function () {
