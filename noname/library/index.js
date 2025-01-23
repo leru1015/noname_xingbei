@@ -10164,6 +10164,11 @@ export class Library {
 			};
 			if (!checkEnable(info.enable)) return false;
 			if (info.filter && !info.filter(event, player)) return false;
+			//xingBei 针对启动技能，如果已经启动过了，就不能再启动了
+			if(info.type=='qiDong' && event.qiDongGuo==true) return false;
+			//teShu 针对特殊行动，如果不能使用特殊行动，就不能
+			if(info.type=='teShu' && event.canTeShu==false) return false;
+
 			if (info.viewAs && typeof info.viewAs !== "function") {
 				if (info.viewAsFilter && info.viewAsFilter(player) === false) return false;
 				if (event.filterCard && !event.filterCard(get.autoViewAs(info.viewAs, "unsure"), player, event)) return false;
