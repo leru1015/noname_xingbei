@@ -3036,7 +3036,7 @@ export default () => {
 				enable:'phaseUse',
 				type:'teShu',
 				filter:function(event,player){
-                    var nengLiang_num=player.countMark('_tiLian_baoShi')+player.countMark('_tiLian_shuiJing');
+                    var nengLiang_num=player.countNengLiangAll();
                     var empty_nengLiang=player.getNengLiangLimit()-nengLiang_num;
 					var zhanJi=get.zhanJi(player.side);
 					return zhanJi.length>=1&&empty_nengLiang>=1;
@@ -3089,7 +3089,7 @@ export default () => {
 					},
 					select:function(){
 						var player=_status.event.player;
-						var nengLiang_num=player.countMark('_tiLian_baoShi')+player.countMark('_tiLian_shuiJing');
+						var nengLiang_num=player.countNengLiangAll();
 						if(player.getNengLiangLimit()-nengLiang_num==1){
 							var range=[1,1];
 						}else if(player.getNengLiangLimit()-nengLiang_num>=2){
@@ -5415,23 +5415,15 @@ export default () => {
 
 				removeBiShaShuiJing:function(){
 					'step 0'
-                    if(player.hasMark('_tiLian_shuiJing')&&player.hasMark('_tiLian_baoShi')){
-                        var list=['baoShi','shuiJing'];
-                        player.chooseControl(list).set('prompt','选择要移除的星石').set('ai',function(){
-							return 1;
-						});
-                    }else if(player.hasMark('_tiLian_shuiJing')){
-                        player.removeMark('_tiLian_shuiJing');
-                        return;
-                    }else if(player.hasMark('_tiLian_baoShi')){
-                        player.removeMark('_tiLian_baoShi');
-                        return;
-                    }
+					var list=['baoShi','shuiJing'];
+					player.chooseControl(list).set('prompt','选择要移除的星石').set('ai',function(){
+						return 1;
+					});
                     'step 1'
-                    if(result.control=='宝石'){
-                        player.removeMark('_tiLian_baoShi');
-                    }else if(result.control=='水晶'){
-                        player.removeMark('_tiLian_shuiJing');
+                    if(result.control=='baoShi'){
+                        player.removeNengLiang('baoShi');
+                    }else if(result.control=='shuiJing'){
+                        player.removeNengLiang('shuiJing');
                     }
 				},
 				
@@ -5454,6 +5446,23 @@ export default () => {
 					event.trigger('removeZhiShiWuJieShu');
 					'step 3'
 					event.trigger('removeZhiShiWuHou');
+				},
+
+				changeNengLiang:function(){
+					'step 0'
+					event.trigger('changeNengLiangQian');
+					'step 1'
+					var num=event.num;
+					var xingShi=event.xingShi;
+					if(num>0){
+						player.addMark('_tiLian_'+xingShi,num)
+					}else if(num<0){
+						player.removeMark('_tiLian_'+xingShi,-num)
+					}
+					'step 2'
+					event.trigger('changeNengLiangJieShu');
+					'step 3'
+					event.trigger('changeNengLiangHou');
 				},
 
 				chooseDraw:function(){
@@ -5887,59 +5896,64 @@ export default () => {
 
 
 				canBiShaShuiJing:function(){//能够使用必杀星石
-					if(this.hasMark('_tiLian_shuiJing')||this.hasMark('_tiLian_baoShi')){
-                        return true;
-                    }else{
-						return false;
-					}
+					return this.hasNengLiang('shuiJing')||this.hasNengLiang('baoShi');
 				},
 				canBiShaBaoShi:function(){//能否使用必杀宝石
-					if(this.hasMark('_tiLian_baoShi')){
-                        return true;
-                    }else{
-						return false;
-					}
+					return this.hasNengLiang('baoShi');
 				},
 				removeBiShaShuiJing:function(){//移除星石
-					var next=game.createEvent('removeBiShaShuiJing',false);
-					next.player=this;
-					next.setContent('removeBiShaShuiJing');
-					return next;
+					if(this.hasNengLiang('shuiJing')&&this.hasNengLiang('baoShi')){
+						var next=game.createEvent('removeBiShaShuiJing',false);
+						next.player=this;
+						next.setContent('removeBiShaShuiJing');
+						return next;
+					}else{
+						if(this.hasNengLiang('shuiJing')){
+							this.removeNengLiang('shuiJing');
+						}else if(this.hasNengLiang('baoShi')){
+							this.removeNengLiang('baoShi');
+						}
+					}
+					
 				},
 				removeBiShaBaoShi:function(){//移除宝石
-					this.removeMark('_tiLian_baoShi');
+					this.removeNengLiang('baoShi');
 				},
 				changeNengLiang:function(xingShi,num){//改变能量
+					if(xingShi==undefined) return;
 					if(typeof num!='number'||!num) num=1;
 					if(num>0){
-						this.addMark('_tiLian_'+xingShi,num)
+						var max=this.getNengLiangLimit();
+						var current=this.countNengLiangAll();
+						if(current+num>max){
+							num=Math.max(0,max-current);
+						}
 					}else if(num<0){
-						this.removeMark('_tiLian_'+xingShi,-num)
+						var current=this.countNengLiang(xingShi);
+						if(current+num<0){
+							num=-current;
+						}
+					}
+					if(num!=0){
+						var next=game.createEvent('changeNengLiang');
+						next.player=this;
+						next.xingShi=xingShi;
+						next.num=num;
+						next.setContent('changeNengLiang');
+						return next;
 					}
 				},
 				addNengLiang:function(xingShi,num){//添加能量
 					if(typeof num!='number'||!num) num=1;
-					var max=this.getNengLiangLimit();
-					var current=this.countNengLiangAll();
-					if(current+num>max){
-						num=max-current;
-					}
-					if(num>0){
-						this.addMark('_tiLian_'+xingShi,num)
-					}
+					this.changeNengLiang(xingShi,num);
 				},
 				removeNengLiang:function(xingShi,num){//移除能量
 					if(typeof num!='number'||!num) num=-1;
 					if(num>0) num=-num;
-					var current=this.countNengLiang(xingShi);
-					if(current+num<0){
-						num=-current;
-					}
-					if(num<0){
-						this.removeMark('_tiLian_'+xingShi,-num)
-					}
+					this.changeNengLiang(xingShi,num);
 				},
 				countNengLiang:function(xingShi){//统计某个能量数
+					if(xingShi==undefined) return 0;
 					return this.countMark('_tiLian_'+xingShi);
 				},
 				hasNengLiang:function(xingShi){//是否拥有某个能量
