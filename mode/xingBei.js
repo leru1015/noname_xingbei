@@ -5461,6 +5461,35 @@ export default () => {
 					event.trigger('changeZhiShiWuHou');
 				},
 
+				changeZhiLiao:function(){
+					'step 0'
+					event.trigger('changeZhiLiaoQian');
+					'step 1'
+					player.zhiLiao+=num;
+					if(num>=0){
+						if(event.yiChu==true){
+							game.log(player,'获得了'+num+'点','[治疗]','，','[治疗]','溢出');
+						}else{
+							game.log(player,'获得了'+num+'点','[治疗]');
+						}
+					}else if(num<0){
+						num=-num;
+						game.log(player,'移除了'+num+'点','[治疗]')
+					}
+					'step 2'
+					if(player.zhiLiao<0){
+						player.zhiLiao=0;
+					}
+					if(event.yiChu==true){
+						event.trigger('zhiLiaoYiChu');
+					}
+					player.update();
+					'step 3'
+					event.trigger('changeZhiLiaoJieShu');
+					'step 4'
+					event.trigger('changeZhiLiaoHou');
+				},
+
 				chooseDraw:function(){
 					'step 0'
 					var num=event.num;
@@ -6166,6 +6195,46 @@ export default () => {
 					if(num>0) num=-num;
 					this.changeLan(num);
 				},
+				/**
+				 * 
+				 * @param {*} num 治疗改变量
+				 * @param {*} limit 临时最大值
+				 * @returns 
+				 */
+				changeZhiLiao:function(num,limit){
+					var next=game.createEvent('changeZhiLiao');
+					if(typeof num!='number'){
+						num=1;
+					}
+					next.num=num;
+					next.player=this;
+					next.setContent('changeZhiLiao');
+					if(typeof limit=='number'){
+						var limit=limit;
+					}else{
+						var limit=this.getZhiLiaoLimit();
+					}
+					if(num>0&&this.zhiLiao+num>parseInt(limit)){
+						if(this.zhiLiao>=parseInt(limit)){
+							next.num=0;
+						}else{
+							next.num=parseInt(limit)-this.zhiLiao;
+						}
+						next.yiChu=true;
+					}else{
+						next.yiChu=false;
+					}
+					return next;
+				},
+				addZhiLiao:function(num,limit){
+					this.changeZhiLiao(num,limit);
+				},
+				removeZhiLiao:function(num){
+					if(typeof num!='number') num=-1;
+					if(num>0) num=-num;
+					this.changeZhiLiao(num);
+				},
+
 				countEmptyCards:function(){
 					return this.getHandcardLimit()-this.countCards('h');
 				},
