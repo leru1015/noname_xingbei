@@ -6252,8 +6252,20 @@ export default () => {
 					next.bool=bool;
 					next.setContent('chooseDraw');
 					return next;
-				}
+				},
 				
+				addGongJiOrFaShu:function(num){
+					if(typeof num!='number') num=1;
+					this.storage.gongJiOrFaShu+=num;
+				},
+				addGongJi:function(num){
+					if(typeof num!='number') num=1;
+					this.storage.gongJi+=num;
+				},
+				addFaShu:function(num){
+					if(typeof num!='number') num=1;
+					this.storage.faShu+=num;
+				},
 			},
 			event:{
 				/**
