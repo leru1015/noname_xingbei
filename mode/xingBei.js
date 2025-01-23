@@ -6154,6 +6154,11 @@ export default () => {
 					if(num>0) num=-num;
 					this.changeZhiShiWu(zhiShiWu,num,Infinity,true);
 				},
+				setZhiShiWu(zhiShiWu, num, log) {
+					const count = this.countMark(zhiShiWu);
+					if (count > num) this.removeMark(zhiShiWu, count - num, log);
+					else if (count < num) this.addMark(zhiShiWu, num - count, log);
+				},
 				hasZhiShiWu:function(zhiShiWu){//是否拥有指示物
 					return this.hasMark(zhiShiWu);
 				},
