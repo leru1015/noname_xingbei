@@ -2431,7 +2431,7 @@ export default () => {
 				content:function(){
 					"step 0"
 					player.wuFaXingDong();
-					player.storage.gongJiOrFaShu++;
+					player.addGongJiOrFaShu();
 				},
 				contentx:function(){
 					"step 0"
