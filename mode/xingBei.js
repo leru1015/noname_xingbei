@@ -5256,6 +5256,9 @@ export default () => {
 				},
 				//xingbei
 				changeXingBei:function(){
+					'step 0'
+					event.trigger('changeXingBeiQian');
+					'step 1'
 					num=event.num;
 					side=event.side;
 					var numx=num;
@@ -5290,9 +5293,12 @@ export default () => {
 					},game.hongXingBei,game.lanXingBei);
 
 					game.addVideo('changeXingBei',null,[numx,side]);
+					'step 2'
 					game.checkResult();
-					
-
+					'step 3'
+					event.trigger('changeXingBeiJieShu');
+					'step 4'
+					event.trigger('changeXingBeiHou');
 				},
 				changeShiQi:function(){
 					'step 0'
