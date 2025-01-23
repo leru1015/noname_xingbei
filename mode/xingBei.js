@@ -5555,6 +5555,35 @@ export default () => {
 
 					}
 				},
+				addMark(i, num, log) {
+					if (typeof num != "number" || !num) num = 1;
+					if (typeof this.storage[i] != "number") this.storage[i] = 0;
+					this.storage[i] += num;
+					if (log !== false) {
+						var str = false;
+						var info = get.info(i);
+						if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
+						else str = lib.translate[i];
+						if (str) game.log(this, "获得了", num, "个", "#g【" + str + "】");
+					}
+					this.syncStorage(i);
+					this.markSkill(i);
+				},
+				removeMark(i, num, log) {
+					if (typeof num != "number" || !num) num = 1;
+					if (typeof this.storage[i] != "number" || !this.storage[i]) return;
+					if (num > this.storage[i]) num = this.storage[i];
+					this.storage[i] -= num;
+					if (log !== false) {
+						var str = false;
+						var info = get.info(i);
+						if (info && info.intro && (info.intro.name || info.intro.name2)) str = info.intro.name2 || info.intro.name;
+						else str = lib.translate[i];
+						if (str) game.log(this, "移去了", num, "个", "#g【" + str + "】");
+					}
+					this.syncStorage(i);
+					this[this.storage[i] || (lib.skill[i] && lib.skill[i].mark) ? "markSkill" : "unmarkSkill"](i);
+				},
 
 				//xingbei
 				wuFaXingDong:function(){
