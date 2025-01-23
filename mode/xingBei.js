@@ -5859,10 +5859,10 @@ export default () => {
 						num=Math.max(0,game.zhanJiMax-zhanJi.length);
 					}
 					if(num<0){
-						num = zhanJi.filter(function(item) {
+						var numx = -zhanJi.filter(function(item) {
 							return item === xingShi;
 						}).length;
-						if(num>0) num=-num;
+						num=Math.max(num,numx);
 					}
 					if(num!=0){
 						var next=game.createEvent('changeZhanJi');
