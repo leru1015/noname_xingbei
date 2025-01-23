@@ -5807,24 +5807,32 @@ export default () => {
 					return next;
 				},
 				changeZhanJi:function(xingShi,num,side){//xingbei
-					var next=game.createEvent('changeZhanJi');
-					if(typeof num!='number'||!num) num=1;
-					next.player=this;
-					next.xingShi=xingShi;
 					var sidex;
 					if(side==undefined){
 						sidex=this.side;
 					}else{
 						sidex=side;
 					}
-					next.side=sidex;
 					var zhanJi=get.zhanJi(sidex).length;
 					if(num>0&&(zhanJi+num>game.zhanJiMax)){
 						num=Math.max(0,game.zhanJiMax-zhanJi);
 					}
-					next.num=num;
-					next.setContent('changeZhanJi');
-					return next;
+					if(num<0){
+						num = zhanJi.filter(function(item) {
+							return item === xingShi;
+						}).length;
+						if(num>0) num=-num;
+					}
+					if(num!=0){
+						var next=game.createEvent('changeZhanJi');
+						if(typeof num!='number'||!num) num=1;
+						next.player=this;
+						next.xingShi=xingShi;
+						next.side=sidex;
+						next.num=num;
+						next.setContent('changeZhanJi');
+						return next;
+					}
 				},
 				changeXingBei:function(num,side){//xingbei
 					var next=game.createEvent('changeXingBei');
