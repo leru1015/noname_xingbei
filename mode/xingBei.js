@@ -5942,6 +5942,10 @@ export default () => {
 				countNengLiang:function(xingShi){//统计某个能量数
 					return this.countMark('_tiLian_'+xingShi);
 				},
+				hasNengLiang:function(xingShi){//是否拥有某个能量
+					if(xinShi==undefined) return this.countNengLiangAll()>0;
+					else return countNengLiang(xingShi)>0;
+				},
 				countNengLiangAll:function(){//统计所有能量数
 					return this.countMark('_tiLian_baoShi')+this.countMark('_tiLian_shuiJing');
 				},
