@@ -2770,7 +2770,7 @@ export default () => {
                     event.trigger('gongJiWeiMingZhong');
                 }
             },
-			_shengGuang:{
+			_shengGuang_weiMingZhong:{
 				trigger:{player:'shengGuang'},
 				direct:true,
 				firstDo:true,
