@@ -2612,7 +2612,7 @@ export default () => {
 
             _xuRuo:{
                 priority:1,//优先级大的先执行
-                trigger:{player:'phaseUseBefore'},
+                trigger:{player:'xingDongQian'},
                 forced:true,
                 //marktext:"虚",
                 markimage:'image/card/xuRuo.png',
@@ -2643,7 +2643,7 @@ export default () => {
 						direct:true,
 						priority:-1,
 						lastDo:true,
-						trigger:{player:'phaseUseBefore'},
+						trigger:{player:'xingDongQian'},
 						content:function(){
 							trigger.cancel();
 						}
@@ -2659,7 +2659,7 @@ export default () => {
 					content:'expansion',
 					markcount:'expansion',
 				},
-                trigger:{player:'phaseUseBefore'},
+                trigger:{player:'xingDongQian'},
                 forced:true,
                 filter:function(event,player){
                     return player.hasExpansions('_zhongDu');
