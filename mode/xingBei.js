@@ -6288,36 +6288,36 @@ export default () => {
 				 * 设置攻击效果 主要在攻击设置/攻击前时机调用
 				*/
 				qiangZhiMingZhong:function(){
-					if(event.canYingZhan!=undefined){
-						event.canYingZhan=false;
-						event.canShengGuang=false;
-						event.canShengDun=false;
+					if(this.canYingZhan!=undefined){
+						this.canYingZhan=false;
+						this.canShengGuang=false;
+						this.canShengDun=false;
 					}else{
-						event.getParent().canYingZhan=false;
-						event.getParent().canShengGuang=false;
-						event.getParent().canShengDun=false;1
+						this.getParent().canYingZhan=false;
+						this.getParent().canShengGuang=false;
+						this.getParent().canShengDun=false;1
 					}
 					
 				},
 				wuFaYingZhan:function(){
-					if(event.canYingZhan!=undefined){
-						event.canYingZhan=false;
+					if(this.canYingZhan!=undefined){
+						this.canYingZhan=false;
 					}else{
-						event.getParent().canYingZhan=false;
+						this.getParent().canYingZhan=false;
 					}
 				},
 				wuFaShengGuang:function(){
-					if(event.canShengGuang!=undefined){
-						event.canShengGuang=false;
+					if(this.canShengGuang!=undefined){
+						this.canShengGuang=false;
 					}else{
-						event.getParent().canShengGuang=false;
+						this.getParent().canShengGuang=false;
 					}
 				},
 				wuFaShengDun:function(){
-					if(event.canShengDun!=undefined){
-						event.canShengDun=false;
+					if(this.canShengDun!=undefined){
+						this.canShengDun=false;
 					}else{
-						event.getParent().canShengDun=false;
+						this.getParent().canShengDun=false;
 					}
 				},
 			},
