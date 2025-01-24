@@ -158,14 +158,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     trigger.qiangZhiMingZhong();
-                    trigger.shengJian=true;
+                    trigger.customArgs.shengJian=true;
                 },
                 subSkill:{
                     drawAndDiscard:{
                         direct:true,
                         trigger:{player:'gongJiJieShu'},
                         filter:function(event,player){
-                            return event.shengJian==true;
+                            return event.customArgs.shengJian==true;
                         },
                         content:function(){
                             "step 0"
