@@ -125,6 +125,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //风之剑圣
             fengNuZhuiJi:{
                 usable:1,
+                frequent:true,
                 trigger:{player:"gongJiHou"},
                 filter:function(event,player){
                     return event.yingZhan!=true;
