@@ -6346,7 +6346,7 @@ export default () => {
 				 * @param {num} num 伤害改变量 
 				 */
 				changeDamageNum(num){
-					if(typeof num != 'number') return;
+					if(typeof num != 'number' || !num) num = 1;
 					if(typeof this.damageNum == 'number'){
 						this.damageNum += num;
 						if(this.damageNum < 0) this.damageNum = 0;
