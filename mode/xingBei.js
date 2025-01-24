@@ -6347,10 +6347,16 @@ export default () => {
 				 */
 				changeDamageNum(num){
 					if(typeof num != 'number' || !num) num = 1;
-					if(typeof this.damageNum == 'number'){
-						this.damageNum += num;
+					if(this.name=='zhiLiao'){
+						this.getParent().num+=num;
+						return;
+					}
+					if(typeof this.damageNum == 'number' || typeof this.num == 'number'){
+						if(typeof this.damageNum == 'number') this.damageNum += num;
+						if(typeof this.num == 'number') this.num += num;
 						if(this.damageNum < 0) this.damageNum = 0;
-					}else if(this.getParent().damageNum){
+						if(this.num < 0) this.num = 0
+					}else if(typeof this.getParent().damageNum=='number'){
 						this.getParent().damageNum += num;
 						if(this.getParent().damageNum < 0) this.getParent().damageNum = 0;
 					}
