@@ -3983,7 +3983,7 @@ div:hover > .intro {
 	font-family: "huangcao", "xinwei";
 	font-size: 36px;
 	line-height: 24px;
-	top: 0;
+	top: 8px;
 }
 .player .identity.animate {
 	animation: identity 0.8s;
