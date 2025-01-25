@@ -230,9 +230,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return num>0
                 },
                 ai:{
-                    tag:{
-                        shuiJing:true,
-                    }
+                    shuiJing:true,
                 }
             },
             //狂战士
