@@ -5536,6 +5536,9 @@ export default () => {
 
 			},
 			player:{
+				isHengZhi:function(){
+					return this.isLinked();
+				},
 				trySkillAnimate(name, popname, checkShow) {
 					if (!game.online && lib.config.skill_animation_type != "off" && lib.skill[name] && lib.skill[name].skillAnimation) {
 						if (lib.config.skill_animation_type == "default") {

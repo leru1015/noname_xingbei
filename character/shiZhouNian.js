@@ -404,11 +404,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 mod:{
                     maxHandcardFinal:function(player,num){
-                        if(player.isLinked()) return 7
+                        if(player.isHengZhi()) return 7
                     }
                 },
                 check:function(event,player){
-                    return !player.isLinked();
+                    return !player.isHengZhi();
                 },
                 ai:{
                     baoShi:true,
