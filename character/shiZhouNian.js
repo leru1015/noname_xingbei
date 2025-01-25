@@ -18,7 +18,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenJianShou:['female','jiGroup',3,[],],
             fengYinShi:['female','huanGroup',3,[],],
             anShaZhe:['male','jiGroup',3,[],],
-            shengNv:['female','shengGroup',3,[],],
+            shengNv:['female','shengGroup',3,['bingShuangDaoYan','zhiLiaoShu','zhiYuZhiGuang','lianMin','shengLiao'],],
             tianShi:['female','shengGroup',3,[],],
             moFaShaoNv:['female','yongGroup',3,[],],
             moJianShi:['female','huanGroup','3/4',[],],
@@ -309,6 +309,165 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     trigger.changeDamageNum(2);
                 }
+            },
+            //圣女
+            bingShuangDaoYan:{
+                trigger:{player:'daChuPai'},
+                forced:true,
+                filter:function(event,player){
+                    return get.xiBie(event.card)=='shui' || event.card.name=='shengGuang';
+                },
+                content:function(){
+                    'step 0'
+                    var next=player.chooseTarget(true,'目标角色+1[治疗]').set('ai',function(target){
+                        var player=_status.event.player;
+						return get.zhiLiaoEffect2(player,target,1);
+					});
+                    'step 1'
+					if(result.bool){
+						var target=result.targets[0];
+						player.line(target,'blue');
+						target.changeZhiLiao(1,player);
+					}
+                }
+            },
+            zhiLiaoShu:{
+                enable:'faShu',
+                type:'faShu',
+                filterTarget:true,
+                prompt:'目标角色+2[治疗]',
+                position:'h',
+                selectCard:function(card){
+                    return card.hasDuYou('zhiLiaoShu');
+                },
+                filter:function(event,player){
+                    return player.hasCard('h',function(card){
+                        return card.hasDuYou('zhiLiaoShu');
+                    });
+				},
+                content:function(){
+                    return target.changeZhiLiao(2,player);
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+					},
+					order: 3.2,
+				},
+            },
+            zhiYuZhiGuang:{
+                type:'faShu',
+                enable:'faShu',
+				filterCard:function(card){
+                    return card.hasDuYou('zhiYuZhiGuang');
+				},
+				position:'h',
+				filter:function(event,player){
+                    return player.hasCard('h',function(card){
+                        return card.hasDuYou('zhiYuZhiGuang');
+                    });
+				},
+				prompt:'指定最多3名角色各+1[治疗]。',
+                filterTarget:true,
+                selectTarget:[0,3],
+                useCard:true,
+                content:function(){
+                    if(target){
+                        target.changeZhiLiao(1,player);
+                    }
+                },
+                ai: {
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 3.2,
+				},
+            },
+            lianMin:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                frequent:true,
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.hengZhi();
+                    'step 2'
+                    player.addNengLiang('shuiJing');
+                },
+                mod:{
+                    maxHandcardFinal:function(player,num){
+                        if(player.isLinked()) return 7
+                    }
+                },
+                check:function(event,player){
+                    return !player.isLinked();
+                },
+                ai:{
+                    baoShi:true,
+                    draw:false,
+                }
+            },
+            shengLiao:{
+                type:'faShu',
+                usable:1,
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                selectTarget:[1,3],
+                filterTarget:true,
+                contentBefore:function(){
+                    player.removeBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    if(targets.length==1){
+                        target.changeZhiLiao(3,player);
+                        event.finish();
+                    }else if(targets.length==3||player.storage.shengLiao==2){
+                        target.changeZhiLiao(1,player);
+                        event.finish();
+                    }else if(player.storage.shengLiao==1){
+                        target.changeZhiLiao(2,player);
+                        event.finish();
+                    }else{
+                        var list=[1,2];
+                        var name=get.translation(target)
+                        var next=player.chooseControl(list).set('prompt',name+'获得X点[治疗]');
+                        var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao;
+                        if(chaZhi<=1) var num=0;
+                        else var num=1;
+                        next.set('num',num);
+                        next.set('ai',function(){
+                            return _status.event.num;
+                        });
+                    }
+                    'step 1'
+                    var num=result.control;
+                    target.changeZhiLiao(num,player);
+                    player.storage.shengLiao=num;
+                },
+                contentAfter:function(){
+                    player.storage.shengLiao=0;
+                    player.addGongJiOrFaShu();
+                },
+                ai: {
+                    shuiJing:true,
+					result: {
+						target:function(player,target){
+                            return get.zhiLiaoEffect(target,1);
+                        },
+					},
+					order: 3.5,
+				},
             },
         },
 		
