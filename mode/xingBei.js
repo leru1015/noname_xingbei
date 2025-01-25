@@ -2744,7 +2744,9 @@ export default () => {
 						return lib.filter.cardEnabled(card,player,'forceEnable');
 					});
 					next.set('filterTarget',function(card,player,target){
-						return target!=_status.event.source&&target.side!=player.side;
+						if(target==_status.event.source) return false;
+						if(target.side==player.side) return false;
+						return lib.filter.targetEnabled(card,player,target);
                     });
 					next.set('sourceCard',event.sourceCard);
                     next.set('source',event.source);
