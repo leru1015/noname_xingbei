@@ -6133,8 +6133,8 @@ export default () => {
 					};
 					return next;
 				},
-				faShuDamage:function(){//法术伤害
-					var next=this.damage(arguments);
+				faShuDamage:function(...args){//法术伤害
+					var next=this.damage(...args);
 					next.set('faShu',true);
 					return next;
 				},
