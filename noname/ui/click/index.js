@@ -3036,8 +3036,10 @@ export class Click {
 				const cards = result.cards;
 				if (cards.length == 1) {
 					const firstCard = cards[0];
-					if (!resultCard.suit) resultCard.suit = get.suit(firstCard);
-					if (!resultCard.number) resultCard.number = get.mingGe(firstCard);
+					//if (!resultCard.suit) resultCard.suit = get.suit(firstCard);
+					//if (!resultCard.number) resultCard.number = get.mingGe(firstCard);
+					if (!resultCard.xiBie) resultCard.xiBie = get.xiBie(firstCard);
+					if (!resultCard.mingGe) resultCard.mingGe = get.mingGe(firstCard);
 				}
 			}
 			const skillDialog = gameEvent.skillDialog;
