@@ -17,7 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             kuangZhanShi:['male','xueGroup',3,['kuangHua','xueYingKuangDao','xueXingPaoXiao','siLie'],],
             shenJianShou:['female','jiGroup',3,[],],
             fengYinShi:['female','huanGroup',3,[],],
-            anShaZhe:['male','jiGroup',3,[],],
+            anShaZhe:['male','jiGroup',3,['fanShi','shuiYing','qianXing'],],
             shengNv:['female','shengGroup',3,['bingShuangDaoYan','zhiLiaoShu','zhiYuZhiGuang','lianMin','shengLiao'],],
             tianShi:['female','shengGroup',3,[],],
             moFaShaoNv:['female','yongGroup',3,[],],
@@ -469,6 +469,106 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order: 3.5,
 				},
             },
+            //暗杀者
+            fanShi:{
+                trigger:{player:"chengShouShangHai"},
+                forced:true,
+                filter:function(event){
+                    return event.faShu!=true;
+                },
+                content:function(){
+                    trigger.source.draw(player);
+                }
+            },
+            shuiYing:{
+                trigger:{player:'drawBefore'},
+                filter:function(event,player){
+                    return event.yuanYin!="teShuXingDong"&&player.countCards('h')>0;
+                },
+                async cost(event, trigger, player) {
+					event.result = await player
+						.chooseCard("水影：弃X张水系牌",[1,Infinity],function(card){
+                            return get.xiBie(card)=='shui';
+                        })
+						.set("ai",function(card){
+							return 6 - get.value(card);
+						})
+                        .set('zhanShi',true)
+						.forResult();
+				},
+                content:function(){
+                    'step 0'
+                    player.discard(event.cards).set('zhanShi',true);
+                    'step 2'
+                    if(!player.isHengZhi()) event.finish();
+                    'step 3'
+                    var next=player.chooseToDiscard(1,'水影：选择要弃置的法术牌',function(card){
+                        return get.type(card)=='faShu';
+                    });
+                    next.set('ai',function(card){
+                        return 6 - get.value(card);
+                    });
+                    next.set('zhanShi',true);
+                }
+            },
+            qianXing:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.chooseDraw(1);
+                    'step 3'
+                    player.hengZhi();
+                },
+                mod:{
+                    maxHandcardBase:function(player,num){
+                        if(player.isHengZhi()) return num-1;
+                    },
+                    targetEnabled:function(card,player,target){
+                        if(get.type(card)=='gongJi'&&target.isHengZhi()){
+                            if(_status.event.yingZhan!=true) return false;
+                        }
+                    }
+                },
+                group:['qianXing_chongZhi','qianXing_xiaoGuo'],
+                subSkill:{
+                    chongZhi:{
+                        direct:true,
+                        trigger:{player:'xingDongKaiShi'},
+                        filter:function(event,player){
+                            return player.isHengZhi();
+                        },
+                        content:function(){
+                            'step 0'
+                            player.chongZhi();
+                        }
+                    },
+                    xiaoGuo:{
+                        forced:true,
+                        trigger:{player:"gongJiSheZhi"},
+                        filter:function(event,player){
+                            return event.yingZhan!=true&&player.isHengZhi();
+                        },
+                        content:function(){
+                            var num=player.countNengLiangAll();
+                            trigger.changeDamageNum(num);
+                            trigger.wuFaYingZhan();
+                        }
+                    }
+                },
+                ai:{
+                    baoShi:true,
+                },
+                check:function(event,player){
+                    if(player.countNengLiangAll()<=1) return false;
+                    return true;
+                },
+            },
         },
 		
 		translate:{
@@ -554,6 +654,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuiYing_info:"<span class='tiaoJian'>(除【特殊行动】外，当你摸牌前发动)</span>弃X张水系牌[展示]；<span class='tiaoJian'>(若你处于【潜行】效果下)</span>你可额外弃1张法术牌[展示]。",
             qianXing:"[启动]潜行",
             qianXing_info:"[宝石]你可选择摸1张牌，[横置]持续到你的下个行动阶段开始，你的手牌上限-1；你不能成为主动攻击的目标；你的主动攻击对手无法应战且伤害额外+X，X为你剩余的【能量】数。【潜行】的效果结束时[重置]。",
+            qianXing_xiaoGuo:'潜行',
 
             //封印师
             faShuJiDang:"[响应]法术激荡",
