@@ -1033,7 +1033,7 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 			}
 			checkCheat();
 		};
-		var nodedamage=ui.create.div('.menubutton','攻害',row1,clickrow1);
+		var nodedamage=ui.create.div('.menubutton','攻伤',row1,clickrow1);
 		var nodedamageFaShu=ui.create.div('.menubutton','法伤',row1,clickrow1);
 		var nodehandCard=ui.create.div('.menubutton','手牌',row1,clickrow1);
 		//var nodeturnover=ui.create.div('.menubutton','翻面',row1,clickrow1);
