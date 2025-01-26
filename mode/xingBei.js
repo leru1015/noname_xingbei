@@ -5548,8 +5548,68 @@ export default () => {
 					next.set('drawNum',drawNum);
 					'step 1'
 					player.draw(result.control);
-				}
+				},
 
+				gainJiChuXiaoGuo:function(){
+					'step 0'
+					var list=[];
+                    for(var xiaoGuoList in game.jiChuXiaoGuo){
+                        for(var xiaoGuo of game.jiChuXiaoGuo[xiaoGuoList]){
+                            if(target.hasExpansions(xiaoGuo)){
+                                list.push(xiaoGuo);
+                            }
+                        }
+                    }
+					player.chooseControl(list).set('prompt','选择要获得的基础效果').set('ai',function(){
+                        var player=_status.event.player;
+                        var target=_status.event.targetX;
+                        var list=_status.event.listX;
+                        if(target.side==player.side){
+                            if(list.includes('_xuRuo')) return '_xuRuo';
+                            for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                            if(list.includes('_zhongDu')&&!target.hasSkillTag('one_damage')) return '_zhongDu';
+                        }else{
+                            if(list.includes('_shengDun')){
+                                return '_shengDun';
+                            }
+                            for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+                                if(list.includes(xiaoGuo)){
+                                    return xiaoGuo;
+                                }
+                            }
+                        }
+                    }).set('targetX',target).set('listX',list);
+					'step 1'
+					event.control=result.control;
+					if(event.control=='_zhongDu' && target.getExpansions('_zhongDu').length!=1){
+						event.flag=true;
+                        player.chooseCardButton(target.getExpansions('_zhongDu'),true,'选择要获得的中毒');
+                    }else{
+						event.card=target.getExpansions(event.control);
+						if(event.control=='_zhongDu') target.storage.zhongDu=[];
+                    }
+                    'step 2'
+					if(event.flag){
+						var card=result.links[0];
+						var list=target.getExpansions('_zhongDu');
+						var index=list.indexOf(card);
+						target.storage.zhongDu.splice(index, 1);
+						event.card=card;
+					}
+					'step 3'
+                    game.log(player,'获得了',event.card);
+                    player.gain(event.card);
+					'step 4'
+					if(!game.jiChuXiaoGuo.pai.includes(event.control)){
+						target.removeSkill(event.control);
+					}
+					'step 5'
+					event.trigger('gainJiChuXiaoGuo');
+				},
 			},
 			player:{
 				isHengZhi:function(){
@@ -6390,6 +6450,14 @@ export default () => {
 				addFaShu:function(num){
 					if(typeof num!='number') num=1;
 					this.storage.faShu+=num;
+				},
+
+				gainJiChuXiaoGuo:function(target){
+					var next=game.createEvent('gainJiChuXiaoGuo');
+					next.player=this;
+					next.target=target;
+					next.setContent('gainJiChuXiaoGuo');
+					return next;
 				},
 			},
 			event:{
