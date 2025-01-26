@@ -6453,7 +6453,7 @@ export default () => {
 				},
 
 				gainJiChuXiaoGuo:function(target){
-					var next=game.createEvent('gainJiChuXiaoGuo');
+					var next=game.createEvent('gainJiChuXiaoGuo',false);
 					next.player=this;
 					next.target=target;
 					next.setContent('gainJiChuXiaoGuo');
