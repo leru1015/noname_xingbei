@@ -2873,7 +2873,17 @@ export default () => {
 					},
 				}
 			},
-            
+            _baoPai:{
+				trigger:{global:['hengZhiAfter','chongZhiAfter','changeZhiShiWuAfter','changeNengLiangAfter','changeZhiLiaoAfter','addToExpansionAfter','loseToDiscardpileAfter','changeZhanJiAfter','changeXingBeiAfter','changeShiQiAfter']},
+				direct:true,
+				lastDo:true,
+				filter:function(event,player){
+					return player.needsToDiscard()>0;
+				},
+				content:function(){
+					player.qiPai();
+				}
+			},
             
 
             _gouMai:{
