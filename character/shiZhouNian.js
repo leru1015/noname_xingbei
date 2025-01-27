@@ -15,7 +15,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		character:{
 			fengZhiJianSheng:['fengZhiJianSheng_name','jiGroup',3,['fengNuZhuiJi','shengJian','lieFengJi','jiFengJi','jianYing'],],
             kuangZhanShi:['kuangZhanShi_name','xueGroup',3,['kuangHua','xueYingKuangDao','xueXingPaoXiao','siLie'],],
-            shenJianShou:['shenJianShou_name','jiGroup',3,[],],
+            shenJianShou:['shenJianShou_name','jiGroup',3,['shanDianJian','guanChuanSheJi','shanGuangXianJing','jingZhunSheJi','juJi'],],
             fengYinShi:['fengYinShi_name','huanGroup',3,['faShuJiDang','diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin','leiZhiFengYin','wuXiShuFu','fengYinPoSui'],],
             anShaZhe:['anShaZhe_name','jiGroup',3,['fanShi','shuiYing','qianXing'],],
             shengNv:['shengNv_name','shengGroup',3,['bingShuangDaoYan','zhiLiaoShu','zhiYuZhiGuang','lianMin','shengLiao'],],
@@ -1289,6 +1289,107 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     shuiJing:true,
+                }
+            },
+            //神箭手
+            shanDianJian:{
+                forced:true,
+                trigger:{player:"gongJiSheZhi"},
+                filter:function(event){
+                    return get.xiBie(event.card)=='lei';
+                },
+                content:function(){
+                    trigger.wuFaYingZhan();
+                }
+            },
+            guanChuanSheJi:{
+                trigger:{source:"gongJiWeiMingZhong"},
+                filter:function(event,player){
+                    if(event.yingZhan==true) return false;
+                    return player.countCards('h')>0;
+                },
+                async cost(event, trigger, player) {
+                    event.result=await player.chooseCard('h',1,function(card){
+                        return get.type(card)=='faShu';
+                    })
+                    .set('prompt',get.prompt('guanChuanSheJi'))
+                    .set('prompt2',lib.translate.guanChuanSheJi_info)
+                    .set('ai',function(card){
+                        return 6-get.value(card);
+                    })
+                    .forResult();
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cards).set('showCards',true);
+                    'step 1'
+                    trigger.player.faShuDamage(2,player);
+                }
+            },
+            shanGuangXianJing:{
+                type:'faShu',
+                enable:'faShu',
+				filterCard:function(card){
+                    return card.hasDuYou('shanGuangXianJing');
+				},
+				position:'h',
+				filter:function(event,player){
+                    return player.countCards('h',function(card){
+                        return lib.skill.shanGuangXianJing.filterCard(card);
+                    });
+				},
+                filterTarget:true,
+                useCard:true,
+                content:function(){
+                    target.faShuDamage(2,player);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+2>target.getHandcardLimit()) return -1;
+                            return -0.1;
+                        }
+                    }
+                }
+            },
+            jingZhunSheJi:{
+                trigger:{player:'gongJiShi'},
+                filter:function(event,player){
+                    return event.card.hasDuYou('jingZhunSheJi');
+                },
+                content:function(){
+                    trigger.qiangZhiMingZhong();
+                    trigger.changeDamageNum(-1);
+                },
+                check:function(event,player){
+                    return event.targets[0].countCards('h')>3;
+                }
+            },
+            juJi:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    target.drawTo(5);
+                    player.addGongJi();
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.4,
+                    result:{
+                        target:function(player,target){
+                            var num=target.countCards('h');
+                            if(target.getHandcardLimit()<5) return -5;
+                            else return 0;
+                        }
+                    }
                 }
             },
         },
