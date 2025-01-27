@@ -7,7 +7,7 @@ import { get } from "./index.js";
 
 export class Is {
 	//星杯
-	xiDong(event){
+	xingDong(event){
 		//判断事件是否为行动事件
 		return event.action==true||event.getParent().action==true||event.getParent().name=='gongJiOrFaShu'||event.getParent().name=='gongJi'||event.getParent().name=='faShu';
 	}
@@ -17,17 +17,17 @@ export class Is {
 	}
 	yingZhanGongJi(event){
 		if(!get.is.gongJi(event)) return false;
-		if(get.is.xiDong(event)) return false;
+		if(get.is.xingDong(event)) return false;
 		return true;
 	}
 	zhuDongGongJi(event){
 		if(!get.is.gongJi(event)) return false;
-		if(!get.is.xiDong(event)) return false;
+		if(!get.is.xingDong(event)) return false;
 		return true;
 	}
 	gongJiXingDong(event){
 		if(!get.is.gongJi(event)) return false;
-		if(!get.is.xiDong(event)) return false;
+		if(!get.is.xingDong(event)) return false;
 		return true;
 	}
 	faShuXingDong(event){
@@ -36,7 +36,7 @@ export class Is {
 			return info.type=='faShu';
 		}else if(event.name=='useCard'){
 			if(get.type(event.card)=='faShu'){
-				return get.is.xiDong(event);
+				return get.is.xingDong(event);
 			}else{
 				return false;
 			}
