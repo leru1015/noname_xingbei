@@ -2847,6 +2847,7 @@ export default () => {
 					qian:{//第一个使用魔弹的角色增加魔弹标记
 						trigger:{player:'useCardBefore'},
 						direct:true,
+						lastDo:true,
 						filter:function(event,player){
 							if(player.storage.moDan!=true&&(event.card&&event.card.name=='moDan')){
 								return true;
@@ -2861,6 +2862,7 @@ export default () => {
 					hou:{//第一个使用魔弹的角色删除魔弹标记
 						trigger:{player:'useCardAfter'},
 						direct:true,
+						lastDo:true,
 						filter:function(event,player){
 							if(player.storage.moDan!=false&&(event.card&&event.card.name=='moDan')){
 								return true;
