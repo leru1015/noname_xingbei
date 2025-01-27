@@ -2844,7 +2844,7 @@ export default () => {
 				},
 				subSkill:{
 					qian:{//第一个使用魔弹的角色增加魔弹标记
-						trigger:{player:'faShuQian'},
+						trigger:{player:'useCardBefore'},
 						direct:true,
 						filter:function(event,player){
 							if(player.storage.moDan!=true&&(event.card&&event.card.name=='moDan')){
@@ -2858,7 +2858,7 @@ export default () => {
 						}
 					},
 					hou:{//第一个使用魔弹的角色删除魔弹标记
-						trigger:{player:'faShuHou'},
+						trigger:{player:'useCardAfter'},
 						direct:true,
 						filter:function(event,player){
 							if(player.storage.moDan!=false&&(event.card&&event.card.name=='moDan')){
@@ -4128,7 +4128,7 @@ export default () => {
 						event.canShengGuang=true;
 						event.canShengDun=true;
 						event.trigger("gongJiQian");
-					}else if(type=='faShu' && event.oriTargets.length>0){
+					}else if(type=='faShu'&&get.is.xingDong(event)){//防止传递魔弹时触发该时机
 						event.trigger("faShuQian");
 					}else if(card.name=='shengGuang'){
 						event.trigger("shengGuang");
@@ -4471,14 +4471,14 @@ export default () => {
 					var type=get.type(card);
 					if(type=='gongJi' && event.oriTargets.length>0){
 						event.trigger("gongJiJieShu");
-					}else if(type=='faShu' && event.oriTargets.length>0){
+					}else if(type=='faShu' && get.is.xingDong(event)){
 						event.trigger("faShuJieShu");
 					}
 					"step 17";
 					var type=get.type(card);
 					if(type=='gongJi' && event.oriTargets.length>0){
 						event.trigger("gongJiHou");
-					}else if(type=='faShu' && event.oriTargets.length>0){
+					}else if(type=='faShu' && get.is.xingDong(event)){
 						event.trigger("faShuHou");
 					}
 					"step 18";
