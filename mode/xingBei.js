@@ -85,6 +85,7 @@ export default () => {
 					game.lanZhanJi=zhanJiList['lanZhanJi'];
 					game.hongXingBei=zhanJiList['hongXingBei'];
 					game.lanXingBei=zhanJiList['lanXingBei'];
+					if(zhanJiList['moDanFangXiang']) game.moDanFangXiang=zhanJiList['moDanFangXiang'];
                     ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
                     ui.updateShiQiInfo();
                 },game.zhanJiList];
@@ -2340,10 +2341,10 @@ export default () => {
 			resetMoDan:function(){
 				//结算后重置数据
 				game.moDan=2;
-				game.moDanFangXiang='you';
-				game.broadcast(function(){
+				game.broadcastAll(function(){
 					game.moDanFangXiang='you';
-				})
+				});
+				game.zhanJiList['moDanFangXiang']='you';
 			},
 		},
 		
