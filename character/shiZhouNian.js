@@ -121,6 +121,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
                     return num>0
                 },
+                mod:{
+                    aiOrder:function(player,card,num){
+                        if(get.type(card)!='gongJi') return;
+                        if(get.xiBie(card)=='feng') return num-0.3;
+                    }
+                }
             },
             shengJian:{
                 forced:true,
@@ -199,7 +205,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.addGongJi();
                 },
                 check:function(event,player){
-                    var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
+                    if(player.storage.gongJi.zhuDong>=3) return false;
+                    var num=player.countCards('h',card=>get.type(card)=='gongJi');
                     return num>0
                 },
                 ai:{
