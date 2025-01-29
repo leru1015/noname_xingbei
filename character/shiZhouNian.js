@@ -2248,7 +2248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yueGuang:'[法术]月光',
             yueGuang_info:'[宝石]对目标角色造成(X+1)点法术伤害③，X为你剩余的【能量】数。',
             yuanSu:'元素',
-            yuanSu_info:'</span><span class="hong">【</span>元素<span class="hong">】</span>为元素师专有指示物，上限为3。',
+            yuanSu_info:'</span><span class="hong">【元素】</span>为元素师专有指示物，上限为3。',
 
             //月之女神
             xinYueBiHu:"[响应]新月庇护[持续]",
