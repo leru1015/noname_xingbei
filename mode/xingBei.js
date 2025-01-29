@@ -7048,6 +7048,24 @@ export default () => {
 					return game.zhanJiMax-game.lanZhanJi.length;
 				}
 			},
+			xuanZeTongXiPai:function(card){
+				if(ui.selected.cards.length==0) return true;
+				else{
+					var xiBie=get.xiBie(card);
+					if(!xiBie) return false;
+                    if(get.xiBie(ui.selected.cards[0])==xiBie) return true;
+                    else return false;
+				}
+			},
+			xuanZeYiXiPai:function(card){
+				if(ui.selected.cards.length==0) return true;
+				else{
+					var xiBie=get.xiBie(card);
+					if(!xiBie) return false;
+					if(get.xiBie(ui.selected.cards[0])!=xiBie) return true;
+					else return false;
+				}
+			},
 		},
 		help:{
 			
