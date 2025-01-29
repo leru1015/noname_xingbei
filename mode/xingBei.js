@@ -6370,7 +6370,7 @@ export default () => {
 					for(var i=0;i<skills.length;i++){
 						var skill=skills[i];
 						var info=get.info(skill);
-						if(info.intro&&info.markimage=='image/card/zhiShiWU/hong.png'){
+						if(info.intro&&info.markimage=='image/card/zhiShiWu/hong.png'){
 							this.changeZhiShiWu(skill,num,max);
 							break;
 						}
