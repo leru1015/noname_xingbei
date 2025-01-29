@@ -2232,9 +2232,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //元素师
             yuanSuXiShou:'[响应]元素吸收',
-            yuanSuXiShou_info:'<span class="tiaoJian">(对目标角色造成法术伤害时发动③)</span>你+1<span class="hong">【</span>元素<span class="hong">】</span>。',
+            yuanSuXiShou_info:'<span class="tiaoJian">(对目标角色造成法术伤害时发动③)</span>你+1<span class="hong">【元素】</span>。',
             yuanSuDianRan:'[法术]元素点燃',
-            yuanSuDianRan_info:'<span class="tiaoJian">(移除3点</span><span class="hong">【</span>元素<span class="hong">】</span><span class="tiaoJian">)</span>对目标角色造成2点法术伤害③，额外+1[法术行动]；不能与【元素吸收】同时发动。',
+            yuanSuDianRan_info:'<span class="tiaoJian">(移除3点</span><span class="hong">【元素】</span><span class="tiaoJian">)</span>对目标角色造成2点法术伤害③，额外+1[法术行动]；不能与【元素吸收】同时发动。',
             yunShi:'(独)[法术]陨石',
             yunShi_info:'对目标角色造成1点法术伤害③，额外+1[法术行动]；<span class="tiaoJian">(若你额外弃1张地系牌[展示]①)</span>本次伤害额外+1。',
             bingDong:'(独)[法术]冰冻',
