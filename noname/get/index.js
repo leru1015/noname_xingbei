@@ -2310,7 +2310,7 @@ export class Get extends GetCompatible {
 		if (typeof card !== "object") return;
 		if (Array.isArray(card)) {
 			if (card.length == 1) return get.xiBie(card[0], player);
-			return "none";
+			return null;
 		} else if (!("xiBie" in card) && Array.isArray(card.cards)) {
 			return get.xiBie(card.cards, player);
 		} else {
@@ -2321,7 +2321,7 @@ export class Get extends GetCompatible {
 				}
 			}
 			if (card.xiBie === "unsure" || lib.xiBies.includes(card.xiBie)) return card.xiBie;
-			return "none";
+			return null;
 		}
 	}
 	/**
