@@ -3645,6 +3645,7 @@ export default () => {
 					}
 					'step 2';
 					event.trigger("huiHeQian");
+					event.trigger("phaseBeforeStart");//addTempSkill删除技能默认时机
 					"step 3";
 					//规则集中的“回合开始后⑥”，更新“当前回合角色”
 					while (ui.dialogs.length) {
@@ -3692,6 +3693,7 @@ export default () => {
 					event.trigger("huiHeJieShu");
 					"step 8";
 					event.trigger("huiHeHou");
+					event.trigger("phaseAfter");//addTempSkill删除技能默认时机
 					"step 9";
 					//删除当前回合角色 此时处于“不属于任何角色的回合”的阶段
 					game.broadcastAll(function (player) {
