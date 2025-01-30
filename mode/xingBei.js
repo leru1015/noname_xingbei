@@ -5614,6 +5614,139 @@ export default () => {
 				},
 			},
 			player:{
+				logSkill(name, targets, nature, logv, args) {
+					if (get.itemtype(targets) == "player") targets = [targets];
+					var nopop = false;
+					var popname = name;
+					if (Array.isArray(name)) {
+						popname = name[1];
+						name = name[0];
+					}
+					var checkShow = this.checkShow(name);
+					if (lib.translate[name]) {
+						this.trySkillAnimate(name, popname, checkShow);
+						if (Array.isArray(targets) && targets.length) {
+							var str =targets;
+							game.log(this, "对", str, "发动了", "【" + get.skillTranslation(name, this) + "】");
+						} else {
+							game.log(this, "发动了", "【" + get.skillTranslation(name, this) + "】");
+						}
+					}
+					if (nature != false) {
+						if (nature === undefined) {
+							nature = "green";
+						}
+						this.line(targets, nature);
+					}
+					var info = lib.skill[name];
+					if (info && info.ai && info.ai.expose != undefined && this.logAi && (!targets || targets.length != 1 || targets[0] != this)) {
+						this.logAi(lib.skill[name].ai.expose);
+					}
+					if (info && info.round) {
+						var roundname = name + "_roundcount";
+						this.storage[roundname] = game.roundNumber;
+						this.syncStorage(roundname);
+						this.markSkill(roundname);
+					}
+					game.trySkillAudio(name, this, true, null, null, args);
+					if (game.chess) {
+						this.chessFocus();
+					}
+					if (logv === true) {
+						game.logv(this, name, targets, null, true);
+					} else if (info && info.logv !== false) {
+						game.logv(this, name, targets);
+					}
+					if (info) {
+						var player = this;
+						var players = player.getSkills(false, false, false);
+						var equips = player.getSkills("e");
+						var global = lib.skill.global.slice(0);
+						var logInfo = {
+							skill: name,
+							targets: targets,
+							event: _status.event,
+						};
+						if (info.sourceSkill) {
+							logInfo.sourceSkill = info.sourceSkill;
+							if (global.includes(info.sourceSkill)) {
+								logInfo.type = "global";
+							} else if (players.includes(info.sourceSkill)) {
+								logInfo.type = "player";
+							} else if (equips.includes(info.sourceSkill)) {
+								logInfo.type = "equip";
+							}
+						} else {
+							if (global.includes(name)) {
+								logInfo.sourceSkill = name;
+								logInfo.type = "global";
+							} else if (players.includes(name)) {
+								logInfo.sourceSkill = name;
+								logInfo.type = "player";
+							} else if (equips.includes(name)) {
+								logInfo.sourceSkill = name;
+								logInfo.type = "equip";
+							} else {
+								var bool = false;
+								for (var i of players) {
+									var expand = [i];
+									game.expandSkills(expand);
+									if (expand.includes(name)) {
+										bool = true;
+										logInfo.sourceSkill = i;
+										logInfo.type = "player";
+										break;
+									}
+								}
+								if (!bool) {
+									for (var i of players) {
+										var expand = [i];
+										game.expandSkills(expand);
+										if (expand.includes(name)) {
+											logInfo.sourceSkill = i;
+											logInfo.type = "equip";
+											break;
+										}
+									}
+								}
+							}
+						}
+						var next = game.createEvent("logSkill", false),
+							evt = _status.event;
+						next.player = player;
+						next.forceDie = true;
+						next.includeOut = true;
+						evt.next.remove(next);
+						if (evt.logSkill) evt = evt.getParent();
+						for (var i in logInfo) {
+							if (i == "event") next.log_event = logInfo[i];
+							else next[i] = logInfo[i];
+						}
+						evt.after.push(next);
+						next.setContent("emptyEvent");
+						player.getHistory("useSkill").push(logInfo);
+						//尽可能别往这写插入结算
+						//不能用来终止技能发动！！！
+						var next2 = game.createEvent("logSkillBegin", false);
+						next2.player = player;
+						next2.forceDie = true;
+						next2.includeOut = true;
+						for (var i in logInfo) {
+							if (i == "event") next2.log_event = logInfo[i];
+							else next2[i] = logInfo[i];
+						}
+						next2.setContent("emptyEvent");
+					}
+					if (this._hookTrigger) {
+						for (var i = 0; i < this._hookTrigger.length; i++) {
+							var info = lib.skill[this._hookTrigger[i]].hookTrigger;
+							if (info && info.log) {
+								info.log(this, name, targets);
+							}
+						}
+					}
+				},
+
 				discard:function(){
 					var next=game.createEvent('discard');
 					next.player=this;
