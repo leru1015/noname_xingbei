@@ -21,7 +21,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shengNv:['shengNv_name','shengGroup',3,['bingShuangDaoYan','zhiLiaoShu','zhiYuZhiGuang','lianMin','shengLiao'],],
             tianShi:['tianShi_name','shengGroup',3,['fengZhiJieJing','tianShiZhuFu','tianShiJiBan','tianShiZhiQiang','tianShiZhiGe','shenZhiBiHu'],],
             moFaShaoNv:['moFaShaoNv_name','yongGroup',3,['moBaoChongJi','moDanZhangWo','moDanRongHe','huiMieFengBao'],],
-            moJianShi:['moJianShi_name','huanGroup','3/4',[],],
+            moJianShi:['moJianShi_name','huanGroup','3/4',['xiuLuoLianZhan','anYingNingJu','anYingZhiLi','anYingKangJu','anYingLiuXing','huangQaunZhenChan'],],
             shengQiangQiShi:['shengQiangQiShi_name','shengGroup','3/4',['shenShengXinYang','huiYao','chengJie','shengJi','tianQiang','diQiang','shengGuangQiYu'],],
             yuanSuShi:['yuanSuShi_name','yongGroup','3/4',['yuanSuXiShou','yuanSuDianRan','yunShi','bingDong','huoQou','fengRen','leiJi','yueGuang','yuanSu'],],
             maoXianJia:['maoXianJia_name','huanGroup','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
@@ -3244,6 +3244,196 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return get.damageEffect(target,2);
                         }
                     }
+                }
+            },
+            //魔剑士
+            xiuLuoLianZhan:{
+                usable:1,
+                frequent:true,
+                trigger:{player:"gongJiHou"},
+                filter:function(event,player){
+                    return event.yingZhan!=true;
+                },
+                content:function(){
+                    trigger.getParent().insertAfter(function(){
+                        var str='修罗连斩：火系[攻击行动]';
+					    var next=player.gongJi('h',function(card,player,event){
+                        if(get.xiBie(card)!='huo') return false;
+                        return lib.filter.cardEnabled(card,player,'forceEnable');
+					    },str);
+                    },{
+                        player:player,
+                    });
+
+					
+                },
+                check:function(event,player){
+                    return player.hasCard(card=>get.xiBie(card)=='huo');
+                },
+                mod:{
+                    aiUseful(player, card, num) {
+                        if (get.xiBie(card, player) === "huo"&&get.type(card) === "gongJi") {
+                            return num + 1;
+                        }
+                    },
+                    aiOrder:function(player,card,num){
+                        if(get.xiBie(card,player)=='huo'&&get.type(card)=='gongJi'){
+                            return num-0.2;
+                        }
+                    }
+                }
+            },
+            anYingNingJu:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return !player.isHengZhi(); 
+                },
+                content:function(){
+                    'step 0'
+                    player.faShuDamage(1,player);
+                    'step 1'
+                    player.hengZhi();                 
+                },
+                check:function(event,player){
+                    var num=player.getHandcardLimit()-player.countCards('h');
+                    return num>0;
+                },
+                group:'anYingNingJu_chongZhi',
+                subSkill:{
+                    chongZhi:{
+                        direct:true,
+                        trigger:{player:'xingDongKaiShi'},
+                        filter:function(event,player){
+                            return player.isHengZhi();
+                        },
+                        content:function(){
+                            player.chongZhi();
+                        }
+                    }
+                }
+            },
+            anYingZhiLi:{
+                forced:true,
+                trigger:{player:'gongJiShi'},
+				filter:function(event,player){
+                   return player.isHengZhi();
+				},
+				content:function(){
+					trigger.changeDamageNum(1);
+				},
+            },
+            anYingKangJu:{
+                mod:{
+                    cardEnabled:function(card,player){
+                        if(_status.currentPhase==player&&get.type(card)=='faShu'){
+                            return false;
+                        }
+                    }
+                }
+            },
+            anYingLiuXing:{
+                type:'faShu',
+                enable:'faShu',
+                selectCard:2,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                selectTarget:1,
+                filterTarget:true,
+                filter:function(event,player){
+                    if(!player.isHengZhi()) return false;
+                    return player.countCards('h',card=>lib.skill.anYingLiuXing.filterCard(card))>=2;
+                },
+                discard:true,
+                showCards:true,
+                content:async function(event, trigger, player){
+                    await event.target.faShuDamage(2,player);
+                    var list=get.zhanJi(player.side);
+                    if(list.length<2) return;
+                    var listx=[];
+                    for(var i=0;i<list.length;i++){
+                        listx.push([list[i],get.translation(list[i])]);
+                    }
+                    var bool=list.includes('shuiJing')||list.length>=3;
+                    var result=await player.chooseButton([
+                        '是否额外移除2个星石',
+                        [listx,'tdnodes'],
+                    ])
+                    .set('bool',bool)
+                    .set('selectButton',[2,2])
+                    .set('ai',function(button){
+                        var bool=_status.event.bool;
+                        if(!bool) return 0;
+                        if(button.link=='shuiJing'){
+                            return 5;
+                        }else{
+                            return 2;
+                        }
+                    }).forResult();
+                    if(!result.bool) return;
+
+                    var dict={shuiJing:0,baoShi:0};
+                    for(var i=0;i<result.links.length;i++){
+                        dict[result.links[i]]++;
+                    }
+                    if(dict.shuiJing>0) await player.changeZhanJi('shuiJing',-dict.shuiJing);
+                    if(dict.baoShi>0) await player.changeZhanJi('baoShi',-dict.baoShi);
+                    await player.chongZhi();
+                    await player.addNengLiang('baoShi');
+                },
+                ai:{
+					order:function(item,player){
+                        return 1.5+player.countCards('h');
+                    },
+					result:{
+						target:function(player,target){
+							return get.damageEffect(target,2);
+						}
+					},
+				},
+            },
+            huangQaunZhenChan:{
+                usable:1,
+                trigger:{player:'gongJiQian'},
+                filter:function(event,player){
+                    if(!player.canBiShaBaoShi()) return false;
+                    return event.yingZhan!=true;
+                },
+                content:function(){
+                    player.removeBiShaBaoShi();
+                    trigger.customArgs.huangQaunZhenChan=true;
+                    trigger.wuFaYingZhan();
+                },
+                group:'huangQaunZhenChan_mingZhong',
+                subSkill:{
+                    mingZhong:{
+                        trigger:{player:'gongJiMingZhong'},
+                        forced:true,
+                        filter:function(event,player){
+                            return event.customArgs.huangQaunZhenChan==true;
+                        },
+                        content:function(){
+                            'step 0'
+                            var num=player.getHandcardLimit();
+                            player.drawTo(num);
+                            'step 1'
+                            player.chooseToDiscard('h',true,2);
+                        }
+                    }
+                },
+                check:function(event,player){
+                    if(get.xiBie(event.card)=='an') return false;
+                    var target=event.targets[0];
+                    var zhanJi=get.zhanJi(player.side);
+                    if(zhanJi.length<game.zhanJiMax) return true;
+                    var minus=target.getHandcardLimit()-target.countCards('h');
+                    var num=Math.random();
+                    if(minus<2) return num>0.1;
+                    else return num>0.5;
+                },
+                ai:{
+                    baoShi:true,
                 }
             },
         },
