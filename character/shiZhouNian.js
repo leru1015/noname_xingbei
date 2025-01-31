@@ -2474,7 +2474,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             qiZha:{
                 enable:'gongJi',
                 filter:function(event,player){
-                    var bool1=player.countTongXiPai(player.getCards('h'))>=2;
+                    var bool1=player.countTongXiPai()>=2;
                     var bool2=game.filterPlayer(current=>lib.skill.qiZha.filterTarget('',player,current)).length>1;
                     return bool1&&bool2;
                 },
