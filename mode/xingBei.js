@@ -2592,7 +2592,7 @@ export default () => {
 			_zhiLiao:{
                 trigger:{player:"zhiLiao"},
                 forced:true,
-                priority:1,
+                lastDo:true,
                 init:function(player){
                     player.storage.zhongDu=[];
                 },
