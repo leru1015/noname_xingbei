@@ -28,7 +28,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wenYiFaShi:['wenYiFaShi_name','huanGroup','3/4',['buXiu','shengDu','wenYi','siWangZhiChu','juDuXinXing'],],
             zhongCaiZhe:['zhongCaiZhe_name','xueGroup','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             shenGuan:['shenGuan_name','shengGroup',4,[],],
-            qiDaoShi:['qiDaoShi_name','yongGroup',4,[],],
+            qiDaoShi:['qiDaoShi_name','yongGroup',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
             xianZhe:['xianZhe_name','yongGroup',4,[],],
             lingFuShi:['lingFuShi_name','yongGroup',4,[],],
             jianDi:['jianDi_name','jiGroup','4/5',[],],
@@ -119,8 +119,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return !target.hasExpansions('leiZhiFengYin_xiaoGuo');
                 }
             },
+            weiLiCiFu:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('weiLiCiFu_xiaoGuo');
+                }
+            },
+            xunJieCiFu:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('xunJieCiFu_xiaoGuo');
+                }
+            }
         },
-		
+
 		skill:{
             //风之剑圣
             fengNuZhuiJi:{
@@ -3649,6 +3659,252 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png',
             },
+            //祈祷师
+            guangHuiXinYang:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.isHengZhi()) return false;
+                    if(!player.countZhiShiWu('qiDaoFuWen')>0) return false;
+                    return true;
+                },
+                filterTarget:function(card,player,target){
+                    if(target==player) return false;
+                    return target.side==player.side;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('qiDaoFuWen');
+                    'step 1'
+                    if(player.countCards('h')>=2){
+                        player.chooseToDiscard('h',true,2);
+                    }else if(player.countCards('h')==1){
+                        player.chooseToDiscard('h',true,1);
+                    }
+                    'step 2'
+                    player.addZhanJi('baoShi',1);
+                    'step 3'
+                    target.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        target:function(player,target){
+                            return get.zhiLiaoEffect2(target,player,1);
+                        },
+                        player:function(player){
+                            if(player.countCards('h')>=4) return 2;
+                            else return 1;
+                        }
+                    }
+                }
+            },
+            heiAnZuZhou:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.isLinked()) return false;
+                    if(!player.countZhiShiWu('qiDaoFuWen')>0) return false;
+                    return true;
+                },
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('qiDaoFuWen');
+                    'step 1'
+                    target.faShuDamage(2,player);
+                    'step 2'
+                    player.faShuDamage(2,player);
+                },
+                ai:{
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                        player:function(player){
+                            if(player.countCards('h')+2-player.zhiLiao>=6) return -1;
+                            else return 1;
+                        }
+                    }
+                }
+            },
+            weiLiCiFu:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    var bool1=player.hasCard(card=>lib.skill.weiLiCiFu.filterCard(card));
+                    var bool2=game.filterPlayer(current=>lib.skill.weiLiCiFu.filterTarget("",player,current)).length>0;
+                    return bool1&&bool2;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return card.hasDuYou('weiLiCiFu');
+                },
+                useCard:true,
+                filterTarget:function(card,player,target){
+                    if(target==player || target.side!=player.side) return false;
+                    return lib.filter.targetEnabled({name:'weiLiCiFu'},player,target);
+                },
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('weiLiCiFu_xiaoGuo')){
+                        target.addSkill('weiLiCiFu_xiaoGuo');
+                    }
+                    'step 1'
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('weiLiCiFu_xiaoGuo');
+                },
+                subSkill:{
+                    xiaoGuo:{
+                        marktext:"威",
+                        intro:{
+                            content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
+                        trigger:{player:'gongJiMingZhong'},
+                        priority:-1,
+                        filter:function(event,player){
+                            return player.hasExpansions('weiLiCiFu_xiaoGuo');
+                        },
+                        content:function(){
+                            'step 0'
+                            player.loseToDiscardpile(player.getExpansions('weiLiCiFu_xiaoGuo'));
+                            trigger.changeDamageNum(2);
+                            'step 1'
+                            player.removeSkill('weiLiCiFu_xiaoGuo');
+                        }
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
+                    }
+                }
+            },
+            xunJieCiFu:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    var bool1=player.hasCard(card=>lib.skill.xunJieCiFu.filterCard(card));
+                    var bool2=game.filterPlayer(current=>lib.skill.xunJieCiFu.filterTarget("",player,current)).length>0;
+                    return bool1&&bool2;
+                },
+                filterCard:function(card){
+                    return card.hasDuYou('xunJieCiFu');
+                },
+                useCard:true,
+                selectTarget:1,
+                filterTarget:function(card,player,target){
+                    if(target==player || target.side!=player.side) return false;
+                    return lib.filter.targetEnabled({name:'xunJieCiFu'},player,target);
+                },
+                content:function(){
+                    'step 0'
+                    if(!target.hasSkill('xunJieCiFu_xiaoGuo')){
+                        target.addSkill('xunJieCiFu_xiaoGuo');
+                    }
+                    'step 1'
+                    target.addToExpansion(cards,'gain2',player).gaintag.add('xunJieCiFu_xiaoGuo');
+                },
+                subSkill:{
+                    xiaoGuo:{
+                        marktext:"迅",
+                        intro:{
+                            content:'expansion',
+                        },
+                        onremove:function(player, skill) {
+                            const cards = player.getExpansions(skill);
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
+                        //priority:1,
+                        trigger:{player:['gongJiJieShu','faShuJieShu']},
+                        filter:function(event,player){
+                            if(event.yingZhan==true) return false;
+                            return player.hasExpansions('xunJieCiFu_xiaoGuo');
+                        },
+                        content:function(){
+                            'step 0'
+                            player.loseToDiscardpile(player.getExpansions('xunJieCiFu_xiaoGuo'));
+                            player.addGongJi();
+                            'step 1'
+                            player.removeSkill('xunJieCiFu_xiaoGuo');
+                        },
+                        check:function(event,player){
+                            return player.canGongJi();
+                        }
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        target:1,
+                    }
+                }
+            },
+            qiDao:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    if(player.isHengZhi()) return false;
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.hengZhi();
+                },
+                group:'qiDao_xiaoGuo',
+                subSkill:{
+                    xiaoGuo:{
+                        forced:true,
+                        trigger:{player:'gongJiQian'},
+                        filter:function(event,player){
+                            if(!player.isHengZhi()) return false;
+                            return event.yingZhan!=true;
+                        },
+                        content:function(){
+                            player.addZhiShiWu('qiDaoFuWen',2);
+                        }
+                    }
+                },
+                ai:{
+                    baoShi:true,
+                    skillTagFilter:function(player,tag,arg){
+                        if(tag=='baoShi'&&player.isHengZhi()) return false;
+                    }
+                }
+            },
+            faLiChaoXi:{
+                trigger:{player:['faShuJieShu']},
+                usable:1,
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    player.removeBiShaShuiJing();
+                    player.addFaShu();
+                },
+                ai:{
+                    shuiJing:true,
+                },
+                check:function(event,player){
+                    return player.canFaShu();
+                }
+            },
+            qiDaoFuWen:{
+                intro:{
+                    name:'祈祷符文',
+                    content:'mark',
+                    max:3,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/hong.png',
+            },
         },
 		
 		translate:{
@@ -3991,19 +4247,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //祈祷师
             guangHuiXinYang:"[法术]光辉信仰",
-            guangHuiXinYang_info:"<span class='tiaoJian'>(仅在【祈祷形态】下发动，移除1点</span><span class='hong'>【</span>祈祷符文<span class='hong'>】</span><span class='tiaoJian'>)</span>你弃2张牌，我方【战绩区】+1[宝石]，目标队友+1[治疗]。",
+            guangHuiXinYang_info:"<span class='tiaoJian'>(仅在【祈祷形态】下发动，移除1点</span><span class='hong'>【祈祷符文】</span><span class='tiaoJian'>)</span>你弃2张牌，我方【战绩区】+1[宝石]，目标队友+1[治疗]。",
             heiAnZuZhou:"[法术]黑暗诅咒",
-            heiAnZuZhou_info:"<span class='tiaoJian'>(仅在【祈祷形态】下发动，移除1点</span><span class='hong'>【</span>祈祷符文<span class='hong'>】</span><span class='tiaoJian'>)</span>对目标角色和自己各造成2点法术伤害③。",
+            heiAnZuZhou_info:"<span class='tiaoJian'>(仅在【祈祷形态】下发动，移除1点</span><span class='hong'>【祈祷符文】</span><span class='tiaoJian'>)</span>对目标角色和自己各造成2点法术伤害③。",
             weiLiCiFu:"(独)[法术]威力赐福",
             weiLiCiFu_info:"<span class='tiaoJian'>(将威力赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>(攻击命中后可以移除此牌发动②)</span>本次攻击伤害额外+2。",
             xunJieCiFu:"(独)[法术]迅捷赐福",
             xunJieCiFu_info:"<span class='tiaoJian'>(将迅捷赐福放置于目标队友面前)</span>该队友获得<span class='tiaoJian'>([法术行动]或[攻击行动]结束时可以移除此牌发动)</span>额外+1[攻击行动]。",
             qiDao:"[启动]祈祷[持续]",
-            qiDao_info:"[宝石][横置]转为【祈祷形态】，在此形态下，你每发动一次主动攻击①，你+2<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>。",
+            qiDao_info:"[宝石][横置]转为【祈祷形态】，在此形态下，你每发动一次主动攻击①，你+2<span class='hong'>【祈祷符文】</span>。",
             faLiChaoXi:"[响应]法力潮汐[回合限定]",
             faLiChaoXi_info:"[水晶]<span class='tiaoJian'>([法术行动]结束时发动)</span>额外+1[法术行动]。",
             qiDaoFuWen:"祈祷符文",
-            qiDaoFuWen_info:"<span class='hong'>【</span>祈祷符文<span class='hong'>】</span>为祈祷师专有指示物，其上限为3。",
+            qiDaoFuWen_info:"<span class='hong'>【祈祷符文】</span>为祈祷师专有指示物，其上限为3。",
             
             //红莲骑士
             xingHongShengYue:"[响应]腥红圣约[回合限定]",
