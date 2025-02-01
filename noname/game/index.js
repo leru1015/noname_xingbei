@@ -40,6 +40,7 @@ export class Game extends GameCompatible {
 	moDan=2;
 	moDanFangXiang='you';
 	jiChuXiaoGuo={
+		all:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin','leiZhiFengYin','weiLiCiFu','xunJieCiFu','shengDun','xuRuo','zhongDu'],
 		fengYinShi:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
 		qiDaoShi:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
 		pai:['_shengDun','_xuRuo','_zhongDu'],

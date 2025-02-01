@@ -93,6 +93,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shouLingWuShi:`御魂流是一种奇妙的剑道，通过兽魂的不同，可以一击必中，也可以卸掉对手的攻势让其无处使劲。最为奇妙的当属其中奥义【逆反居合斩】，还没有人能准确描述中了此招后的感受。。。因为。。。`,
             shengGong:"因尚未充填完毕，圣弓的伤害仍然受到束缚。然而即使如此，也能隐隐约约感受到其作为能量炮的恐怖之处。若给她足够的时间积蓄力量，她能够一瞬间重置战场甚至逆转战局，是不可忽视的因素",
 		},
+		card:{
+            diZhiFengYin:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('diZhiFengYin_xiaoGuo');
+                }
+            },
+            shuiZhiFengYin:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('shuiZhiFengYin_xiaoGuo');
+                }
+            },
+            huoZhiFengYin:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('huoZhiFengYin_xiaoGuo');
+                }
+            },
+            fengZhiFengYin:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('fengZhiFengYin_xiaoGuo');
+                }
+            },
+            leiZhiFengYin:{
+                filterTarget:function(card,player,target){
+                    return !target.hasExpansions('leiZhiFengYin_xiaoGuo');
+                }
+            },
+        },
 		
 		skill:{
             //风之剑圣
@@ -576,8 +603,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return card.hasDuYou('diZhiFengYin');
 				},
                 filterTarget:function(card,player,target){
-                    if(target.hasSkillTag('noJiChuXiaoGuo')) return false;
-                    return target.side!=player.side&&!target.hasExpansions('diZhiFengYin_xiaoGuo')
+                    if(target.side==player.side) return false;
+                    return lib.filter.targetEnabled({name:'diZhiFengYin'},player,target);
                 },
                 useCard:true,
                 content:function(){
@@ -654,8 +681,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return bool1&&bool2
 				},
                 filterTarget:function(card,player,target){
-                    if(target.hasSkillTag('noJiChuXiaoGuo')) return false;
-                    return target.side!=player.side&&!target.hasExpansions('shuiZhiFengYin_xiaoGuo')
+                    if(target.side==player.side) return false;
+                    return lib.filter.targetEnabled({name:'shuiZhiFengYin'},player,target);
                 },
                 useCard:true,
                 content:function(){
@@ -731,8 +758,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return bool1&&bool2
 				},
                 filterTarget:function(card,player,target){
-                    if(target.hasSkillTag('noJiChuXiaoGuo')) return false;
-                    return target.side!=player.side&&!target.hasExpansions('huoZhiFengYin_xiaoGuo')
+                    if(target.side==player.side) return false;
+                    return lib.filter.targetEnabled({name:'huoZhiFengYin'},player,target);
                 },
                 useCard:true,
                 content:function(){
@@ -805,8 +832,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return bool1&&bool2
 				},
                 filterTarget:function(card,player,target){
-                    if(target.hasSkillTag('noJiChuXiaoGuo')) return false;
-                    return target.side!=player.side&&!target.hasExpansions('fengZhiFengYin_xiaoGuo')
+                    if(target.side==player.side) return false;
+                    return lib.filter.targetEnabled({name:'fengZhiFengYin'},player,target);
                 },
                 useCard:true,
                 content:function(){
@@ -883,8 +910,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return bool1&&bool2
 				},
                 filterTarget:function(card,player,target){
-                    if(target.hasSkillTag('noJiChuXiaoGuo')) return false;
-                    return target.side!=player.side&&!target.hasExpansions('leiZhiFengYin_xiaoGuo')
+                    if(target.hasExpansions('leiZhiFengYin_xiaoGuo')) return false;
+                    if(target.side==player.side) return false;
+                    return lib.filter.targetEnabled({name:'leiZhiFengYin'},player,target);
                 },
                 prepare:'useCard',
                 discard:false,
