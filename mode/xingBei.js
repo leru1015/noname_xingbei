@@ -4731,9 +4731,10 @@ export default () => {
 					if(document.getElementsByClassName('thrown').length){
 						if(event.skill&&get.info(event.skill).delay!==false&&get.info(event.skill).delay!==0) game.delayx();
 					}
+					/*
 					else{
 						event.finish();
-					}
+					}*/
 					"step 6"
 					ui.clear();
 					'step 7'
