@@ -27,7 +27,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             maoXianJia:['maoXianJia_name','huanGroup','3/4',['qiZha','qiangYun','diXiaFaZe','maoXianJiaTianTang','touTianHuanRi'],],
             wenYiFaShi:['wenYiFaShi_name','huanGroup','3/4',['buXiu','shengDu','wenYi','siWangZhiChu','juDuXinXing'],],
             zhongCaiZhe:['zhongCaiZhe_name','xueGroup','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
-            shenGuan:['shenGuan_name','shengGroup',4,[],],
+            shenGuan:['shenGuan_name','shengGroup',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['qiDaoShi_name','yongGroup',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
             xianZhe:['xianZhe_name','yongGroup',4,[],],
             lingFuShi:['lingFuShi_name','yongGroup',4,[],],
@@ -4377,6 +4377,184 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:'storage',
                 markimage:'image/card/zhuanShu/moWen.png',
+            },
+            //神官
+            shenShengQiShi:{
+                trigger:{player:'teShuJieShu'},
+                frequent:true,
+                content:function(){
+                    player.changeZhiLiao(1);
+                }
+            },
+            shenShengQiFu:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.countCards('h',card=>lib.skill.shenShengQiFu.filterCard(card))>=2;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    return get.type(card)=='faShu';
+                },
+                discard:true,
+                showCards:true,
+                content:function(){
+                    player.changeZhiLiao(2);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        player:function(player){
+                            return get.zhiLiaoEffect(player,2);
+                        },
+                    }
+                }
+            },
+            shuiZhiShenLi:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.countCards('h',card=>lib.skill.shuiZhiShenLi.filterCard(card))>=1;
+                },
+                selectCard:1,
+                filterCard:function(card){
+                    return get.xiBie(card)=='shui';
+                },
+                discard:true,
+                showCards:true,
+                filterTarget:function(card,player,target){
+                    return target.side==player.side&&target!=player;
+                },
+                content:function(){
+                    'step 0'
+                    if(player.countCards('h')>0){
+                        player.chooseCard('h','交给目标队友1张牌',true,1);
+                    }
+                    'step 1'
+                    if(result.bool){
+                        player.give(result.cards[0],target);
+                    }
+                    'step 2'
+                    player.changeZhiLiao(1);
+                    'step 3'
+                    target.changeZhiLiao(1,player);
+                },
+                ai:{
+                    order:3.5,
+                    result:{
+                        target:function(player,target){
+                            if(target.countCards('h')+1<=target.getHandcardLimit()){
+                                return 1.5;
+                            }else{
+                                return -1;
+                            }
+                        },
+                        player:1,
+                    }
+                }
+            },
+            shengShiShouHu:{
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return num+4;
+                    }
+                },
+                trigger:{player:'zhiLiaoSheZhi'},
+                forced:true,
+                content:function(){
+                    trigger.zhiLiaoLimit=1;
+                }
+                
+            },
+            shenShengQiYue:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&player.zhiLiao>0;
+                },
+                content:async function(event, trigger, player){
+                    await player.removeBiShaShuiJing();
+                    var list=[];
+                    for(var i=1;i<=player.zhiLiao;i++){
+                        list.push(i);
+                    }
+                    var control=await player.chooseControl(list).set('prompt','转移[治疗]数量').set('num',list.length-1).set('ai',function(){
+                        var num=_status.event.num;
+                        if(num>3) return 3;
+                        return _status.event.num;
+                    }).forResultControl();
+
+                    var targets=await player.chooseTarget('目标队友+'+control+'点[治疗]',true,function(card,player,target){
+                        return target.side==player.side&&target!=player;
+                    }).set('ai',function(target){
+                        var num=_status.event.control;
+                        var player=_status.event.player;
+                        return get.zhiLiaoEffect2(target,player,num);
+                    }).set('num',control).forResultTargets();
+                    var target=targets[0];
+					if(control>0){
+						await player.changeZhiLiao(-control);
+                        await target.changeZhiLiao(control,4,player).set('zhuanYi',true);
+					}
+                },
+                ai:{
+                    shuiJing:true,
+                },
+                check:function(event,player){
+                    if(player.zhiLiao<=1) return false;
+                    return game.hasPlayer(function(current){
+                        if(current.side!=player.side) return false;
+                        if(current.zhiLiao+2<=4) return true;
+                        return false;
+                    });
+                }
+            },
+            shenShengLingYu:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:async function(event, trigger, player){
+                    await player.removeBiShaShuiJing();
+                    await player.chooseToDiscard(2,true,'h');
+                    var choiceList=["<span class='tiaoJian'>(移除你的1[治疗])</span>对目标角色造成2点法术伤害③","你+2[治疗]，目标队友+1[治疗]"];
+                    var list=['选项二'];
+                    if(player.zhiLiao>0){
+                        list.unshift('选项一');
+                    }
+                    var control=await player.chooseControl(list).set('prompt','神圣领域').set('choiceList',choiceList).set('ai',function(event,player){
+                        if(player.zhiLiao+2>=player.getZhiLiaoLimit()) return '选项一';
+                        else return '选项二';
+                    }).forResultControl();
+                    'step 2'
+                    if(control=='选项一'){
+                        await player.changeZhiLiao(-1);
+                        var targets=await player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                            var player=_status.event.player;
+                            return get.damageEffect2(target,player,2);
+                        }).forResultTargets();
+                        var target=targets[0];
+                        await target.faShuDamage(2,player);
+                    }else if(control=='选项二'){
+                        await player.changeZhiLiao(2);
+                        var targets=await player.chooseTarget('目标队友+1[治疗]',true,function(card,player,target){
+                            return target.side==player.side&&target!=player;
+                        }).set('ai',function(target){
+                            var player=_status.event.player;
+                            return get.zhiLiaoEffect2(target,player,1);
+                        }).forResultTargets();
+                        var target=targets[0];
+                        await target.changeZhiLiao(1,player);
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        player:1,
+                    }
+                }       
             },
         },
 		
