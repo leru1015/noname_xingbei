@@ -2601,11 +2601,14 @@ export default () => {
                     return true;
                 },
                 content:function(){
-                    "step 0"
+					'step 0'
+					event.trigger('zhiLiaoSheZhi');
+                    "step 1"
                     var num=trigger.getParent().num;
                     var list=[];
                     for(var i=0;i<=player.zhiLiao;i++){
                         if(i>num) break;
+						if(i>event.zhiLiaoLimit) break;
                         list.push(i);
                     }
 					var  zhiLiao=list.length-1;//使用几点治疗，默认取最大值
@@ -2615,7 +2618,7 @@ export default () => {
 						var num=_status.event.num;
 						return num;
 					}).set('num',zhiLiao);
-					"step 1"
+					"step 2"
 					var zhiLiaonum=result.control;
 					if(zhiLiaonum>0){
 						trigger.getParent().num-=zhiLiaonum;
