@@ -2763,7 +2763,6 @@ export default () => {
                     next.set('yingZhan',true);
 					next.set('canYingZhan',trigger.canYingZhan);
 					next.set('canShengGuang',trigger.canShengGuang);
-					next.set('yingZhan',event.yingZhan);
 					'step 1'
                     if(result.bool){
                         trigger.targets.remove(player);
