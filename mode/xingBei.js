@@ -6383,6 +6383,11 @@ export default () => {
 					next.set('faShu',true);
 					return next;
 				},
+				damageFaShu:function(...args){//法术伤害
+					var next=this.damage(...args);
+					next.set('faShu',true);
+					return next;
+				},
 
 				/**
 				 * 
