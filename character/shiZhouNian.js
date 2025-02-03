@@ -29,7 +29,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongCaiZhe:['zhongCaiZhe_name','xueGroup','3/4',['zhongCaiFaZe','yiShiZhongDuan','moRiShenPan','shenPanLangChao','zhongCaiYiShi','panJueTianPing','shenPan'],],
             shenGuan:['shenGuan_name','shengGroup',4,['shenShengQiShi','shenShengQiFu','shuiZhiShenLi','shengShiShouHu','shenShengQiYue','shenShengLingYu'],],
             qiDaoShi:['qiDaoShi_name','yongGroup',4,['guangHuiXinYang','heiAnZuZhou','weiLiCiFu','xunJieCiFu','qiDao','faLiChaoXi','qiDaoFuWen'],],
-            xianZhe:['xianZhe_name','yongGroup',4,[],],
+            xianZhe:['xianZhe_name','yongGroup',4,['zhiHuiFaDian','faShuFanTan','moDaoFaDian','shengJieFaDian'],],
             lingFuShi:['lingFuShi_name','yongGroup',4,[],],
             jianDi:['jianDi_name','jiGroup','4/5',[],],
             geDouJia:['geDouJia_name','jiGroup','4/5',[],],
@@ -5116,6 +5116,151 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png',
 
+            },
+            //贤者
+            zhiHuiFaDian:{
+                mod:{
+                    maxNengLiang:function(player,num){
+                        return num+1;
+                    }
+                },
+                forced:true,
+                trigger:{player:'chengShouShangHai'},
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    return event.num>3;
+                },
+                content:function(){
+                    'step 0'
+                    player.addNengLiang('baoShi',2);
+                    'step 1'
+                    if(player.countCards('h')>0){
+                        player.chooseToDiscard('h',true);
+                    }
+                }
+            },
+            faShuFanTan:{
+                trigger:{player:'chengShouShangHai'},
+                filter:function(event,player){
+                    if(event.faShu!=true) return false;
+                    if(event.num!=1) return false;
+                    return player.countCards('h')>1;
+                },
+                async cost(event,trigger,player){
+                    event.result=await player.chooseCardTarget({
+                        filterCard:function(card){
+                            if(ui.selected.cards.length==0) return true;
+                            if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
+                            return false;
+                        },
+                        selectCard:[2,Infinity],
+                        filterTarget:true,
+                        complexCard:true,
+                        prompt:get.prompt('faShuFanTan'),
+                        prompt2:lib.translate.faShuFanTan_info,
+                        ai1(card) {
+                            return 6- get.value(card);
+                        },
+                        ai2:function(target){
+							var player=_status.event.player;
+                            return get.damageEffect2(target,player,1);
+						},
+                    }).forResult();
+                },
+                content:function(){
+                   'step 0'
+                    player.discard(event.cards).set('showCards',true);
+                    event.num=event.cards.length;
+                    event.target=event.targets[0];
+                    'step 2'
+                    event.target.faShuDamage(event.num-1,player);
+                    'step 3'
+                    player.faShuDamage(event.num,player);
+                },
+                ai:{
+                    one_damage:true,
+                }
+            },
+            moDaoFaDian:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.canBiShaBaoShi()) return false;
+                    return player.countYiXiPai()>1;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                selectCard:[2,Infinity],
+                filterCard:function(card,player){
+                    return get.xuanZeYiXiPai(card);
+                },
+                complexCard:true,
+                discard:false,
+                lose:false,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.discard(cards).set('showCards',true);
+                    'step 2'
+                    target.damageFaShu(cards.length-1,player);
+                    'step 3'
+                    player.damageFaShu(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2);
+                        },
+                    }
+                }
+            },
+            shengJieFaDian:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(!player.canBiShaBaoShi()) return false;
+                    return player.countYiXiPai()>2;
+                },
+                filterCard:function(card,player){
+                    return get.xuanZeYiXiPai(card);
+                },
+                selectCard:[3,Infinity],
+                complexCard:true,
+                discard:false,
+                lose:false,
+                selectTarget:function(){
+                    return [0,ui.selected.cards.length-2];
+                },
+                filterTarget:true,
+                filterOk:function(event,player){
+                    return ui.selected.targets.length<=ui.selected.cards.length-2;
+                },
+                contentBefore:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.discard(cards).set('showCards',true);
+                },
+                content:function(){
+                    if(target){
+                        target.changeZhiLiao(2);
+                    }
+                },
+                contentAfter:function(){
+                    player.faShuDamage(cards.length-1,player);
+                },
+                ai:{
+                    baoShi:true,
+                    order:3.7,
+                    result:{
+                        target:function(player,target){
+                            return get.zhiLiaoEffect(target,2);
+                        },
+                    }
+                }
             },
         },
 		
