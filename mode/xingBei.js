@@ -5502,6 +5502,10 @@ export default () => {
 					next.set('drawNum',drawNum);
 					'step 1'
 					player.draw(result.control);
+					event.result={
+						bool:true,
+						control:result.control,
+					}
 				},
 
 				gainJiChuXiaoGuo:function(){
