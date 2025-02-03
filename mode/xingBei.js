@@ -2717,6 +2717,7 @@ export default () => {
 						event.source=trigger.player;
 						event.yingZhan=trigger.yingZhan;
 						event.sourceCard=trigger.card;
+						event.customArgs=trigger.customArgs;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
                     //trigger.cancel();
@@ -2783,6 +2784,7 @@ export default () => {
 					'step 0'
 					trigger.yingZhan=true;//设置本次攻击为应战攻击
 
+					event.customArgs=trigger.getParent(5).customArgs;
                     event.source=trigger.getParent().source;//攻击来源
                     event.player=trigger.getParent().player;//应战者
 					event.yingZhan=trigger.getParent().yingZhan;//判断未命中的攻击是否为应战攻击
@@ -2800,6 +2802,7 @@ export default () => {
                 },
 				content:function(){
 					'step 0'
+					event.customArgs=trigger.getParent(5).customArgs;
 					event.source=trigger.getParent().source;//攻击来源
                     event.player=trigger.getParent().player;//应战者
 					event.yingZhan=trigger.getParent().yingZhan;//判断未命中的攻击是否为应战攻击
