@@ -45,7 +45,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             cangYanMoNv:['cangYanMoNv_name','xueGroup',4,[],],
             yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',[],],
             jingLingSheShou:['jingLingSheShou_name','jiGroup','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
-            yinYangShi:['yinYangShi_name','huanGroup',4,[],],
+            yinYangShi:['yinYangShi_name','huanGroup',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['xueSeJianLing_name','xueGroup',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
             yueZhiNvShen:['yueZhiNvShen_name','shengGroup',5,['xinYueBiHu','anYueZuZhou','meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],],
             shouLingWuShi:['shouLingWuShi_name','jiGroup','4/5',[],],
@@ -85,9 +85,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moQiang:`被幻之星尘同化的魔枪在获得了新的意志和形态后，体内涌出一股无与伦比的力量。这种力量极大地提高了她的打击能力和爆发力，但也使得她再也无法使用那些基本的法术了`,
             cangYanMoNv:`拥有千奇百怪魔法道具的她总是让敌人无可奈何，然而苍炎魔女真正的杀招，是隐藏于血脉之中的苍炎之力<br>
             将身躯奉献给苍炎之力的苍炎魔女，觉醒其体内完全的魔力。烈炎之痕烙印在她的身躯上，为了心中的执念，她已不顾任何毁灭性的后果。是什么让她如此奋不顾身？也许答案已不言而喻。。。`,
-            yinYouShiRen:`阴阳师通过式神的帮助，于虚实之间转移对手注意力并造成伤害。由于阴阳师与式神之间捉摸不定的特性，往往使得对手疲于奔命`,
+            yinYouShiRen:`吟游诗人不仅仅依凭自己的直觉和灵感进行着战斗，他弹奏的一个个音符能大幅增强自身和队友的实力，同样也能对敌人造成极大的伤害`,
             jingLingSheShou:"穿梭于丛林之中，游走于动物伙伴之间，精灵秘仪的力量祝福者她和她的动物伙伴在战场上战无不胜",
-            yinYangShi:`吟游诗人不仅仅依凭自己的直觉和灵感进行着战斗，他弹奏的一个个音符能大幅增强自身和队友的实力，同样也能对敌人造成极大的伤害`,
+            yinYangShi:`阴阳师通过式神的帮助，于虚实之间转移对手注意力并造成伤害。由于阴阳师与式神之间捉摸不定的特性，往往使得对手疲于奔命`,
             xueSeJianLing:`将鲜血之力与剑技完美融合，血色剑灵拥有着匹敌于魔剑的爆发性和机动性。任何敌人若踏进她的鲜血领域，那么他将必死无疑”`,
             yueZhiNvShen:`月之女神以新月庇佑队友，吸纳队友伤痛作为自己的力量。她是相信“力量即为一切”的对手的梦魇，会在积累足够的伤痛后进行反击。然而对于另一种不擅长以伤害取胜的对手，她还是疲于应付`,
             shouLingWuShi:`御魂流是一种奇妙的剑道，通过兽魂的不同，可以一击必中，也可以卸掉对手的攻势让其无处使劲。最为奇妙的当属其中奥义【逆反居合斩】，还没有人能准确描述中了此招后的感受。。。因为。。。`,
@@ -4556,6 +4556,332 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }       
             },
+            //阴阳师
+            shiShenJiangLin:{
+                type:'faShu',
+                enable:['chooseToUse','faShu'],
+                filter:function(event,player){
+                    if(player.isLinked()) return false;
+                    return player.countTongMingPai()>=2;
+                },
+                discard:true,
+                showCards:true,
+                selectCard:2,
+                filterCard:function(card,player){
+                    return get.xuanZeTongMingPai(card);
+                },
+                complexCard:true,
+                content:function(){
+                    'step 0'
+                    player.hengZhi();
+                    'step 1'
+                    player.addZhiShiWu('guiHuo');
+                    player.addGongJi();
+                },
+                ai:{
+                    order:4,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            yinYangZhanHuan:{
+                enable:['yingZhan'],
+                filter:function(event,player){
+                    var event=_status.event;
+                    if(event.canYingZhan==false) return false;
+                    var mingGe=get.mingGe(event.sourceCard);
+                    return player.hasCard(card=>get.mingGe(card)==mingGe&&get.type(card)=='gongJi');
+                },
+                filterCard:function(card,player,event){
+                    var event=_status.event;
+                    var mingGe=get.mingGe(event.sourceCard);
+                    return get.mingGe(card)==mingGe&&get.type(card)=='gongJi';
+                },
+                position:'h',
+                viewAs:function(cards,player){
+                    var event=_status.event;
+					return {name:get.name(event.sourceCard),xiBie:get.xiBie(event.sourceCard),isCard:true};
+				},
+                group:['yinYangZhanHuan_xiaoGuo'],
+                ai:{
+                    order:5,
+                },
+                subSkill:{
+                   xiaoGuo:{
+                    trigger:{player:'gongJiQian'},
+                    firstDo:true,
+                    direct:true,
+                    priority:1,
+                    filter:function(event,player){
+                        return event.skill=='yinYangZhanHuan';
+                    },
+                    content:function(){
+                        'step 0'
+                        player.addZhiShiWu('guiHuo');
+                        game.setXiBie(trigger.card,get.xiBie(trigger.cards[0]));
+                        'step 1'
+                        event.trigger('yinYangZhanHuan');
+                        'step 2'
+                        if(player.isHengZhi()){
+                            player.chongZhi();
+                        }else{
+                            event.finish();
+                        }
+                        'step 3'
+                        trigger.damageNum=player.countZhiShiWu('guiHuo');
+                    }
+                   } 
+                }
+            },
+            shiShenZhuanHuan:{
+                trigger:{player:'yinYangZhanHuan'},
+                content:function(){
+                    player.draw(1);
+                    player.addZhiShiWu('guiHuo');
+                },
+                check:function(event,player){
+                    if(player.countZhiShiWu('guiHuo')>2) return false;
+                    if(player.countCards('h')+1<=player.getHandcardLimit()) return true;
+                    return false;
+                }
+            },
+            heiAnJiLi:{
+                trigger:{player:'huiHeJieShu'},
+                forced:true,
+                filter:function(event,player){
+                    return player.countZhiShiWu('guiHuo')>=get.info('guiHuo').intro.max;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('guiHuo',player.countZhiShiWu('guiHuo'));
+                    'step 1'
+                    player.chooseTarget('对目标角色造成2点法术伤害③',true).set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.damageEffect2(target, player, 2);
+                    });
+                    'step 2'
+                    if(result.bool){
+                        result.targets[0].faShuDamage(2,player);
+                    }
+                }
+            },
+            shiShenZhouShu:{
+                trigger:{global:'shouDaoGongJi'},
+                priority:1,
+                filter:function(event,player){
+                    if(player.countCards('h')==0) return false;
+                    if(event.yingZhan==true) return false;
+                    if(event.target.side!=player.side) return false;
+                    if(event.target==player) return false;
+                    if(event.canYingZhan==false) return false;
+                    if(!player.isHengZhi()) return false;
+                    var zhanJi=get.zhanJi(player.side);
+                    if(zhanJi.length<2) return false;
+                    var count=zhanJi.filter(xingShi=>xingShi=='baoShi').length;
+                    if(count==0) return false;
+                    return true;
+                },
+                popup:false,
+                async cost(event,trigger,player){
+                    event.source=trigger.player;
+					event.yingZhan=trigger.yingZhan;
+					event.sourceCard=trigger.card;
+					var name=get.translation(event.source);
+                    var name2=get.translation(trigger.target);
+					var propmt=`${name2}受到${name}的`;
+					propmt+=get.translation(get.xiBie(event.sourceCard))+'系主动攻击，';
+					propmt+=get.prompt('shiShenZhouShu');
+					event.result=await player.yingZhan(propmt)
+                    .set('filterCard',function(card,player,event){
+						if(get.type(card)=='gongJi'){
+							if(_status.event.canYingZhan==false) return false;//不能应战设置
+							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.sourceCard)) return false;
+						}
+						return lib.filter.cardEnabled(card,player,'forceEnable');
+					})
+					.set('filterTarget',function(card,player,target){
+						if(target==_status.event.source) return false;
+						if(target.side==player.side) return false;
+						return lib.filter.targetEnabled(card,player,target);
+                    })
+					.set('sourceCard',event.sourceCard)
+                    .set('source',event.source)
+                    .set('yingZhan',true)
+					.set('canYingZhan',trigger.canYingZhan)
+					.set('canShengGuang',trigger.canShengGuang)
+                    .set('shiShenZhouShu',true)
+                    .set('prompt2',lib.translate.shiShenZhouShu_info)
+                    .forResult();
+                },
+                content:function(){
+                    trigger.targets.remove(trigger.target);
+                    trigger.cancel();
+                },
+                group:'shiShenZhouShu_tiaoJian',
+                subSkill:{
+                    tiaoJian:{
+                        trigger:{player:'gongJiQian'},
+                        direct:true,
+                        firstDo:true,
+                        filter:function(event,player){
+                            return event.getParent().shiShenZhouShu==true;
+                        },
+                        content:function(){
+                            'step 0'
+                            player.logSkill('shiShenZhouShu');
+                            var list=get.zhanJi(player.side);
+                            var listx=[];
+                            for(var i=0;i<list.length;i++){
+                                listx.push([list[i],get.translation(list[i])]);
+                            }
+                            var next=player.chooseButton([
+                                '移除1[宝石]1[水晶]',
+                                [listx,'tdnodes'],
+                            ]);
+                            next.set('forced',true);
+                            next.set('selectButton',2);
+                            next.set('filterOk',function(){
+                                for(var i in ui.selected.buttons){
+                                    if(ui.selected.buttons[i].link=='baoShi') return true;
+                                }
+                            });
+                            'step 1'
+                            event.dict={baoShi:0,shuiJing:0};
+                            for(var i=0;i<result.links.length;i++){
+                                if(result.links[i]=='baoShi'){
+                                    event.dict.baoShi++;
+                                }else if(result.links[i]=='shuiJing'){
+                                    event.dict.shuiJing++;
+                                }
+                            }
+                            if(event.dict.baoShi>0){
+                                player.removeZhanJi('baoShi',event.dict.baoShi);
+                            }
+                            if(event.dict.shuiJing>0){
+                                player.removeZhanJi('shuiJing',event.dict.shuiJing);
+                            }
+                        }
+                    }
+                }
+            },
+            shengMingJieJie:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('生命结界','hidden');
+                        var list=[['1',"目标队友+1[宝石]并+1[治疗]；然后对自己造成X点法术伤害③，X为你的<span class='hong'>【</span>鬼火<span class='hong'>】</span>数。(若X为3)本次法术伤害③不会造成我方士气下降"],['2',"<span class='tiaoJian'>(仅【式神形态】下，弃2张命格相同的手牌[展示])</span>[重置]脱离【式神形态】目标队友弃1张牌"]]
+						dialog.add([list,'textbutton']);
+						return dialog;
+                    },
+                    filter:function(button,player){
+                        var link=button.link;
+                        if(link=='1'){
+                            return true;
+                        }
+                        if(link=='2'){
+                            if(!player.isHengZhi()) return false;
+                            return player.countTongMingPai()>=2;
+                        }
+                    },
+                    backup:function(links,player){
+                        if(links[0]=='1'){
+                            var next=get.copy(lib.skill['shengMingJieJie_1']);
+                        }else if(links[0]=='2'){
+                            var next=get.copy(lib.skill['shengMingJieJie_2']);
+                        }
+						return next;
+					},
+                    prompt:function(links,player){
+                        if(links[0]=='1'){
+                            return '目标队友+1[宝石]并+1[治疗]'
+                        }else{
+                            return '弃2张命格相同的手牌[展示]，目标队友弃1张牌'
+                        }  
+                    },
+                    check:function(button){
+                        return Math.random();
+                    }
+                },
+                subSkill:{
+                    1:{
+                        type:'faShu',
+                        selectTarget:1,
+                        filterTarget:function(card,player,target){
+                            return target.side==player.side&&target!=player;
+                        },
+                        content:async function(event, trigger, player){
+                            await player.removeBiShaShuiJing();
+                            await player.addZhiShiWu('guiHuo');
+                            var target=event.target;
+                            await target.addNengLiang('baoShi');
+                            await target.changeZhiLiao(1);
+                            var num=player.countZhiShiWu('guiHuo');
+                            if(num==3){
+                                await player.faShuDamage(num,player)
+                                .set('shiQiXiaJiang',false);
+                            }else{
+                                await player.faShuDamage(num,player);
+                            }
+                        },
+                        ai:{
+                            result:{
+                                target:function(player,target){
+                                    return target.getNengLiangLimit()-target.countNengLiangAll();
+                                }
+                            }
+                        }
+                    },
+                    2:{
+                        type:'faShu',
+                        selectTarget:1,
+                        filterTarget:function(card,player,target){
+                            return target.side==player.side&&target!=player;
+                        },
+                        selectCard:2,
+                        filterCard:function(card,player){
+                            return get.xuanZeTongMingPai(card);
+                        },
+                        complexCard:true,
+                        discard:false,
+                        lose:false,
+                        content:async function(event, trigger, player){
+                            await player.removeBiShaShuiJing();
+                            await player.addZhiShiWu('guiHuo');
+                            await player.discard(event.cards).set('showCards',true);
+                            await player.chongZhi();
+                            await event.target.chooseToDiscard(1,true);
+                        },
+                        ai:{
+                            result:{
+                                target:function(player,target){
+                                    return target.countCards('h')-1;
+                                }
+                            }
+                        }
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                    order:3.8,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            guiHuo:{
+                intro:{
+                    name:'鬼火',
+                    content:'mark',
+                    max:3,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/hong.png',
+            },
         },
 		
 		translate:{
@@ -4960,20 +5286,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             
             //阴阳师
             shiShenJiangLin:"[法术]式神降临[持续]",
-            shiShenJiangLin_info:"<span class='tiaoJian'>(弃2张命格相同的手牌[展示])</span>[横置]转为【式神形态】，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>，额外+1[攻击行动]。",
+            shiShenJiangLin_info:"<span class='tiaoJian'>(弃2张命格相同的手牌[展示])</span>[横置]转为【式神形态】，你+1<span class='hong'>【鬼火】</span>，额外+1[攻击行动]。",
             yinYangZhanHuan:"[响应]阴阳转换",
-            yinYangZhanHuan_info:"<span class='tiaoJian'>(应战攻击时①，打出1张与攻击牌命格相同的攻击牌[展示])</span>你应战此次攻击，并将本次攻击系别转为与此牌相同，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>。<span class='tiaoJian'>(若处于【式神形态】，[重置]脱离【式神形态】)</span>本次攻击伤害为X，X为你的<span class='hong'>【</span>鬼火<span class='hong'>】</span>数。",
+            yinYangZhanHuan_info:"<span class='tiaoJian'>(应战攻击时①，打出1张与攻击牌命格相同的攻击牌[展示])</span>你应战此次攻击，并将本次攻击系别转为与此牌相同，你+1<span class='hong'>【鬼火】</span>。<span class='tiaoJian'>(若处于【式神形态】，[重置]脱离【式神形态】)</span>本次攻击伤害为X，X为你的<span class='hong'>【鬼火】</span>数。",
             shiShenZhuanHuan:"[响应]式神转换",
-            shiShenZhuanHuan_info:"<span class='tiaoJian'>(与【阴阳转换】同时发动)</span>你摸1张牌[强制]，你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>。",
+            shiShenZhuanHuan_info:"<span class='tiaoJian'>(与【阴阳转换】同时发动)</span>你摸1张牌[强制]，你+1<span class='hong'>【鬼火】</span>。",
             heiAnJiLi:"[被动]黑暗祭礼",
-            heiAnJiLi_info:"<span class='tiaoJian'>(你的回合结束时，若</span><span class='hong'>【</span>鬼火<span class='hong'>】</span><span class='tiaoJian'>达到上限)</span>移除所有<span class='hong'>【</span>鬼火<span class='hong'>】</span>，对目标角色造成2点法术伤害③。",
+            heiAnJiLi_info:"<span class='tiaoJian'>(你的回合结束时，若</span><span class='hong'>【鬼火】</span><span class='tiaoJian'>达到上限)</span>移除所有<span class='hong'>【鬼火】</span>，对目标角色造成2点法术伤害③。",
             shiShenZhouShu:"[响应]式神咒束",
             shiShenZhouShu_info:"<span class='tiaoJian'>(目标队友受到主动攻击时①，若此攻击可应战且你处于【式神形态】，打出1张合理的应战攻击牌[展示]，移除我方【战绩区】1[宝石]1[水晶])</span>将本次攻击目标变更为你，且视为你使用此牌执行应战攻击。",
             shengMingJieJie:"[法术]生命结界",
             shengMingJieJie_backup:"[法术]生命结界",
-            shengMingJieJie_info:"[水晶]你+1<span class='hong'>【</span>鬼火<span class='hong'>】</span>，选择以下一项发动：<br>·目标队友+1[宝石]并+1[治疗]；然后对自己造成X点法术伤害③，X为你的<span class='hong'>【</span>鬼火<span class='hong'>】</span>数。(若X为3)本次法术伤害③不会造成我方士气下降。<br>·<span class='tiaoJian'>(仅【式神形态】下，弃2张命格相同的手牌[展示])</span>[重置]脱离【式神形态】目标队友弃1张牌。",
+            shengMingJieJie_info:"[水晶]你+1<span class='hong'>【鬼火】</span>，选择以下一项发动：<br>·目标队友+1[宝石]并+1[治疗]；然后对自己造成X点法术伤害③，X为你的<span class='hong'>【鬼火】</span>数。(若X为3)本次法术伤害③不会造成我方士气下降。<br>·<span class='tiaoJian'>(仅【式神形态】下，弃2张命格相同的手牌[展示])</span>[重置]脱离【式神形态】目标队友弃1张牌。",
             guiHuo:"鬼火",
-            guiHuo_info:"<span class='hong'>【</span>鬼火<span class='hong'>】</span>为阴阳师专有指示物，上限为3。",
+            guiHuo_info:"<span class='hong'>【鬼火】</span>为阴阳师专有指示物，上限为3。",
             
             //苍炎魔女
             cangYanFaDian:"[法术]苍炎法典",
