@@ -38,7 +38,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xueZhiWuNv:['xueZhiWuNv_name','xueGroup',5,[],],
             dieWuZhe:['dieWuZhe_name','yongGroup',5,[],],
             nvWuShen:['nvWuShen_name','shengGroup','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
-            moGong:['moGong_name','huanGroup',4,[],],
+            moGong:['moGong_name','huanGroup',4,['moGuanChongJi','leiGuangSanShe','duoChongSheJi','chongNeng','moYan','chongNengPai'],],
             hongLianQiShi:['hongLianQiShi_name','xueGroup',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
             yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['moQiang_name','huanGroup',4,[],],
@@ -5262,6 +5262,360 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
+            //魔弓
+            moGuanChongJi:{
+                trigger:{player:'gongJiQian'},
+                filter:function(event,player){
+                    var cards=player.getExpansions('chongNengPai');
+                    if(cards.length==0) return false;
+                    if(event.yingZhan==true) return false;
+                    if(event.getParent('phaseUse').moGuanChongJi==false) return false;
+                    if(event.targets[0].countCards('h')>=event.targets[0].getHandcardLimit()) return false;
+                    return true;
+                },
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('chongNengPai');
+                    var result=await player.chooseCardButton(cards,'是否发动【魔贯冲击】，弃1张火系【充能】,本次攻击伤害额外+1')
+                        .set('filterButton',function(button){
+                            return get.xiBie(button.link)=='huo';
+                        })
+                        .set('ai',function(button){
+                            if(get.xiBie(button.link)=='huo') return 1;
+                            return 0;
+                        }).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links,
+                    };
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cost_data,'chongNengPai').set('showHiddenCards',true);
+                    trigger.changeDamageNum(1);
+                    trigger.customArgs.moGuanChongJi=true;
+                    trigger.getParent('phaseUse').duoChongSheJi=false;
+                },
+                group:['moGuanChongJi_mingZhong','moGuanChongJi_weiMingZhong'],
+                subSkill:{
+                    mingZhong:{
+                        trigger:{player:'gongJiMingZhong'},
+                        filter:function(event,player){
+                            if(event.customArgs.moGuanChongJi!=true) return false;
+                            var cards=player.getExpansions('chongNengPai');
+                            if(cards.length==0) return false;
+                            return true; 
+                        },
+                        async cost(event,trigger,player){
+                            var cards=player.getExpansions('chongNengPai');
+                            var result=await player.chooseCardButton(cards,'是否发动【魔贯冲击】，移除1张火系【充能】,本次攻击伤害额外+1')
+                                .set('filterButton',function(button){
+                                    return get.xiBie(button.link)=='huo';
+                                })
+                                .set('ai',function(button){
+                                    if(get.xiBie(button.link)=='huo') return 1;
+                                    return 0;
+                                }).forResult();
+                            event.result={
+                                bool:result.bool,
+                                cost_data:result.links,
+                            };
+                        },
+                        content:function(){
+                            'step 0'
+                            player.discard(event.cost_data,'chongNengPai').set('showHiddenCards',true);
+                            trigger.changeDamageNum(1);
+                        }
+                    },
+                    weiMingZhong:{
+                        trigger:{source:'gongJiWeiMingZhong'},
+                        filter:function(event,player){
+                            return event.customArgs.moGuanChongJi;
+                        },
+                        direct:true,
+                        content:function(){
+                            trigger.player.faShuDamage(3,player);
+                        }
+                    }
+                }
+
+            },
+            leiGuangSanShe:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    if(event.getParent('phaseUse').leiGuangSanShe==false) return false;
+                    var cards=player.getExpansions('chongNengPai');
+                    if(cards.length==0) return false;
+                    for(var i=0;i<cards.length;i++){
+                        if(get.xiBie(cards[i])=='lei') return true;
+                    }
+                    return false;
+                },
+                chooseButton:{
+                    dialog:function(event,player){
+                        var dialog=ui.create.dialog('雷光散射：移除1+X个雷系【充能】[展示]','hidden');
+                        var cards=player.getExpansions('chongNengPai');
+                        dialog.add(cards);
+                        return dialog;
+                    },
+                    select:[1,Infinity],
+                    filter:function(button,player){
+                        return get.xiBie(button.link)=='lei';
+                    },
+                    backup:function(links,player){
+                        return{
+                            links:links,
+                            type:'faShu',
+                            selectTarget:-1,
+                            filterTarget:function(card,player,target){
+                                return player.side!=target.side;
+                            },
+                            contentBefore:function(){
+                                'step 0'
+                                event.links=lib.skill.leiGuangSanShe_backup.links;
+                                player.discard(event.links,'chongNengPai').set('showHiddenCards',true);
+                                for(var target of targets){
+                                    target.storage.leiGuangSanShe=1;
+                                }
+                                'step 1'
+                                event.num=event.links.length-1;
+                                if(event.num>0){
+                                    player.chooseTarget('对其造成的伤害额外+'+event.num,true,function(card,player,target){
+                                        return target.side!=player.side;
+                                    }).set('ai',function(target){
+                                        return -get.damageEffect(target,2);
+                                    });
+                                }else{
+                                    event.finish();
+                                }
+                                'step 2'
+                                game.log(player,'选择了',result.targets[0],'伤害额外+'+event.num);
+                                result.targets[0].storage.leiGuangSanShe+=event.num;
+                            },
+                            content:function(){
+                                target.faShuDamage(target.storage.leiGuangSanShe,player);
+
+                            },
+                            contentAfter:function(){
+                                for(var target of targets){
+                                    delete target.storage.leiGuangSanShe;
+                                }
+                            }
+                        }
+                    },
+                    check:function(button){
+                        if(get.xiBie(button.link)=='lei') return 1;
+                        return 0;
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        var cards=player.getExpansions('chongNengPai');
+                        var num=1.5;
+                        for(var i=0;i<cards.length;i++){
+                            if(get.xiBie(cards[i])=='lei') num+=0.7;
+                        }
+                        return num;
+                    },
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            duoChongSheJi:{
+                trigger:{player:'gongJiJieShu'},
+                filter:function(event,player){
+                    var cards=player.getExpansions('chongNengPai');
+                    if(cards.length==0) return false;
+                    if(event.yingZhan==true) return false;
+                    if(event.getParent('phaseUse').duoChongSheJi==false) return false;
+                    return true;
+                },
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('chongNengPai');
+                    var result=await player.chooseCardButton(cards,'是否发动【多重射击】')
+                        .set('filterButton',function(button){
+                            return get.xiBie(button.link)=='feng';
+                        })
+                        .set('ai',function(button){
+                            if(get.xiBie(button.link)=='feng') return 1;
+                            return 0;
+                        }).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links,
+                    };
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cost_data,'chongNengPai').set('showHiddenCards',true);
+                    trigger.getParent('phaseUse').moGuanChongJi=false;
+                    var bool=game.hasPlayer(function(current){
+                        if(current==trigger.oriTargets[0]) return false;
+                        return player.canUse('anMie',current);
+                    });
+                    if(bool){
+                        player.chooseTarget(true,function(card,player,target){
+                            if(target==_status.event.trigger_target) return false;
+                            return player.canUse('anMie',target);
+                        }).set('trigger_target',trigger.oriTargets[0]);
+                    }else event.finish();
+                    'step 1'
+                    if(result.targets){
+                        player.useCard({name:'anMie',xiBie:'an'},result.targets[0]).set('duoChongSheJi',true);
+                    }
+                },
+                group:['duoChongSheJi_1'],
+                subSkill:{
+                    1:{
+                        trigger:{player:'gongJiSheZhi'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.duoChongSheJi==true;
+                        },
+                        content:function(){
+                            trigger.changeDamageNum(-1);
+                        }
+                    }
+
+                }
+            },
+            chongNeng:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    if(player.countCards('h')>4){
+                        player.chooseToDiscard(true,player.countCards('h')-4);
+                    }
+                    'step 2'
+                    player.chooseDraw(4,true);
+                    'step 3'
+                    event.num=result.control;
+                    if(event.num==0){
+                        event.goto(6);
+                    }
+                    'step 4'
+                    player.chooseCard('h',[1,event.num]).set('prompt',`将至多${event.num}张手牌作为充能`).set('ai',function(card){
+                        var player=_status.event.player;
+                        if(ui.selected.cards.length>=player.countCards('h')) return 0;
+                        var xiBie=get.xiBie(card);
+                        if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
+                        return 0;
+                    });
+                    'step 5'
+                    if(result.cards){
+                        player.addToExpansion('draw',result.cards,'log').gaintag.add('chongNengPai');
+                    }
+                    'step 6'
+                    trigger.moGuanChongJi=false;
+                    trigger.leiGuangSanShe=false;
+                },
+                check:function(event,player){
+                    if(player.countNengLiang('baoShi')>0) return false;
+                    if(player.countCards('h',function(card){
+                        var xiBie=get.xiBie(card);
+                        if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return true;
+                        return false;
+                    })<3) return true;
+                    return true;
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            moYan:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    var choiceList=['目标角色弃1张牌','你摸3张牌[强制]'];
+                    player.chooseControl().set('prompt','魔眼').set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')<2){
+                            return '选项二'
+                        }else{
+                            return '选项一'
+                        }
+                    });
+                    'step 2'
+                    if(result.control=='选项一'){
+                        event.goto(3);
+                    }else{
+                        event.goto(5);
+                    }
+                    'step 3'
+                    player.chooseTarget(true,'目标角色弃1张牌').set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target.side==player.side){
+                            return 5;
+                        }
+                        return target.countCards('h');
+                    });
+                    'step 4'
+                    result.targets[0].chooseToDiscard('h',true);
+                    event.goto(6);
+
+                    'step 5'
+                    player.draw(3);
+                    'step 6'
+                    if(player.countCards('h')>0){
+                        player.chooseCard('h',1,true).set('prompt','将自己1张手牌作为充能').set('ai',function(card){
+                            var xiBie=get.xiBie(card);
+                            if(xiBie=='lei'||xiBie=='huo'||xiBie=='feng') return 1;
+                            return 0;
+                        });
+                    }else{
+                        event.goto(8);
+                    }
+                    'step 7'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('chongNengPai');
+                    'step 8'
+                    player.addNengLiang('shuiJing',1);
+                },
+                ai:{
+                    baoShi:true,
+                }
+            },
+            chongNengPai:{
+                intro:{
+                    name:'充能',
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('chongNengPai');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
+                trigger:{player:'addToExpansionAfter'},
+                filter:function(event,player){
+                    return event.gaintag.includes('chongNengPai')&&player.getExpansions('chongNengPai').length>8;
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('chongNengPai');
+                    player.chooseCardButton(cards,'舍弃'+(cards.length-8)+'张【充能】',true,cards.length-8);
+                    'step 1'
+                    if(result.links){
+                        player.discard(result.links);
+                    }
+                }
+            },
         },
 		
 		translate:{
@@ -5711,7 +6065,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //魔弓
             moGuanChongJi:"[响应]魔贯冲击",
-            moGuanChongJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1个火系【充能】[展示])</span>本次攻击伤害额外+1，不能攻击手牌达到上限的对手；<span class='tiaoJian'>(若命中②，额外移除1个火系【充能】[展示])</span>，本次攻击伤害额外+1；<span class='tiaoJian'>(若未命中②)</span>对对手造成3点法术伤害③，本回合你不能发动【多重射击】。",
+            moGuanChongJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1个火系【充能】[展示])</span>本次攻击伤害额外+1，不能攻击手牌达到上限的对手；<span class='tiaoJian'>(若命中②，额外移除1个火系【充能】[展示])</span>，本次攻击伤害额外+1；<span class='tiaoJian'>(若未命中②)</span>对对手造成3点法术伤害③。本回合你不能发动【多重射击】。",
             leiGuangSanShe:"[法术]雷光散射",
             leiGuangSanShe_backup:"[法术]雷光散射",
             leiGuangSanShe_info:"<span class='tiaoJian'>(移除1个雷系【充能】[展示])</span>对所有对手造成1点法术伤害③；<span class='tiaoJian'>(若你额外移除X个雷系【充能】[展示])</span>指定一名对手，本次对其攻击伤害额外+X③。",
