@@ -6504,6 +6504,32 @@ export default () => {
                     }
 					return Object.keys(dict).length;
 				},
+				countTongMingPai:function(){//统计同命格牌数
+					var h=this.getCards('h');
+					var dict={};
+                    for(var i=0;i<h.length;i++){
+                        var mingGe=get.mingGe(h[i]);
+                        if(!dict[mingGe]) dict[mingGe]=0;
+                        dict[mingGe]++;
+                    }
+    				let maxValue=-Infinity;  
+                    for(let key in dict) {  
+						if (dict[key] > maxValue) {  
+							maxValue = dict[key];  
+						}     
+					}
+					return maxValue;  
+				},
+				countYiMingPai:function(){//统计异命格牌数
+					var h=this.getCards('h');
+					var dict={};
+                    for(var i=0;i<h.length;i++){
+                        var mingGe=get.mingGe(h[i]);
+                        if(!dict[mingGe]) dict[mingGe]=0;
+                        dict[mingGe]++;
+                    }
+					return Object.keys(dict).length;
+				},
 				usedSkill:function(skill){//是否使用过技能
 					if(!skill) return false;
 					return this.countSkill(skill)>0;
@@ -7244,6 +7270,27 @@ export default () => {
 					for(var i=0;i<ui.selected.cards.length;i++){
 						var xiBie2=get.xiBie(ui.selected.cards[i]);
 						if(xiBie1==xiBie2) return false;
+					}
+					return true;
+				}
+			},
+			xuanZeTongMingPai:function(card){
+				if(ui.selected.cards.length==0) return true;
+				else{
+					var mingGe=get.mingGe(card);
+					if(!mingGe) return false;
+                    if(get.mingGe(ui.selected.cards[0])==mingGe) return true;
+                    else return false;
+				}
+			},
+			xuanZeYiMingPai:function(card){
+				if(ui.selected.cards.length==0) return true;
+				else{
+					var mingGe1=get.mingGe(card);
+					if(!mingGe1) return false;
+					for(var i=0;i<ui.selected.cards.length;i++){
+						var mingGe2=get.mingGe(ui.selected.cards[i]);
+						if(mingGe1==mingGe2) return false;
 					}
 					return true;
 				}
