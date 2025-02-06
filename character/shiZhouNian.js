@@ -43,7 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['moQiang_name','huanGroup',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
             cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
-            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',[],],
+            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','xiWangFuGeQu','lingGan','yongHengYueZhang'],],
             jingLingSheShou:['jingLingSheShou_name','jiGroup','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['yinYangShi_name','huanGroup',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['xueSeJianLing_name','xueGroup',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
@@ -3252,7 +3252,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
                     prompt:function(links,player){
-                        var num=links[0];
+                        var num=links.length;
 						return `弃置b张同系牌[展示]至少2张，对目标角色造成(${num}+b-3)点伤害`;
 					},
                     check: function (button) {
@@ -6021,6 +6021,354 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if (cards.length) player.loseToDiscardpile(cards);
                 },
             },
+            //吟游诗人
+            chenLunXieZouQu:{
+                trigger:{global:'damageAfter'},//该时机不会因为治疗而被抵消
+                filter:function(event,player){
+                    if(player.isHengZhi()) return false;
+                    if(event.faShu!=true) return false;
+                    if(player.countCards('h')<2) return false;
+                    if(!(event.player.side!=player.side&&event.source.side==player.side)) return false; 
+                    return player.storage.chenLunXieZouQu.length>=2;
+                },
+                usable:1,
+                async cost(event,trigger,player){
+                    event.result=await player.chooseCard('h',2)
+                    .set('complexCard',true)
+                    .set('filterCard',function(card){return get.xuanZeTongXiPai(card)})
+                    .set('prompt',get.prompt('chenLunXieZouQu'))
+                    .set('prompt2',lib.translate.chenLunXieZouQu_info)
+                    .set('ai',function(card){return 6-get.value(card)})
+                    .forResult();
+                },
+                content:async function(event,trigger,player){
+                    await player.discard(event.cards).set('showCards',true);
+                    await player.addZhiShiWu('lingGan');
+                    var flag=false;
+                    for(var i=0;i<event.cards.length;i++){
+                        if(get.type(event.cards[i])=='faShu'){
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        var targets=await player.chooseTarget('对目标对手造成1点法术伤害',true,function(card,player,target){
+                            return player.side!=target.side;
+                        })
+                        .set('ai',function(target){
+                            var player=_status.event.player;
+                            return get.damageEffect2(target,player,1);
+                        })
+                        .forResultTargets();
+                        await targets[0].faShuDamage(1,player);
+                    }
+                },
+                group:['chenLunXieZouQu_chongZhi','chenLunXieZouQu_jiShu'],
+                subSkill:{
+                    chongZhi:{
+                        trigger:{global:'huiHeQian'},
+                        direct:true,
+                        firstDo:true,
+                        content:function(){
+                            player.storage.chenLunXieZouQu=[];
+                        }
+                    },
+                    jiShu:{
+                        trigger:{global:'zaoChengShangHai'},
+                        filter:function(event,player){
+                            if(event.faShu!=true) return false;
+                            if(player.storage.chenLunXieZouQu.includes(event.player)) return false;
+                            return event.player.side!=player.side&&event.source.side==player.side;
+                        },
+                        direct:true,
+                        content:function(){
+                            player.storage.chenLunXieZouQu.add(trigger.player);
+                        }
+                    }
+                }
+            },
+            buXieHeXian:{
+                type:'faShu',
+                enable:'faShu',
+                filter:function(event,player){
+                    return player.countZhiShiWu('lingGan')>1;
+                },
+                chooseButton:{
+                    check:function (button) {
+                        var player = _status.event.player;
+                        if(typeof button.link=="number"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=button.link-1) return button.link;
+                        }else if(typeof button.link=="string"){
+                            var num=player.getHandcardLimit()-player.countCards('h');
+                            if(num>=2&&button.link=='摸'){
+                                return 1;
+                            }
+                            if(num<2&&button.link=='弃'){
+                                return 1;
+                            }
+                        }
+                        return 0.5;
+                    },
+
+                    dialog:function(event,player){
+						var dialog=ui.create.dialog('不谐和弦：移除X点【灵感】,摸/弃(X-1)张牌','hidden');
+                        var list=[];
+                        for(var i=2;i<=player.countZhiShiWu('lingGan');i++){
+                            list.push(i);
+                        }
+						dialog.add([list,'tdnodes']);
+                        dialog.add([['摸','弃'],'tdnodes'])
+						return dialog;
+					},
+                    filter:function(button,player){
+                        if (ui.selected.buttons.length>0) return typeof ui.selected.buttons[0].link != typeof button.link;
+                        else return true;
+                    },
+                    select:2,
+                    backup:function(links,player){
+						return{
+							links:links,
+							type:'faShu',
+                            selectTarget:1,
+                            filterTarget:true,
+                            selectCard: 0,
+                            filterCard: true,
+                            contentBefore:async function(event,trigger,player){
+                                var links=lib.skill.buXieHeXian_backup.links;
+                                for(var i=0;i<links.length;i++){
+                                    if(typeof links[i]=='number'){
+                                        var num=links[i];
+                                        break
+                                    }
+                                }
+                                if(player.isHengZhi()) await player.chongZhi();
+                                await player.removeZhiShiWu('lingGan',num);
+                            },
+							content:async function(event,trigger,player){
+                                var links=lib.skill.buXieHeXian_backup.links;
+                                for(var i=0;i<links.length;i++){
+                                    if(typeof links[i]=='number'){
+                                        var num=links[i]-1;
+                                    }else if(typeof links[i]=='string'){
+                                        var action=links[i];
+                                    }
+                                }
+								if(action=='摸'){
+                                    await player.draw(num);
+                                    await event.target.draw(num);
+                                }else{
+                                    await player.chooseToDiscard('h',num,true);
+                                    await event.target.chooseToDiscard('h',num,true); 
+                                }
+							},
+                            ai:{
+                                result:{
+                                    target:function(player,target){
+
+                                        var num=player.getHandcardLimit()-player.countCards('h');
+                                        if(num>=2) return -target.countCards('h');
+                                        else return target.countCards('h');
+                                    }
+                                }
+                            }
+						}
+					},
+                    prompt:function(links,player){
+                        for(var i=0;i<links.length;i++){
+                            if(typeof links[i]=='number'){
+                                var num=links[i]-1;
+                            }else if(typeof links[i]=='string'){
+                                var action=links[i];
+                            }
+                        }
+                        if(action=='摸'){
+                            return `你和目标角色各摸${num}张牌[强制]`
+                        }else{
+                            return `你和目标角色各弃${num}张牌`
+                        }
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        var num=30+player.countZhiShiWu('lingGan')*0.5;
+                        return num;
+                    },
+                    result:{
+                        player:1,
+                    }
+                }
+                
+            },
+            jinJiShiPian:{
+                trigger:{global:'yongHengYueZhang'},
+                forced:true,
+                content:async function(event,trigger,player){
+                    var info=get.info('lingGan');
+                    if(player.countZhiShiWu('lingGan')<info.intro.max){
+                        await player.addZhiShiWu('lingGan');
+                        await trigger.player.removeZhiShiWu('yongHengYueZhang');
+                    }else{
+                        await player.faShuDamage(3,player);
+                        await player.hengZhi();
+                    }
+                }
+            },
+            xiWangFuGeQu:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:async function(event,trigger,player){
+                    await player.removeBiShaShuiJing();
+                    await player.chooseDraw(1,true);
+
+                    var players=game.filterPlayer((function(current){
+                        return current.side==player.side&&current.hasZhiShiWu('yongHengYueZhang');
+                    }));
+
+                    if(players.length>0){
+                        var targets=await player.chooseTarget('将【永恒乐章】转移给我方另一名目标角色',true,function(card,player,target){
+                            var targetx=_status.event.targetx;
+                            return target.side==player.side&&targetx!=target;
+                        }).set('targetx',players[0]).forResultTargets();
+                    }else{
+                        var targets=await player.chooseTarget('将【永恒乐章】放置于目标队友面前',true,function(card,player,target){
+                            return target.side==player.side&&target!=player;
+                        }).forResultTargets();
+                    }
+
+                    if(players.length>0) await players[0].removeZhiShiWu('yongHengYueZhang');
+                    var target=targets[0];
+                    if(!target.hasSkill('yongHengYueZhang')){
+                        await target.addSkill('yongHengYueZhang');
+                    }
+
+                    await target.addZhiShiWu('yongHengYueZhang');
+                    target.storage.yongHengYueZhang_player=player;
+                    
+                    if(players.length>0){
+                        if(player.countCards('h')>0){
+                            await player.chooseToDiscard(1,true);
+                        }
+                        var list=['治疗','灵感'];
+                        var control=await player.chooseControl(list).set('prompt','选择+1[治疗]或[灵感]').forResultControl();
+                        if(control=='治疗') await player.changeZhiLiao();
+                        else if(control=='灵感') await player.addZhiShiWu('lingGan');
+                    }
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            lingGan:{
+                intro:{
+                    name:'灵感',
+                    markcount:'mark',
+                    max:3,
+                    content:'mark',
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/hong.png'
+            },
+            yongHengYueZhang:{
+                intro:{
+                    name:'(专)永恒乐章',
+                    content:"[响应]激昂狂想曲：<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>[响应]胜利交响诗：<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
+                    nocount:true,
+                },
+                group:['yongHengYueZhang_jiAngKuangXiangQu','yongHengYueZhang_shengLiJiaoXiangShi'],
+                markimage:'image/card/zhuanShu/yongHengYueZhang.png',
+                subSkill:{
+                    jiAngKuangXiangQu:{
+                        trigger:{player:'huiHeKaiShi'},
+                        filter:function(event,player){
+                            return player.hasZhiShiWu('yongHengYueZhang');
+                        },
+                        content:function(){
+                            'step 0'
+                            var choiceList=['吟游诗人对2名目标对手各造成1点法术伤害③','你弃2张牌'];
+                            player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                                var player=_status.event.player;
+                                if(player.storage.yongHengYueZhang_player.countCards('h')>2) return '选项一';
+                                else return '选项二';
+                            });
+                            'step 1'
+                            if(result.control=='选项一'){
+                                player.storage.yongHengYueZhang_player.chooseTarget(2,'对2名目标对手各造成1点法术伤害③',true,function(card,player,target){
+                                    return target.side!=player.side;
+                                });
+                            }else{
+                                player.chooseToDiscard(2,true);
+                                event.goto(4);
+                            }
+                            'step 2'
+                            event.targets=result.targets.sortBySeat(player);
+                            event.targets[0].faShuDamage(1,player.storage.yongHengYueZhang_player);
+                            'step 3'
+                            event.targets[1].faShuDamage(1,player.storage.yongHengYueZhang_player);
+                            'step 4'
+                            event.trigger('yongHengYueZhang');
+                        },
+                        check:function(event,player){
+                            var bool1=player.storage.yongHengYueZhang_player.countCards('h')>2;
+                            var bool2=player.countCards('h')>=5;
+                            return bool1||bool2;
+                        }
+                    },
+                    shengLiJiaoXiangShi:{
+                        trigger:{player:'huiHeJieShu'},
+                        filter:function(event,player){
+                            return player.hasZhiShiWu('yongHengYueZhang');
+                        },
+                        content:function(){
+                            'step 0'
+                            var choiceList=['将我方【战绩区】的1个星石提炼成为你的能量','为我方【战绩区】+1[宝石]，你+1[治疗]'];
+                            var list=['选项二'];
+                            var zhanJi=get.zhanJi(player.side);
+                            if(player.countNengLiangAll()<player.getNengLiangLimit()&&zhanJi.length>0){
+                                list.unshift('选项一');
+                            }
+                            var next=player.chooseControl(list).set('choiceList',choiceList).set("ai",function(){
+                                var num=Math.random();
+                                if(num<0.5) return '选项一';
+                                return '选项二';
+                            });
+                            'step 1'
+                            if(result.control=='选项一'){
+                                event.goto(2);
+                            }else{
+                                event.goto(4);
+                            }
+                            'step 2'
+                            var list=get.zhanJi(player.side);
+                            var listx=[];
+                            for(var i=0;i<list.length;i++){
+                                listx.push([list[i],get.translation(list[i])]);
+                            }
+                            var next=player.chooseButton(['将我方【战绩区】的1个星石提炼成为你的能量',[listx,'tdnodes']],true);
+                            next.set('forced',true);
+                            'step 3'
+                            for(var i=0;i<result.links.length;i++){
+                                if(result.links[i]=='baoShi'){
+                                    player.changeZhanJi('baoShi',-1);
+                                    player.addNengLiang('baoShi');
+                                }else if(result.links[i]=='shuiJing'){
+                                    player.changeZhanJi('shuiJing',-1);
+                                    player.addNengLiang('shuiJing');
+                                }
+                            }
+                            event.goto(5);
+                            'step 4'
+                            player.addZhanJi('baoShi',1);
+                            player.changeZhiLiao(1);
+                            'step 5'
+                            event.trigger('yongHengYueZhang');
+                        }
+                    }
+                }
+            },
         },
 		
 		translate:{
@@ -6519,16 +6867,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             buXieHeXian_info:"<span class='tiaoJian'>(移除X点【灵感】，X>1)(若你处于【永恒囚徒形态】，[重置]脱离【永恒囚徒形态】)</span>你选择以下一项发动：<br>·你和目标角色各摸(X-1)张牌[强制]。<br>·你和目标角色各弃(X-1)张牌。",
             jinJiShiPian:"[被动]禁忌诗篇",
             jinJiShiPian_info:"<span class='tiaoJian'>(【激昂狂想曲】或【胜利交响诗】的效果结算完后)</span>根据【灵感】数量：<br>·(【灵感】未达上限)你+1【灵感】，移除【永恒乐章】。<br> ·(【灵感】已达上限)对自己造成3点法术伤害③。<span class='tiaoJian'>(若你处于【普通形态】)</span>[横置]转为【永恒囚徒形态】。",
-            jiAngKuangXiangQu:"(专)[响应]激昂狂想曲",
-            jiAngKuangXiangQu_info:"<span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。",
-            shengLiJiaoXiangShi:"(专)[响应]胜利交响诗",
-            shengLiJiaoXiangShi_info:"<span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。",
+            yongHengYueZhang:"(专)永恒乐章",
+            yongHengYueZhang_info:`
+            <span class="greentext">[响应]激昂狂想曲</span><br>
+            <span class='tiaoJian'><span class='tiaoJian'>(回合开始时若你拥有【永恒乐章】)</span>选择以下一项执行：<br>·吟游诗人对2名目标对手各造成1点法术伤害③。 <br>·你弃2张牌。<br>
+            <span class="greentext">[响应]胜利交响诗</span><br>
+            <span class='tiaoJian'><span class='tiaoJian'>(回合结束时若你拥有【永恒乐章】)</span>选择以下一项执行<br>·将我方【战绩区】的1个星石提炼成为你的能量。<br>·为我方【战绩区】+1[宝石]，你+1[治疗]。
+            `,
+            yongHengYueZhang_jiAngKuangXiangQu:"[响应]激昂狂想曲",
+            yongHengYueZhang_shengLiJiaoXiangShi:"[响应]胜利交响诗",
             xiWangFuGeQu:"[启动]希望赋格曲",
             xiWangFuGeQu_info:"[水晶]你可以选择摸1张牌，如果【永恒乐章】不在场，则将【永恒乐章】放置于目标队友面前；否则将【永恒乐章】转移给我方另一名目标角色，你弃1张牌，+1[治疗]或+1【灵感】。",
             lingGan:"灵感",
             lingGan_info:"【灵感】为吟游诗人的专有指示物，上限为3。",
-            yongHengYueZhang_jiAngKuangXiangQu:"(专)[响应]激昂狂想曲",
-            yongHengYueZhang_shengLiJiaoXiangShi:"(专)[响应]胜利交响诗",
 
             //勇者
             yongZheZhiXin:"[被动]勇者之心",
