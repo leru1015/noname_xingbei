@@ -9746,6 +9746,7 @@ export class Library {
 		shengGroupColor:"#22A3C3",
 		huanGroupColor:"#635282",
 
+		zhiLiao:"治疗",
 
 		'3xing':'3星',
 		'3.5xing':'3.5星',
