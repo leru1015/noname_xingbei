@@ -191,6 +191,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			shengGuang:{
 				type:"faShu",
 				fullskin:true,
+				notarget:true,
 				content:function(){
 
 				},
