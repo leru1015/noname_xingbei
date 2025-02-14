@@ -314,9 +314,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             siLie:{
-                trigger:{player:'gongJiMingZhong'},
-                frequent:true,
-                priority:-1,
+                trigger:{player:'gongJiMingZhongHou'},
                 filter:function(event,player){
                     return player.canBiShaBaoShi();
                 },
