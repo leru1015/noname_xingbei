@@ -2355,8 +2355,8 @@ export default () => {
 			versus_single_control_config:'单人控制',
 
 			_wuFaXingDong:'无法行动',
-			_wuFaXingDong_qiDongQian:'无法行动 启动前',
-			_wuFaXingDong_qiDongHou:'无法行动 启动后',
+			_wuFaXingDong_qiDongQian:'无法行动-启动前',
+			_wuFaXingDong_qiDongHou:'无法行动-启动后',
 			
 			//公共技能
             _xuRuo:"虚弱",
