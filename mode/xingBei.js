@@ -4130,34 +4130,25 @@ export default () => {
 					game.delayx();
 					event.trigger("daChuPai");
 					"step 4";
-
-
-					"step 5";
 					if(event.type=='gongJi'){
 						event.trigger("gongJiShi");
 					}
-					"step 6";
+					"step 5";
 					if(event.type=='gongJi'){
 						if(get.xiBie(card)=='an') event.canYingZhan=false;//暗灭无法应战
 						event.trigger("gongJiSheZhi");
 					}
-					"step 7";
+					"step 6";
 					var name=get.name(card);
 					if((event.type=='gongJi' || name=='moDan')){
 						if(event.type=='gongJi') event.trigger("shouDaoGongJi");
 						else if(name=='moDan') event.trigger("shouDaoMoDan");
 					}
-					"step 8";
-
-					"step 9";
+					"step 7";
 					if(event.type=='gongJi' && event.target){
 						event.trigger("gongJiMingZhong");
 					}
-					"step 10";
-					
-					"step 11";
-
-					"step 12";
+					"step 8";
 					var info = get.info(card, false);
 					if(event.target || info.notarget){
 						var next = game.createEvent(card.name);
@@ -4172,20 +4163,14 @@ export default () => {
 						next.customArgs = event.customArgs;
 						next.target = event.target;
 						if (next.target) {
-								next.target.addTempClass("target");
+							next.target.addTempClass("target");
 						}
 					}
-					"step 13";
-
-					"step 14";
-
-					"step 15";
-
-					"step 16";
+					"step 9";
 					if(event.type=='gongJi' || event.type=='faShu'){
 						event.trigger(event.type+"JieShu");
 					}
-					"step 17";
+					"step 10";
 					if(event.type=='gongJi' || event.type=='faShu'){
 						event.trigger(event.type+"Hou");
 					}
