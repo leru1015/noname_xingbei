@@ -2028,7 +2028,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.faShuDamage(event.num,player);
                     'step 2'
-                    player.changeZhanJi('r',1);
+                    player.changeZhanJi('baoShi',1);
                 },
                 ai:{
                     order:3.5,
