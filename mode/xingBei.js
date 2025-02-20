@@ -5554,12 +5554,12 @@ export default () => {
 
 				//xingbei
 				wuFaXingDong:function(){
-					var next=game.createEvent('wuFaXingDong');
+					var next=game.createEvent('wuFaXingDong',false);
 					next.player = this;
 					next.setContent(lib.skill._wuFaXingDong.contentx);
 				},
 				moDan:function(use){
-					var next=game.createEvent('moDan');
+					var next=game.createEvent('moDan',false);
 					next.player = this;
 					if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 						for (var i in use) {
@@ -5609,7 +5609,7 @@ export default () => {
 				},
 
 				yingZhan:function(use){
-					var next=game.createEvent('yingZhan');
+					var next=game.createEvent('yingZhan',false);
 					next.player = this;
 					if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 						for (var i in use) {
@@ -5658,7 +5658,7 @@ export default () => {
 					return next;
 				},
 				gongJiOrFaShu:function(use){
-					var next=game.createEvent('gongJiOrFaShu');
+					var next=game.createEvent('gongJiOrFaShu',false);
 					next.player = this;
 					if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 						for (var i in use) {
@@ -5707,7 +5707,7 @@ export default () => {
 					return next;
 				},
 				gongJi:function(use){
-					var next=game.createEvent('gongJi');
+					var next=game.createEvent('gongJi',false);
 					next.player = this;
 					if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 						for (var i in use) {
@@ -5756,7 +5756,7 @@ export default () => {
 					return next;
 				},
 				faShu:function(use){
-					var next=game.createEvent('faShu');
+					var next=game.createEvent('faShu',false);
 					next.player = this;
 					if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 						for (var i in use) {
