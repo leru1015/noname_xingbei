@@ -4138,20 +4138,24 @@ export default () => {
 						event.trigger("gongJiSheZhi");
 					}
 					"step 6";
+					if(event.type=='gongJi'){
+						event.trigger("shouDaoGongJiBefore");
+					}
+					'step 7';
 					var name=get.name(card);
 					if((event.type=='gongJi' || name=='moDan')){
 						if(event.type=='gongJi') event.trigger("shouDaoGongJi");
 						else if(name=='moDan') event.trigger("shouDaoMoDan");
 					}
-					"step 7";
+					"step 8";
 					if(event.type=='gongJi' && event.target){
 						event.trigger("gongJiMingZhong");
 					}
-					'step 8';
+					'step 9';
 					if(event.type=='gongJi' && event.target){
 						event.trigger("gongJiMingZhongAfter");
 					}
-					"step 9";
+					"step 10";
 					var info = get.info(card, false);
 					if(event.target || info.notarget){
 						var next = game.createEvent(card.name);
@@ -4169,11 +4173,11 @@ export default () => {
 							next.target.addTempClass("target");
 						}
 					}
-					"step 10";
+					"step 11";
 					if(event.type=='gongJi' || event.type=='faShu'){
 						event.trigger(event.type+"End");
 					}
-					"step 11";
+					"step 12";
 					if(event.type=='gongJi' || event.type=='faShu'){
 						event.trigger(event.type+"After");
 					}

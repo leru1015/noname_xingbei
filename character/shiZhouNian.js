@@ -4672,8 +4672,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             shiShenZhouShu:{
-                trigger:{global:'shouDaoGongJi'},
-                priority:1,
+                trigger:{global:'shouDaoGongJiBefore'},
                 filter:function(event,player){
                     if(player.countCards('h')==0) return false;
                     if(event.yingZhan==true) return false;
