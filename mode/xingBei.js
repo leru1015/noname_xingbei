@@ -5180,8 +5180,11 @@ export default () => {
 					var numx=player.getHandcardLimit()-player.countCards('h');
 					var maxValue = Math.max.apply(null, list);
 					var drawNum = Math.min(numx,maxValue);
-					if(list.includes(numx)==false){
+					if(!list.includes(numx)){
 						drawNum =0;
+					}
+					if(maxValue<=numx){
+						drawNum = maxValue;
 					}
 					var next=player.chooseControl(list).set('prompt','选择摸牌数量');
 					next.set('ai',function(){
