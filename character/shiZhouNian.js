@@ -6387,7 +6387,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.removeZhiShiWu('nuQi');
                     trigger.changeDamageNum(2);
-                    trigger.customArgs.nuHou;
+                    trigger.customArgs.nuHou=true;
                     'step 1'
                     player.chooseDraw();
                 },
