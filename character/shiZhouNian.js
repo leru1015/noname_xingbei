@@ -1011,7 +1011,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     xiaoGuo:{
                         priority:2,
-                        trigger:{player:'xingDongAfter'},
+                        trigger:{player:'xingDongBefore'},
                         forced:true,
                         markimage:'image/card/zhuanShu/wuXiShuFu.png',
                         intro:{
@@ -1240,7 +1240,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             tianShiZhiGe:{
-                trigger:{player:'phaseAfter'},
+                trigger:{player:'phaseBefore'},
                 filter:function(event,player){
                     if(!player.canBiShaShuiJing()){
                         return false;
@@ -2846,7 +2846,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             tianQiang:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     if(event.getParent('phaseUse').tianQiang===false) return false;
                     return event.yingZhan!=true&&player.zhiLiao>=2;
@@ -3447,7 +3447,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             huangQaunZhenChan:{
                 usable:1,
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     if(!player.canBiShaBaoShi()) return false;
                     return event.yingZhan!=true;
@@ -4986,7 +4986,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'moNvZhiNu_chongZhi',
                 subSkill:{
                     chongZhi:{
-                        trigger:{player:'xingDongAfter'},
+                        trigger:{player:'xingDongBefore'},
                         direct:true,
                         filter:function(event,player){
                             return player.isHengZhi();
@@ -5270,7 +5270,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             //魔弓
             moGuanChongJi:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length==0) return false;
@@ -6380,7 +6380,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             nuHou:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('nuQi')) return false;
                     return event.yingZhan!=true;
@@ -6438,7 +6438,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             mingJingZhiShui:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     if(player.countZhiShiWu('zhiXing')<4) return false;
                     return event.yingZhan!=true;
@@ -6758,7 +6758,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             xuLiYiji:{
-                trigger:{player:"gongJiAfter"},
+                trigger:{player:"gongJiBefore"},
                 filter:function(event,player){
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
                     if(event.customArgs.qiJueBengJi) return false;
@@ -6905,7 +6905,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             },
             qiJueBengJi:{
-                trigger:{player:"gongJiAfter"},
+                trigger:{player:"gongJiBefore"},
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('douQi')) return false;
                     if(event.customArgs.xuLiYiji) return false;
@@ -7267,7 +7267,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             liuXingShengDan:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     if(!player.isHengZhi()) return false;
                     return event.yingZhan!=true&&(player.zhiLiao>0||player.countZhiShiWu('xinYang')>0);
@@ -7533,7 +7533,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             },
             tianShiZhiHun:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     return event.yingZhan!=true&&lib.skill.jianHun.tianShiZhiHun(player)>0;
                 },
@@ -7575,7 +7575,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             eMoZhiHun:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     return event.yingZhan!=true&&lib.skill.jianHun.eMoZhiHun(player)>0;
                 },
@@ -7836,7 +7836,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             niFanJuHeZhan:{
-                trigger:{player:'gongJiAfter'},
+                trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
                     return player.isHengZhi()&&event.target.countCards('h')<4;
                 },
