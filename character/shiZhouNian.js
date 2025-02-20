@@ -4727,7 +4727,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 group:'shiShenZhouShu_tiaoJian',
                 subSkill:{
                     tiaoJian:{
-                        trigger:{player:'gongJiAfter'},
+                        trigger:{player:'gongJiBefore'},
                         direct:true,
                         firstDo:true,
                         filter:function(event,player){
