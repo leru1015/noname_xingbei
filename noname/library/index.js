@@ -169,6 +169,7 @@ export class Library {
 	ondb2 = [];
 	chatHistory = [];
 	emotionList = {
+		xingBei_emotion: 27,
 		xiaowu_emotion: 14,
 		xiaokuo_emotion: 8,
 		shibing_emotion: 15,
@@ -9633,6 +9634,7 @@ export class Library {
 		baiban: "白板",
 		_disableJudge: "判定区",
 
+		xingBei_emotion: "星杯表情",
 		xiaowu_emotion: "小无表情",
 		guojia_emotion: "郭嘉表情",
 		zhenji_emotion: "甄姬表情",
