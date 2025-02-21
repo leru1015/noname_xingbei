@@ -2541,7 +2541,7 @@ export default () => {
                 }
             },
 			_gongJiXingShi:{//攻击获得星石
-				trigger:{player:'gongJiMingZhong'},
+				trigger:{source:'gongJiMingZhong'},
 				direct:true,
 				firstDo:true,
 				filter:function(event,player){
@@ -4068,6 +4068,7 @@ export default () => {
 
 					if(event.targets.length>0){
 						event.target=event.targets[0];
+						event.source=player;
 						event.oriTargets=event.target;
 					}
 					var type=get.type(card);
