@@ -7819,7 +7819,7 @@ export class Game extends GameCompatible {
 					if(value.side==true){
 						var c='red';
 					}else{
-						var c='blue'
+						var c='lightblue'
 					}
 					str+=`<span style="color:${c};">${get.translation(value)}</span>`;
 					str2+=get.translation(value);
