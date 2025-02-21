@@ -1086,7 +1086,7 @@ export default () => {
 					event.red_leader=event.red_list[red_index];
 					event.blue_leader=event.blue_list[blue_index];
 					game.log('<span style="color:red;">红方</span>队长为',event.red_leader.node.name.innerHTML);
-					game.log('<span style="color:blue;">蓝方</span>队长为',event.blue_leader.node.name.innerHTML);
+					game.log('<span style="color:lightblue;">蓝方</span>队长为',event.blue_leader.node.name.innerHTML);
 					game.broadcastAll(function(red_leader,blue_leader){
 						game.red_leader=red_leader;
 						game.blue_leader=blue_leader;
@@ -1122,7 +1122,7 @@ export default () => {
 							if (list1 != game.me&&list1==game.red_leader) {
 								dialog.content.firstChild.innerHTML = "等待<span style='color:red;'>红方</span>队长选择";
 							}else if(list1!=game.me&&list1==game.blue_leader){
-								dialog.content.firstChild.innerHTML = "等待<span style='color:blue;'>蓝方</span>队长选择";
+								dialog.content.firstChild.innerHTML = "等待<span style='color:lightblue;'>蓝方</span>队长选择";
 							}
 						}
 					};
@@ -1156,7 +1156,7 @@ export default () => {
 								if (choosing == game.red_leader) {
 									choosing = "<span style='color:red;'>红方</span>队长";
 								} else {
-									choosing = "<span style='color:blue;'>蓝方</span>队长";
+									choosing = "<span style='color:lightblue;'>蓝方</span>队长";
 								}
 								dialog.content.firstChild.innerHTML =
 									choosing + "Ban了" + get.translation(links);
@@ -1218,7 +1218,7 @@ export default () => {
 
 					event.videoId = lib.status.videoId++;
 					var createDialog = function (choosed,list, id,list1, list2) {
-						var dialog = ui.create.dialog(`<span style="color:red;">红方</span>为${choosed}选择角色，<span style="color:blue;">蓝方</span>队长是否插入Ban`, [list, "character"]);
+						var dialog = ui.create.dialog(`<span style="color:red;">红方</span>为${choosed}选择角色，<span style="color:lightblue;">蓝方</span>队长是否插入Ban`, [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -1238,7 +1238,7 @@ export default () => {
 							if (list1 != game.me&&list1==game.red_leader) {
 								dialog.content.firstChild.innerHTML = "等待<span style='color:red;'>红方</span>队长选择";
 							}else if(list1!=game.me&&list1==game.blue_leader){
-								dialog.content.firstChild.innerHTML = "等待<span style='color:blue;'>蓝方</span>队长选择";
+								dialog.content.firstChild.innerHTML = "等待<span style='color:lightblue;'>蓝方</span>队长选择";
 							}
 						}
 					};
@@ -1307,9 +1307,9 @@ export default () => {
 									var str;
 									if (choosing == game.red_leader) {
 										choosing = "<span style='color:red;''>红方</span>队长";
-										str=`，<span style="color:blue;">蓝方</span>队长为${choosed}选择角色`;
+										str=`，<span style="color:lightblue;">蓝方</span>队长为${choosed}选择角色`;
 									} else {
-										choosing = "<span style='color:blue;'>蓝方</span>队长";
+										choosing = "<span style='color:lightblue;'>蓝方</span>队长";
 										str=`，<span style="color:red;">红方</span>队长为${choosed}选择角色`;
 									}
 									dialog.content.firstChild.innerHTML =
@@ -1346,7 +1346,7 @@ export default () => {
 									if (choosing == game.red_leader) {
 										choosing = `<span style="color:red;">红方</span>队长为${choosed}`;
 									} else {
-										choosing = `<span style="color:blue;">蓝方</span>队长为${choosed}`;
+										choosing = `<span style="color:lightblue;">蓝方</span>队长为${choosed}`;
 									}
 									dialog.content.firstChild.innerHTML =
 										choosing + "选择角色";
@@ -1405,12 +1405,12 @@ export default () => {
 								if (choosing == game.red_leader) {
 									choosing = `<span style="color:red;">红方</span>队长为${choosed}`;
 								} else {
-									choosing = `<span style="color:blue;">蓝方</span>队长为${choosed}`;
+									choosing = `<span style="color:lightblue;">蓝方</span>队长为${choosed}`;
 								}
 
 								if(next_choosed_side===true){
 									if(!blue_ban){
-										ban=`，<span style="color:red;">红方</span>队长将要为${next_choosed_name}选择角色，<span style="color:blue;">蓝方</span>是否插入Ban`;
+										ban=`，<span style="color:red;">红方</span>队长将要为${next_choosed_name}选择角色，<span style="color:lightblue;">蓝方</span>是否插入Ban`;
 									}else{
 										if(next_choosed_name){
 											ban=`，<span style="color:red;">红方</span>队长为${next_choosed_name}选择角色`;
@@ -1419,10 +1419,10 @@ export default () => {
 									}
 								}else if(next_choosed_side===false){
 									if(!red_ban){
-										ban=`，<span style="color:blue;">蓝方</span>队长将要为${next_choosed_name}选择角色，<span style="color:red;">红方</span>是否插入Ban`;
+										ban=`，<span style="color:lightblue;">蓝方</span>队长将要为${next_choosed_name}选择角色，<span style="color:red;">红方</span>是否插入Ban`;
 									}else{
 										if(next_choosed_name){
-											ban=`，<span style="color:blue;">蓝方</span>队长为${next_choosed_name}选择角色`
+											ban=`，<span style="color:lightblue;">蓝方</span>队长为${next_choosed_name}选择角色`
 										}
 									}
 								}
@@ -1626,7 +1626,7 @@ export default () => {
 								if (choosing.side == true) {
 									choosing = "<span style='color:red;'>红方</span>";
 								} else {
-									choosing = "<span style='color:blue;'>蓝方</span>";
+									choosing = "<span style='color:lightblue;'>蓝方</span>";
 								}
 								dialog.content.firstChild.innerHTML =
 									choosing + "Ban了" + get.translation(links);
@@ -1768,14 +1768,14 @@ export default () => {
 									if(next_side==true){
 										next=`，<span style="color:red;">${next_name}</span>选择角色`
 									}else{
-										next=`，<span style="color:blue;">${next_name}</span>选择角色`
+										next=`，<span style="color:lightblue;">${next_name}</span>选择角色`
 									}
 								}
 
 								if (choosing.side == true) {
 									choosing = `<span style="color:red;">${name}</span>`;
 								} else {
-									choosing = `<span style="color:blue;">${name}</span>`;
+									choosing = `<span style="color:lightblue;">${name}</span>`;
 								}
 								var str=choosing + "选择了" + get.translation(link)+next;
 								dialog.content.firstChild.innerHTML =str;
@@ -1972,7 +1972,7 @@ export default () => {
 								if (choosing.side == true) {
 									choosing = "<span style='color:red;'>红方</span>";
 								} else {
-									choosing = "<span style='color:blue;'>蓝方</span>";
+									choosing = "<span style='color:lightblue;'>蓝方</span>";
 								}
 								dialog.content.firstChild.innerHTML =
 									choosing + "Ban了" + get.translation(links);
@@ -2114,14 +2114,14 @@ export default () => {
 									if(next_side==true){
 										next=`，<span style="color:red;">${next_name}</span>选择角色`
 									}else{
-										next=`，<span style="color:blue;">${next_name}</span>选择角色`
+										next=`，<span style="color:lightblue;">${next_name}</span>选择角色`
 									}
 								}
 
 								if (choosing.side == true) {
 									choosing = `<span style="color:red;">${name}</span>`;
 								} else {
-									choosing = `<span style="color:blue;">${name}</span>`;
+									choosing = `<span style="color:lightblue;">${name}</span>`;
 								}
 								var str=choosing + "选择了" + get.translation(link)+next;
 								dialog.content.firstChild.innerHTML =str;
@@ -2220,10 +2220,10 @@ export default () => {
 					game.lanShiQi+=num;
 					if(log!=false){
 						if(num>0){
-							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
+							game.log('<span style="color:lightblue;">蓝方</span>士气增加',num);
 						}else if(num<0){
 							num=-num;
-							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+							game.log('<span style="color:lightblue;">蓝方</span>士气减少',num);
 						}
 					}
 				}
@@ -2256,7 +2256,7 @@ export default () => {
 						for(let i=0;i<num;i++){
 							game.lanZhanJi.push(xingShi);
 							if(log!=false){
-								game.log('<span style="color:blue;">蓝方</span>战绩区增加',name);
+								game.log('<span style="color:lightblue;">蓝方</span>战绩区增加',name);
 							}
 						}
 					}
@@ -2278,7 +2278,7 @@ export default () => {
 							if (index !== -1) {  
 								game.lanZhanJi.splice(index, 1);
 								if(log!=false){
-									game.log('<span style="color:blue;">蓝方</span>战绩区移除',name);
+									game.log('<span style="color:lightblue;">蓝方</span>战绩区移除',name);
 								}
 							}
 						}
@@ -2317,10 +2317,10 @@ export default () => {
 					game.lanXingBei+=num;
 					if(log!=false){
 						if(num>0){
-							game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
+							game.log('<span style="color:lightblue;">蓝方</span>星杯数量增加',num);
 						}else{
 							num=-num;
-							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+							game.log('<span style="color:lightblue;">蓝方</span>星杯数量减少',num);
 						}
 					}
 				}
@@ -4970,10 +4970,10 @@ export default () => {
 					}else if(side==false){
 						game.lanXingBei+=num;
 						if(num>0){
-							game.log('<span style="color:blue;">蓝方</span>星杯数量增加',num);
+							game.log('<span style="color:lightblue;">蓝方</span>星杯数量增加',num);
 						}else{
 							num=-num;
-							game.log('<span style="color:blue;">蓝方</span>星杯数量减少',num);
+							game.log('<span style="color:lightblue;">蓝方</span>星杯数量减少',num);
 						}
 					}
 
@@ -5023,10 +5023,10 @@ export default () => {
 					}else if(side==false){
 						game.lanShiQi+=num;
 						if(num>0){
-							game.log('<span style="color:blue;">蓝方</span>士气增加',num);
+							game.log('<span style="color:lightblue;">蓝方</span>士气增加',num);
 						}else if(num<0){
 							num=-num;
-							game.log('<span style="color:blue;">蓝方</span>士气减少',num);
+							game.log('<span style="color:lightblue;">蓝方</span>士气减少',num);
 						}
 					}
 
@@ -5067,7 +5067,7 @@ export default () => {
 							for(let i=0;i<num;i++){
 								game.lanZhanJi.push(xingShi);
 							}
-							game.log(`<span style="color:blue;">蓝方</span>战绩区增加了${num}个`,name);
+							game.log(`<span style="color:lightblue;">蓝方</span>战绩区增加了${num}个`,name);
 						}
 					}else if(num<0){
 						num=-num;
@@ -5086,7 +5086,7 @@ export default () => {
 									game.lanZhanJi.splice(index, 1);  
 								}
 							}
-							game.log(`<span style="color:blue;">蓝方</span>战绩区移除了${num}个`,name);
+							game.log(`<span style="color:lightblue;">蓝方</span>战绩区移除了${num}个`,name);
 						}	
 					}
 					game.hongZhanJi.sort();
