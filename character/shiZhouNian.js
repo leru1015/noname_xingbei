@@ -7960,7 +7960,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     order:function(item,player){
-                        return 2.1+player.countCards('h',lib.skill.lingHunZhaoHuan.filterCard(card))*0.7;
+                        return 2.1+player.countCards('h',card=>lib.skill.lingHunZhaoHuan.filterCard(card))*0.7;
                     },
                     result:{
                         player:1,
