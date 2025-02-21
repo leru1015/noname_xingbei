@@ -99,6 +99,12 @@ window.noname_source_list = [
 	"noname/util/struct/promise-error-handler/unknown.js",
 
 	"card/xingBei.js",
+	'character/rank.js',
+	"character/sanBan.js",
+	"character/siBan.js",
+	"character/shiZhouNian.js",
+	"character/yiDuanYeHuo.js",
+	"character/shenZiChuangLin.js",
 
 	"font/motoyamaru.woff2",
 	"font/suits.woff2",
