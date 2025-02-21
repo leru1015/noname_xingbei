@@ -35,7 +35,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             geDouJia:['geDouJia_name','jiGroup','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','qiJueBengJi','douShenTianQu','douQi'],],
             yongZhe:['yongZhe_name','xueGroup','4/5',['yongZheZhiXin','nuHou','jinPiLiJin','mingJingZhiShui','tiaoXin','jinDuanZhiLi','siDou','nuQi','zhiXing'],],
             lingHunShuShi:['lingHunShuShi_name','huanGroup','4/5',["lingHunTunShi","lingHunZhaoHuan",'lingHunZhuanHuan',"lingHunJingXiang","lingHunZhenBao","lingHunFuYu","lingHunLianJie","lingHunZengFu","huangSeLingHun","lanSeLingHun"],],
-            xueZhiWuNv:['xueZhiWuNv_name','xueGroup',5,[],],
+            xueZhiWuNv:['xueZhiWuNv_name','xueGroup',5,['xueZhiAiShang','liuXue','niLiu','xueZhiBeiMing','tongShengGongSi','xueZhiZuZhou'],],
             dieWuZhe:['dieWuZhe_name','yongGroup',5,[],],
             nvWuShen:['nvWuShen_name','shengGroup','3/4',['shenShengZhuiJi','zhiXuZhiYin','hePingXingZhe','junShenWeiGuan','yingLingZhaoHuan'],],
             moGong:['moGong_name','huanGroup',4,['moGuanChongJi','leiGuangSanShe','duoChongSheJi','chongNeng','moYan','chongNengPai'],],
@@ -8250,6 +8250,248 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/lan.png',
+            },
+            //血之巫女
+            xueZhiAiShang:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.storage.tongShengGongSi_use;
+                },
+                content:async function(event,trigger,player){
+                    await player.faShuDamage(2,player);
+
+                    var result=await player.chooseTarget('转移【同生共死】目标，取消则移除【同生共死】',function(card,player,target){
+                        return target!=_status.event.targetX;
+                    })
+                    .set('targetX',player.storage.tongShengGongSi_target)
+                    .set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target==player) return -1;
+                        if(target.side==player.side) return -1;
+                        else return 1;
+                    }).forResult();
+                    
+                    if(result.bool){
+                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
+                        var target=result.targets[0];
+                        if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
+                            target.storage.tongShengGongSi_player=player;
+                            target.addSkill('tongShengGongSi_xiaoGuo');                
+                        }
+                        player.storage.tongShengGongSi_target=target;
+                        await target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+                    }else{
+                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
+                        player.storage.tongShengGongSi_use=false;
+                        player.storage.tongShengGongSi_target=undefined;
+                    }
+                },
+                check:function(event,player){
+                    if(player.isHengZhi()&&player.storage.tongShengGongSi_target.side==player.side) return false;
+                    var minus=player.getHandcardLimit()-player.countCards('h');
+                    var num=Math.random();
+                    if(player.isHengZhi()&&minus>=1) return num>0.1;
+                    if(minus>=3) return num>0.15;
+                    return false;
+                }
+            },
+            liuXue:{
+                forced:true,
+                trigger:{player:'changeShiQiEnd'},
+                filter:function(event,player){
+                    return event.num<0&&event.yuanYin=='damage'&&!player.isHengZhi();
+                },
+                content:function(){
+                    'step 0'
+                    player.hengZhi();
+                    'step 1'
+                    player.changeZhiLiao(1);
+                },
+                group:['liuXue_shangHai','liuXue_chongZhi'],
+                subSkill:{
+                    shangHai:{
+                        trigger:{player:'phaseBegin'},
+                        direct:true,
+                        filter:function(event,player){
+                            return player.isHengZhi();
+                        },
+                        content:function(){
+                            player.faShuDamage(1,player);
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{
+                            player:'loseAfter',
+                            global:['gainAfter','loseAsyncAfter','addToExpansionAfter'],
+                        },
+                        filter:function(event,player){
+                            if(!player.isHengZhi()) return false;
+                            if(event.name=='gain'&&event.player==player) return false;
+                            var evt=event.getl(player);
+                            return evt&&evt.cards2&&evt.cards2.length>0&&player.countCards('h')<3;
+                        },
+                        forced:true,
+                        content:function(){
+                            'step 0'
+                            player.chongZhi();
+                        }
+                    }
+                }
+            },
+            niLiu:{
+                type:'faShu',
+                enable:['faShu'],
+                filter:function(event,player){
+                    return player.isHengZhi();
+                },
+                selectCard:2,
+                filterCard:true,
+                discard:true,
+                content:function(){
+                    'step 0'
+                    player.changeZhiLiao(1);
+                },
+                ai:{
+                    order:3.6,
+                    result:{
+                        player:2,
+                    }
+                }
+            },
+            xueZhiBeiMing:{
+                type:'faShu',
+                enable:['faShu'],
+                filter:function(event,player){
+                    return player.isHengZhi()&&player.hasCard(card=>lib.skill.xueZhiBeiMing.filterCard(card));
+                },
+                filterCard:function(card){
+                    return card.hasDuYou('xueZhiBeiMing');
+                },
+                selectCard:1,
+                useCard:true,
+                filterTarget:true,
+                selectTarget:1,
+                contentBefore:function(){
+                    'step 0'
+                    var list=[0,1,2];
+                    player.chooseControl(list).set('prompt','对目标角色和自己各造成(X+1)点法术伤害③').set('ai',function(){
+                        var num=Math.random();
+                        if(num>0.5) return 1;
+                        else if(num>0.2) return 2;
+                        else return 0;
+                    });
+                    'step 1'
+                    player.storage.xueZhiBeiMin=result.control+1;
+                },
+                content:function(){
+                    'step 0'
+                    target.faShuDamage(player.storage.xueZhiBeiMin,player);
+                    'step 1'
+                    player.faShuDamage(player.storage.xueZhiBeiMin,player);
+                },
+                ai:{
+                    order:function(card,player){
+                        return 7-player.countCards('h');
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
+                }
+            },
+            tongShengGongSi:{
+                type:'faShu',
+                enable:['faShu'],
+                filter:function(event,player){
+                    return !player.storage.tongShengGongSi_use;
+                },
+                selectTarget:1,
+                filterTarget:true,
+                content:function(){
+                    'step 0'
+                    player.draw(2);
+                    'step 1'
+                    player.storage.tongShengGongSi_target=target;
+                    player.storage.tongShengGongSi_use=true;
+                    
+                    if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
+                        target.storage.tongShengGongSi_player=player;
+                        target.addSkill('tongShengGongSi_xiaoGuo');
+                    }
+                    'step 2'
+                    target.addZhiShiWu('tongShengGongSi_xiaoGuo');
+                },
+                group:'tongShengGongSi_xiaoGuo',
+                subSkill:{
+                    xiaoGuo:{
+                        intro:{
+                            content:"<span class='tiaoJian'>(在【普通形态】下)</span>你和他手牌上限各-2。 <span class='tiaoJian'>(在【流血形态】下)</span>你和他手牌上限各+1。",
+                            nocount:true,
+                        },
+                        onremove:'storage',
+                        markimage:'image/card/zhuanShu/tongShengGongSi.png',
+
+                        mod:{
+                            maxHandcard:function(player,num){
+                                if(player.storage.tongShengGongSi_use){
+                                    if(player.isHengZhi()){
+                                        return num+1;
+                                    }else{
+                                        return num-2;
+                                    }
+                                }else if(player.hasZhiShiWu('tongShengGongSi_xiaoGuo')){
+                                        if(player.storage.tongShengGongSi_player.isHengZhi()){
+                                            return num+1;
+                                        }else{
+                                            return num-2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                ai:{
+                    order:function(item,player){
+                        var num=0;
+                        if(player.isHengZhi()) num+=2;
+                        return 7-player.countCards('h')+num;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return -target.countCards('h');
+                        },
+                    }
+                }
+            },
+            xueZhiZuZhou:{
+                type:'faShu',
+                enable:['faShu'],
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                filterTarget:true,
+                selectTarget:1,
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    target.faShuDamage(2,player);
+                    'step 2'
+                    player.chooseToDiscard(3,true,'h');
+                },
+                ai:{
+                    baoShi:true,
+                    order:function(card,player){
+                        return 1.7+player.countCards('h')*0.5;
+                    },
+                    result:{
+                        target:function(player,target){
+                            return get.damageEffect(target,2)
+                        }
+                    }
+                }
             },
         },
 		
