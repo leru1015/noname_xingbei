@@ -1,3 +1,4 @@
+import { count } from "console";
 import { lib, game, ui, get, ai, _status } from "../noname.js";
 export const type = "mode";
 /**
@@ -6369,6 +6370,9 @@ export default () => {
 
 				countEmptyCards:function(){
 					return this.getHandcardLimit()-this.countCards('h');
+				},
+				countEmptyNengLiang:function(){
+					return this.getNengLiangLimit()-this.countNengLiangAll();
 				},
 
 				/**
