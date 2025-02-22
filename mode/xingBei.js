@@ -1,4 +1,3 @@
-import { count } from "console";
 import { lib, game, ui, get, ai, _status } from "../noname.js";
 export const type = "mode";
 /**
