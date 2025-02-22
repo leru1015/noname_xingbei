@@ -1463,7 +1463,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    var name=get.translation(player);
+                    var name=get.colorName(player);
                     target.chooseToDiscard(`弃置1张法术牌，否则${name}对你造成2点法术伤害③、${name}弃一张牌`,1,function(card){
                         return get.type(card)=='faShu';
                     })
