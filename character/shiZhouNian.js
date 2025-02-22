@@ -8946,7 +8946,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //魔法少女
             moBaoChongJi:'[法术]魔爆冲击',
-            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方【战绩区】+1[宝石]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③、你弃一张牌。',
+            moBaoChongJi_info:'<span class="tiaoJian">(弃1张法术牌[展示])</span>我方【战绩区】+1[宝石]。2名目标对手各弃一张法术牌[展示]，每有人不如此做，你对他造成2点法术伤害③、你弃1张牌。',
             moDanZhangWo:'[响应]魔弹掌握',
             moDanZhangWo_info:'你主动使用【魔弹】时可以选择逆向传递。',
             moDanRongHe:'[响应]魔弹融合',
