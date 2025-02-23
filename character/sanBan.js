@@ -62,7 +62,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             san_shuiYing:{
                 trigger:{player:'drawBefore'},
                 filter:function(event,player){
-                    return event.yuanYin!="teShuXingDong"&&player.countCards('h')>0;
+                    return event.cause!="teShuXingDong"&&player.countCards('h')>0;
                 },
                 async cost(event, trigger, player) {
 					event.result = await player

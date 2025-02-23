@@ -2907,7 +2907,7 @@ export default () => {
 				},
 				content:function(){
 					'step 0'
-					player.draw(3).set('yuanYin','teShuXingDong');
+					player.draw(3).set('cause','teShuXingDong');
 					event.trigger('gouMai');
 					'step 1'
 					var num=0;
@@ -2984,7 +2984,7 @@ export default () => {
 								event.links=lib.skill._heCheng_backup.links;
 								event.trigger('heCheng');
 								'step 1'
-								player.draw(3).set('yuanYin','teShuXingDong');
+								player.draw(3).set('cause','teShuXingDong');
 								'step 2'
 								var dict={};
 								for(var i=0;i<event.links.length;i++){
@@ -3947,8 +3947,8 @@ export default () => {
 						if(event.baoPai==true){
 							if(event.shiQiXiaJiang!=false){
 								event.done.set('baoPai',true);
-								if(event.yuanYin=='damage'){
-									event.done.set('yuanYin','damage');
+								if(event.cause=='damage'){
+									event.done.set('cause','damage');
 								}
 								if(event.faShu){
 									event.done.set('faShu',true);
@@ -4522,8 +4522,8 @@ export default () => {
 						}
 						else{
 							var next=player.gain(cards,'draw');
-							if(event.yuanYin=='damage'){
-								next.set('yuanYin','damage')
+							if(event.cause=='damage'){
+								next.set('cause','damage')
 								if(event.faShu===true){
 									next.set('faShu',true);
 								}else{
@@ -4572,8 +4572,8 @@ export default () => {
 					if(event.baoPai==true){
 						if(event.shiQiXiaJiang!=false){
 							var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
-							if(event.yuanYin=='damage'){
-								next.set('yuanYin','damage');
+							if(event.cause=='damage'){
+								next.set('cause','damage');
 								if(event.faShu){
 									next.set('faShu',true);
 								}else{
@@ -4663,7 +4663,7 @@ export default () => {
 					player.getHistory('damage').push(event);
 
 					if(!event.unreal){
-						var next=player.draw(num,source).set('yuanYin','damage');
+						var next=player.draw(num,source).set('cause','damage');
 						if(event.faShu){
 							next.set('faShu',true);
 						}else{
@@ -4930,8 +4930,8 @@ export default () => {
 					var num=player.needsToDiscard();
 					if(num>0){
 						var next=player.chooseToDiscard(num,true).set('baoPai',true);
-						if(event.yuanYin=='damage'){
-							next.set('yuanYin','damage');
+						if(event.cause=='damage'){
+							next.set('cause','damage');
 							if(event.faShu===true){
 								next.set('faShu',true);
 							}else{

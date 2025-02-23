@@ -499,7 +499,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shuiYing:{
                 trigger:{player:'drawBefore'},
                 filter:function(event,player){
-                    return event.yuanYin!="teShuXingDong"&&player.countCards('h')>0;
+                    return event.cause!="teShuXingDong"&&player.countCards('h')>0;
                 },
                 async cost(event, trigger, player) {
 					event.result = await player
@@ -1298,7 +1298,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{global:'changeShiQiBefore'},
                 filter:function(event,player){
                     if(event.side!=player.side) return false;
-                    return player.canBiShaShuiJing()&&event.num<0&&event.yuanYin=='damage'&&event.faShu==true;
+                    return player.canBiShaShuiJing()&&event.num<0&&event.cause=='damage'&&event.faShu==true;
                 },
                 async cost(event, trigger, player) {
                     var list=[];
@@ -2082,7 +2082,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.isHengZhi()) return false;
                     if(event.side!=player.side) return false;
                     if(event.num>=0) return false;
-                    if(event.yuanYin!='damage') return false;
+                    if(event.cause!='damage') return false;
                     if(!event.cards) return false;
                     return true;
                 },
@@ -4025,7 +4025,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.isHengZhi()) return false;//是否已经横置
                     if(event.player!=player) return false;
                     if(event.num>=0) return false;//增加士气无法发发动
-                    if(event.yuanYin!='damage') return false;//判断原因
+                    if(event.cause!='damage') return false;//判断原因
                     return true;
                 },
                 content:function(){
@@ -8294,7 +8294,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 forced:true,
                 trigger:{player:'changeShiQiEnd'},
                 filter:function(event,player){
-                    return event.num<0&&event.yuanYin=='damage'&&!player.isHengZhi();
+                    return event.num<0&&event.cause=='damage'&&!player.isHengZhi();
                 },
                 content:function(){
                     'step 0'
