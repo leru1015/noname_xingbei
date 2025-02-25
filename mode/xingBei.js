@@ -7098,7 +7098,10 @@ export default () => {
 			//xingbei
 			zhiLiaoEffect:function(target,num){
 				if(target.hasSkillTag('noZhiLiao')) return 0;
-				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
+				if(target.getZhiLiaoLimit()-target.zhiLiao<=0){
+					if(target.hasSkillTag('zhiLiaoYiChu')) return 0.2;
+					return 0.1;
+				}
 				if(!num){
 					num=1;
 				}
@@ -7106,22 +7109,13 @@ export default () => {
 				if(chaZhi>0){
 					return chaZhi;
 				}else{
+					
 					return target.getZhiLiaoLimit()-target.zhiLiao
 				}
 			},
 			zhiLiaoEffect2:function(target,player,num){
 				if(target.side!=player.side) return -1;
-				if(target.hasSkillTag('noZhiLiao')) return 0;
-				if(target.getZhiLiaoLimit()-target.zhiLiao<=0) return 0.1;
-				if(!num){
-					num=1;
-				}
-				var chaZhi=target.getZhiLiaoLimit()-target.zhiLiao-num;
-				if(chaZhi>0){
-					return chaZhi;
-				}else{
-					return target.getZhiLiaoLimit()-target.zhiLiao
-				}
+				return get.zhiLiaoEffect(target,num);
 			},
 			damageEffect:function(target,num){
 				if(!target) return 0;
