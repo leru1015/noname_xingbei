@@ -3388,7 +3388,7 @@ export class Game extends GameCompatible {
 				}
 				for (var i = 0; i < cards.length; i++) {
 					for (var j = 0; j < nodes.length; j++) {
-						if (cards[i][2] == nodes[j].name && cards[i][0] == nodes[j].suit && cards[i][1] == nodes[j].number) {
+						if (cards[i][2] == nodes[j].name && cards[i][0] == nodes[j].xiBie && cards[i][1] == nodes[j].mingGe) {
 							nodes[j].moveDelete(player);
 							cards.splice(i--, 1);
 							nodes.splice(j--, 1);
@@ -3412,7 +3412,7 @@ export class Game extends GameCompatible {
 				}
 				for (var i = 0; i < cards.length; i++) {
 					for (var j = 0; j < nodes.length; j++) {
-						if (cards[i][2] == nodes[j].name && cards[i][0] == nodes[j].suit && cards[i][1] == nodes[j].number) {
+						if (cards[i][2] == nodes[j].name && cards[i][0] == nodes[j].xiBie && cards[i][1] == nodes[j].mingGe) {
 							nodes[j].delete();
 							if (method == "zoom") {
 								nodes[j].style.transform = "scale(0)";
@@ -3435,7 +3435,7 @@ export class Game extends GameCompatible {
 					nodes.push(nodeList[i]);
 				}
 				for (var j = nodes.length - 1; j >= 0; j--) {
-					if (card[2] == nodes[j].name && card[0] == nodes[j].suit && card[1] == nodes[j].number) {
+					if (card[2] == nodes[j].name && card[0] == nodes[j].xiBie && card[1] == nodes[j].mingGe) {
 						nodes[j].classList.add("thrownhighlight");
 						break;
 					}
@@ -3513,7 +3513,7 @@ export class Game extends GameCompatible {
 									l2.splice(j--, 1);
 									break;
 								}
-							} else if (l2[j].suit == l1[i][0] && l2[j].number == l1[i][1] && l2[j].name == l1[i][2]) {
+							} else if (l2[j].xiBie == l1[i][0] && l2[j].mingGe == l1[i][1] && l2[j].name == l1[i][2]) {
 								l2[j].addGaintag(content[1]);
 								l2.splice(j--, 1);
 								break;
@@ -3538,7 +3538,7 @@ export class Game extends GameCompatible {
 										l2.splice(j--, 1);
 										break;
 									}
-								} else if (l2[j].suit == l1[i][0] && l2[j].number == l1[i][1] && l2[j].name == l1[i][2]) {
+								} else if (l2[j].xiBie == l1[i][0] && l2[j].mingGe == l1[i][1] && l2[j].name == l1[i][2]) {
 									l2[j].removeGaintag(content[0]);
 									l2.splice(j--, 1);
 									break;
@@ -3853,7 +3853,7 @@ export class Game extends GameCompatible {
 									l2.splice(j--, 1);
 									break;
 								}
-							} else if (l2[j].suit == l1[i][0] && l2[j].number == l1[i][1] && l2[j].name == l1[i][2]) {
+							} else if (l2[j].xiBie == l1[i][0] && l2[j].mingGe == l1[i][1] && l2[j].name == l1[i][2]) {
 								l2[j].classList.remove("glow");
 								l2[j].classList.remove("glows");
 								l2[j].remove();
@@ -5590,7 +5590,7 @@ export class Game extends GameCompatible {
 			card = ui.create.card(ui.special);
 		}
 		card.storage.vanish = true;
-		return card.init([suit, mingGe, name, nature]);
+		return card.init([xiBie, mingGe, name, duYou]);
 	}
 	/**
 	 * @overload
@@ -5599,9 +5599,9 @@ export class Game extends GameCompatible {
 	/**
 	 * @overload
 	 * @param { Card | string } name
-	 * @param { string } suit
-	 * @param { number } number
-	 * @param { string } nature
+	 * @param { string } xiBie
+	 * @param { number } mingGe
+	 * @param { string } duYou
 	 */
 	createCard2() {
 		let card = game.createCard.apply(this, arguments);

@@ -4000,7 +4000,7 @@ export class Player extends HTMLDivElement {
 				filter = card => {
 					for (let j in arg2) {
 						var value;
-						if (j == "type" || j == "subtype" || j == "color" || j == "suit" || j == "number") {
+						if (j == "type" || j == "subtype" || j == "xiBei" || j == "mingGe") {
 							value = get[j](card);
 						} else if (j == "name") {
 							value = getCardName(card);
@@ -4083,7 +4083,7 @@ export class Player extends HTMLDivElement {
 				filter = card => {
 					for (let j in arg2) {
 						var value;
-						if (j == "type" || j == "subtype" || j == "color" || j == "suit" || j == "number") {
+						if (j == "type" || j == "subtype" || j == "color" || j == "xiBei" || j == "mingGe") {
 							value = get[j](card);
 						} else if (j == "name") {
 							value = getCardName(card);
@@ -4433,21 +4433,21 @@ export class Player extends HTMLDivElement {
 										break;
 									}
 								}
-							} else if (j == "suit") {
+							} else if (j == "xiBei") {
 								if (typeof arg2[j] == "object") {
-									if (arg2[j].includes(get.suit(cards[i])) == false) {
+									if (arg2[j].includes(get.xiBei(cards[i])) == false) {
 										cards.splice(i, 1);
 										i--;
 										break;
 									}
 								} else if (typeof arg2[j] == "string") {
-									if (get.suit(cards[i]) != arg2[j]) {
+									if (get.mingGe(cards[i]) != arg2[j]) {
 										cards.splice(i, 1);
 										i--;
 										break;
 									}
 								}
-							} else if (j == "number") {
+							} else if (j == "mingGe") {
 								if (typeof arg2[j] == "object") {
 									if (arg2[j].includes(get.mingGe(cards[i])) == false) {
 										cards.splice(i, 1);
@@ -4476,7 +4476,7 @@ export class Player extends HTMLDivElement {
 							}
 						}
 					}
-				} else if (typeof arg2 == "number" && arg2 > 0) {
+				} else if (typeof arg2 == "mingGe") {
 					cards.splice(arg2);
 				} else if (typeof arg2 == "function") {
 					for (i = 0; i < cards.length; i++) {
@@ -4494,11 +4494,11 @@ export class Player extends HTMLDivElement {
 				}
 			}
 			if (arg2 === 0) return cards[0];
-			if (typeof arg3 == "number") {
+			if (typeof arg3 == "mingGe") {
 				if (arg3 == 0) return cards[0];
 				cards.splice(arg3);
 			}
-			if (typeof arg4 == "number") {
+			if (typeof arg4 == "mingGe") {
 				if (arg4 == 0) return cards[0];
 				cards.splice(arg4);
 			}
@@ -4903,7 +4903,7 @@ export class Player extends HTMLDivElement {
 					}
 					var player = get.owner(card);
 					var getn = function (card) {
-						if (player.hasSkill("tianbian") && get.suit(card) == "heart") return 13;
+						if (player.hasSkill("tianbian") && get.xiBie(card) == "heart") return 13;
 						return get.mingGe(card);
 					};
 					var event = _status.event.getParent();
@@ -7926,8 +7926,8 @@ export class Player extends HTMLDivElement {
 				node = name.copy("mark");
 				node.classList.add("drawinghidden");
 				this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-				node.suit = name.suit;
-				node.number = name.number;
+				node.xiBei = name.xiBei;
+				node.mingGe = name.mingGe;
 				// if(name.name&&lib.card[name.name]&&lib.card[name.name].markimage){
 				// 	node.node.image.style.left=lib.card[name.name].markimage;
 				// }
@@ -11671,7 +11671,7 @@ export class Player extends HTMLDivElement {
 		} else if (info.subtype === "equip4") {
 			cardShownName += "-";
 		}
-		const cardx = isViewAsCard ? game.createCard(card.name, cards.length == 1 ? get.suit(cards[0]) : "none", cards.length == 1 ? get.mingGe(cards[0]) : 0) : cards[0];
+		const cardx = isViewAsCard ? game.createCard(card.name, cards.length == 1 ? get.xiBie(cards[0]) : "none", cards.length == 1 ? get.mingGe(cards[0]) : 0) : cards[0];
 		cardx.fix();
 		const cardSymbol = Symbol("card");
 		cardx.cardSymbol = cardSymbol;
@@ -11680,16 +11680,16 @@ export class Player extends HTMLDivElement {
 		cardx.style.transform = "";
 		cardx.classList.remove("drawinghidden");
 		delete cardx._transform;
-		const suit = get.translation(cardx.suit),
-			number = get.strNumber(cardx.number);
+		const xiBei = get.translation(cardx.xiBei),
+			mingGe = get.mingGe(cardx.mingGe);
 		if (isViewAsCard) {
 			cardx.cards = cards || [];
 			cardx.viewAs = card.name;
-			cardx.node.name2.innerHTML = `${suit}${number} [${cardShownName}]`;
+			cardx.node.name2.innerHTML = `${xiBei}${mingGe} [${cardShownName}]`;
 			cardx.classList.add("fakeequip");
 		} else {
 			delete cardx.viewAs;
-			cardx.node.name2.innerHTML = `${suit}${number} ${cardShownName}`;
+			cardx.node.name2.innerHTML = `${xiBei}${mingGe} ${cardShownName}`;
 			cardx.classList.remove("fakeequip");
 		}
 		let equipped = false,

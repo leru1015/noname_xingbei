@@ -90,7 +90,7 @@ export class VCard {
 			}
 		}
 		if (typeof xiBieOrCard == "string") this.xiBie = xiBieOrCard;
-		if (typeof mingGeOrCards == "string") this.number = mingGeOrCards;
+		if (typeof mingGeOrCards == "string") this.mingGe = mingGeOrCards;
 		if (typeof name == "string") this.name = name;
 		if (typeof duYou == "string") this.duYou = duYou;
 		if (!this.storage) this.storage = {};
@@ -134,9 +134,9 @@ export class VCard {
 		if (similar !== false) prefix = similar ? "[card:" : "[vcard:";
 		if (this.cardid) return prefix + this.cardid + "]";
 		if (!this.cards.length) return prefix + `${this.name}+${
-			this.suit ? this.suit : (this.color || "none")
+			this.xiBie ? this.xiBie : "none"
 		}+${
-			this.number === undefined ? "none" : this.number
+			this.mingGe === undefined ? "none" : this.mingGe
 		}${
 			this.duYou ? "+" + this.duYou : ""
 		}]`;

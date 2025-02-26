@@ -9714,8 +9714,8 @@ export const Content = {
 		event.result = {
 			card: player.judging[0],
 			name: player.judging[0].name,
-			number: get.mingGe(player.judging[0]),
-			suit: get.suit(player.judging[0]),
+			mingGe: get.mingGe(player.judging[0]),
+			xiBie: get.xiBie(player.judging[0]),
 			color: get.color(player.judging[0]),
 			node: event.node,
 		};

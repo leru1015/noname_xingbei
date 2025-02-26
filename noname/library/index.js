@@ -9160,7 +9160,7 @@ export class Library {
 				}
 			}
 			if (!targets.length) targets.push(game.me);
-			source.useCard(game.createCard(card.name, card.suit, card.number, card.nature), targets);
+			source.useCard(game.createCard(card.name, card.xiBie, card.mingGe, card.duYou), targets);
 		},
 		/**
 		 * 输出每个强度的武将数量、每个武将包的每个强度的武将数量、每个武将对应的id和翻译
@@ -9303,36 +9303,24 @@ export class Library {
 		 * ```
 		 */
 		gn(name) {
-			let nature = null;
-			let suit = null;
-			let suits = ["club", "spade", "diamond", "heart"];
-			for (let i = 0; i < suits.length; i++) {
-				if (name.startsWith(suits[i])) {
-					suit = suits[i];
-					name = name.slice(suits[i].length);
+			let xiBei = null;
+			let xiBeiList = ["huo", "feng", "shui", "di",'an','lei'];
+			let nameList = ['huoYanZhan','fengShenZhan','shuiLianZhan','diLieZhan','anMie','leiGuangZhan'];
+			let mingGeList = ['sheng','xue','yong','ji','huan'];
+			for (let i = 0; i < xiBeiList.length; i++) {
+				if (name.startsWith(xiBeiList[i])) {
+					xiBei = xiBei[i];
+					name = nameList.slice(xiBeiList[i].length);
 					break;
 				}
 			}
-			if (name.startsWith("red")) {
-				name = name.slice(3);
-				suit = ["diamond", "heart"].randomGet();
-			}
-			if (name.startsWith("black")) {
-				name = name.slice(5);
-				suit = ["spade", "club"].randomGet();
-			}
+			
+			let mingGe = mingGeList.randomGet();
 
-			if (name == "huosha") {
-				name = "sha";
-				nature = "fire";
-			} else if (name == "leisha") {
-				name = "sha";
-				nature = "thunder";
-			}
 			if (!lib.card[name]) {
 				return null;
 			}
-			return game.createCard(name, suit, null, nature);
+			return game.createCard(name, xiBei, mingGe);
 		},
 		/**
 		 * 指定的玩家或自己立即获得诸葛连弩，青龙刀，八卦阵，的卢，赤兔，木牛

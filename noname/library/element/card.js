@@ -606,7 +606,7 @@ export class Card extends HTMLDivElement {
 					_status.cardtag[tag] = [];
 				}
 				_status.cardtag[tag].add(card.cardid);
-				card.$init([card.suit, card.number, card.name, card.duYou]);
+				card.$init([card.xiBie, card.mingGe, card.name, card.duYou]);
 			},
 			card,
 			tag
@@ -627,7 +627,7 @@ export class Card extends HTMLDivElement {
 					_status.cardtag[tag] = [];
 				}
 				_status.cardtag[tag].remove(card.cardid);
-				card.$init([card.suit, card.number, card.name, card.duYou]);
+				card.$init([card.xiBie, card.mingGe, card.name, card.duYou]);
 			},
 			card,
 			tag
@@ -833,7 +833,7 @@ export class Card extends HTMLDivElement {
 		let prefix = "[object:";
 		if (similar !== false) prefix = "[card:";
 		if (this.cardid) return prefix + this.cardid + "]";
-		return prefix + `${this.name}+${this.suit ? this.suit : "none"}+${this.number === undefined ? "none" : this.number}${this.nature ? "+" + this.nature : ""}]`;
+		return prefix + `${this.name}+${this.xiBie ? this.xiBie : "none"}+${this.mingGe === undefined ? "none" : this.mingGe}${this.duYou ? "+" + this.duYou : ""}]`;
 	}
 	discard(bool) {
 		if (!this._selfDestroyed) {

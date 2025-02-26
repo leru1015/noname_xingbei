@@ -1217,9 +1217,9 @@ export class Get extends GetCompatible {
 				if (lib.inpile.includes(info[2]) && get.type(info[2]) == type) {
 					list.push({
 						name: info[2],
-						suit: info[0],
-						number: info[1],
-						nature: info[3],
+						xiBie: info[0],
+						mingGe: info[1],
+						duYou: info[3],
 					});
 				}
 			}
@@ -1711,7 +1711,7 @@ export class Get extends GetCompatible {
 		return Array.from(infos || []).map(get.infoVCard);
 	}
 	cardInfoOL(card) {
-		return "_noname_card:" + JSON.stringify([card.cardid, card.suit, card.number, card.name, card.duYou]);
+		return "_noname_card:" + JSON.stringify([card.cardid, card.xiBie, card.mingGe, card.name, card.duYou]);
 	}
 	infoCardOL(info) {
 		if (!lib.cardOL) return info;
@@ -3247,13 +3247,13 @@ export class Get extends GetCompatible {
 							} else if (typeof filter[j] == "string") {
 								if (get.color(arguments[i]) != filter[j]) return false;
 							}
-						} else if (j == "suit") {
+						} else if (j == "xiBei") {
 							if (Array.isArray(filter[j])) {
 								if (filter[j].includes(get.xiBie(arguments[i])) == false) return false;
 							} else if (typeof filter[j] == "string") {
 								if (get.xiBie(arguments[i]) != filter[j]) return false;
 							}
-						} else if (j == "number") {
+						} else if (j == "mingGe") {
 							if (Array.isArray(filter[j])) {
 								if (filter[j].includes(get.mingGe(arguments[i])) == false) return false;
 							} else if (typeof filter[j] == "string") {
