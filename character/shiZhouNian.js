@@ -4594,18 +4594,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     var event=_status.event;
                     if(event.canYingZhan==false) return false;
-                    var mingGe=get.mingGe(event.sourceCard);
+                    var mingGe=get.mingGe(event.card);
                     return player.hasCard(card=>get.mingGe(card)==mingGe&&get.type(card)=='gongJi');
                 },
                 filterCard:function(card,player,event){
                     var event=_status.event;
-                    var mingGe=get.mingGe(event.sourceCard);
+                    var mingGe=get.mingGe(event.card);
                     return get.mingGe(card)==mingGe&&get.type(card)=='gongJi';
                 },
                 position:'h',
                 viewAs:function(cards,player){
                     var event=_status.event;
-					return {name:get.name(event.sourceCard),xiBie:get.xiBie(event.sourceCard),isCard:true};
+					return {name:get.name(event.card),xiBie:get.xiBie(event.card),isCard:true};
 				},
                 group:['yinYangZhanHuan_xiaoGuo'],
                 ai:{
@@ -4689,17 +4689,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 async cost(event,trigger,player){
                     event.source=trigger.player;
 					event.yingZhan=trigger.yingZhan;
-					event.sourceCard=trigger.card;
+					event.card=trigger.card;
 					var name=get.translation(event.source);
                     var name2=get.translation(trigger.target);
 					var propmt=`${name2}受到${name}的`;
-					propmt+=get.translation(get.xiBie(event.sourceCard))+'系主动攻击，';
+					propmt+=get.translation(get.xiBie(event.card))+'系主动攻击，';
 					propmt+=get.prompt('shiShenZhouShu');
 					event.result=await player.yingZhan(propmt)
                     .set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
 							if(_status.event.canYingZhan==false) return false;//不能应战设置
-							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.sourceCard)) return false;
+							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
 						}else if(get.type(card)=='faShu'){
                             return false;
                         }
@@ -4710,7 +4710,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(target.side==player.side) return false;
 						return lib.filter.targetEnabled(card,player,target);
                     })
-					.set('sourceCard',event.sourceCard)
+					.set('card',event.card)
                     .set('source',event.source)
                     .set('yingZhan',true)
 					.set('canYingZhan',trigger.canYingZhan)
@@ -7019,7 +7019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     gongJiWeiMingZhong:{
                         trigger:{source:'gongJiWeiMingZhong'},
                         filter:function(event,player){
-                            return player.zhiLiao>0&&event.sourceCard.shengXieJuBao;
+                            return player.zhiLiao>0&&event.card.shengXieJuBao;
                         },
                         direct:true,
                         content:function(){
@@ -7462,7 +7462,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced:true,
                 content:function(){
-                    player.addToExpansion('draw',trigger.sourceCard.cards,player,'log').gaintag.add('jianHun');
+                    player.addToExpansion('draw',trigger.card.cards,player,'log').gaintag.add('jianHun');
                 }
             },
             yangGong:{

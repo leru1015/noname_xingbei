@@ -2858,7 +2858,7 @@ export default () => {
                     if(get.type(trigger.card)=='gongJi'){
 						event.source=trigger.player;
 						event.yingZhan=trigger.yingZhan;
-						event.sourceCard=trigger.card;
+						event.card=trigger.card;
 						event.customArgs=trigger.customArgs;
                         event.trigger('gongJiWeiMingZhong');
                     }else if(trigger.card.name=='moDan') game.resetMoDan();
@@ -2875,10 +2875,10 @@ export default () => {
 					'step 0'
 					event.source=trigger.player;
 					event.yingZhan=trigger.yingZhan;
-					event.sourceCard=trigger.card;
+					event.card=trigger.card;
 					var name=get.translation(event.source);
 					var propmt=`受到${name}的`;
-					propmt+=get.translation(get.xiBie(event.sourceCard))+'系';
+					propmt+=get.translation(get.xiBie(event.card))+'系';
 					if(event.yingZhan){
 						propmt+='应战攻击';
 					}else{
@@ -2888,7 +2888,7 @@ export default () => {
                     next.set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
 							if(_status.event.canYingZhan==false) return false;//不能应战设置
-							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.sourceCard)) return false;
+							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
 						}else if(get.type(card)=='faShu'){
 							if(_status.event.canShengGuang==false) return false;
 							if(get.name(card)!='shengGuang') return false;
@@ -2900,7 +2900,7 @@ export default () => {
 						if(target.side==player.side) return false;
 						return lib.filter.targetEnabled(card,player,target);
                     });
-					next.set('sourceCard',event.sourceCard);
+					next.set('card',event.card);
                     next.set('source',event.source);
                     next.set('yingZhan',true);
 					next.set('canYingZhan',trigger.canYingZhan);
@@ -2929,7 +2929,7 @@ export default () => {
                     event.source=trigger.getParent().source;//攻击来源
                     event.player=trigger.getParent().player;//应战者
 					event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
-					event.sourceCard=trigger.getParent().sourceCard;//攻击来源牌
+					event.card=trigger.getParent().card;//攻击来源牌
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
                 }
@@ -2947,7 +2947,7 @@ export default () => {
 					event.source=trigger.getParent().source;//攻击来源
                     event.player=trigger.getParent().player;//应战者
 					event.yingZhan=trigger.getParent(2).yingZhan;//判断未命中的攻击是否为应战攻击
-					event.sourceCard=trigger.getParent().sourceCard;//攻击来源牌
+					event.card=trigger.getParent().card;//攻击来源牌
 					'step 1'
                     event.trigger('gongJiWeiMingZhong');
 				}
