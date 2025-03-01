@@ -12,7 +12,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             }
         },
 		character:{
-            zhanDouFaShi:['zhanDouFaShi_name','yongGroup',3,[],],
+            zhanDouFaShi:['zhanDouFaShi_name','yongGroup',3,['fuWenZhiHuan','fuMoDaJi','shangBian','moLiShangZeng'],],
             xingZhuiNvWu:['xingZhuiNvWu_name','yongGroup','4/5',[],],
             shengTingJianChaShi:['shengTingJianChaShi_name','shengGroup',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
             lieWuRen:['lieWuRen_name','jiGroup','3/4',[],],
@@ -658,6 +658,177 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png',
+            },
+
+            //战斗法师
+            fuWenZhiHuan:{
+                type:'faShu',
+                enable:['faShu'],
+                usable:1,
+                filter:function(event,player){
+                    return player.countTongXiPai()>=2;
+                },
+                selectCard:2,
+                filterCard:function(card){
+                    return get.xuanZeTongXiPai(card);
+                },
+                complexCard:true,
+                discard:true,
+                showCards:true,
+                content:function(){
+                    'step 0'
+                    player.draw(1);
+                    'step 1'
+                    for(var i=0;i<cards.length;i++){
+                        if(get.mingGe(cards[i])=='yong'||get.type(cards[i])=='faShu'){
+                            event.flag=true;
+                            break;
+                        }
+                    }
+                    if(event.flag){
+                        player.addGongJi();
+                    }
+                },
+                ai:{
+                    order:3.8,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            fuMoDaJi:{
+                trigger:{source:['gongJiMingZhong','gongJiWeiMingZhong']},
+                usable:1,
+                frequent:true,
+                filter:function(event,player,name){
+                    if(get.is.zhuDongGongJi(event)){
+                        if(name=='gongJiMingZhong') return true;
+                        else if(name=='gongJiWeiMingZhong'){
+                            return get.mingGe(event.card)=='yong';
+                        }
+                    }else return false;
+                },
+                content:function(){
+                    player.addFaShu();
+                }
+            },
+            shangBian:{
+                trigger:{player:['gongJiEnd','faShuEnd']},
+                filter:function(event,player){
+                    if(!get.is.xingDong(event)) return false;
+                    var zhanJi=get.zhanJi(player.side);
+                    var bool1=zhanJi.includes('baoShi');
+                    var bool2=game.hasPlayer(function(current){
+                        return current.side==player.side&&current!=player&&current.countNengLiangAll()>0;
+                    });
+                    return player.storage.shangBian==3&&(bool1||bool2);
+                },
+                content:function(){
+                    'step 0'
+                    var zhanJi=get.zhanJi(player.side);
+                    var bool1=zhanJi.includes('baoShi');
+                    var bool2=game.hasPlayer(function(current){
+                        return current.side==player.side&&current!=player&&current.countNengLiangAll()>0;
+                    });
+
+                    if(bool1&&bool2){
+                        var next=player.chooseTarget('是否消耗队友【能量区】1【能量】,否者消耗我方【战绩区】1[宝石]',function(card,player,target){
+                            return target.side==player.side&&target!=player&&target.countNengLiangAll()>0;
+                        });
+                    }else if(!bool1&&bool2){
+                        var next=player.chooseTarget('消耗队友【能量区】1【能量】',true,function(card,player,target){
+                            return target.side==player.side&&target!=player&&target.countNengLiangAll()>0;
+                        });
+                    }
+                    'step 1'
+                    if(result.bool){
+                        var target=result.targets[0];
+                        var name=get.colorName(target);
+                        event.target=target;
+                        if(target.countNengLiang('baoShi')>0&&target.countNengLiang('shuiJing')>0){
+                            var list=[['baoShi',get.translation('baoShi')],['shuiJing',get.translation('shuiJing')]];
+                            var next=player.chooseControl(list);
+                            next.set('prompt',`选择消耗${name}的能量`);
+                            next.set('ai',function(control){
+                                return 1;
+                            });
+                        }else if(target.countNengLiang('baoShi')>0){
+                            event.target.removeNengLiang('baoShi',1);
+                            event.goto(3);
+                        }else if(target.countNengLiang('shuiJing')>0){
+                            event.target.removeNengLiang('shuiJing',1);
+                            event.goto(3);
+                        }
+                    }else{
+                        player.removeZhanJi('baoShi',1);
+                        event.goto(3);
+                    }
+                    'step 2'
+                    if(result.control=='baoShi'){
+                        event.target.removeNengLiang('baoShi',1);
+                    }else{
+                        event.target.removeNengLiang('shuiJing',1);
+                    }
+                    'step 3'
+                    var next=player.chooseTarget(2,'对2名目标对手各造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    });
+                    'step 4'
+                    event.targets=result.targets.sortBySeat(player);
+                    game.log(player,'选择了',event.targets);
+                    'step 5'
+                    var target=event.targets.shift();
+                    target.faShuDamage(1,player);
+
+                    if(event.targets.length){
+                        event.redo();
+                    }
+                },
+                group:['shangBian_jiShu','shangBian_chongZhi'],
+                subSkill:{
+                    jiShu:{
+                        priority:1,
+                        trigger:{player:['gongJiEnd','faShuEnd']},
+                        direct:true,
+                        filter:function(event,player){
+                            return get.is.xingDong(event);
+                        },
+                        content:function(){
+                            player.storage.shangBian++;
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{player:'phaseBefore'},
+                        direct:true,
+                        priority:-2,
+                        content:function(){
+                            player.storage.shangBian=0;
+                        }
+                    }
+                }
+            },
+            moLiShangZeng:{
+                trigger:{player:['gongJiEnd','faShuEnd']},
+                filter:function(event,player){
+                    if(!get.is.xingDong(event)) return false;
+                    return event.firstAction!=true&&player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.chooseTarget('对目标对手造成1点法术伤害③',true,function(card,player,target){
+                        return target.side!=player.side;
+                    }).set('ai',function(target){
+                        var player=_status.event.player;
+                        return get.damageEffect2(target,player,1);
+                    });
+                    'step 2'
+                    result.targets[0].faShuDamage(1,player);
+                },
+                ai:{
+                    shuiJing:true,
+                }
             },
         },
 		
