@@ -13,7 +13,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             }
         },
 		character:{
-            jinGuiZhiNv:['jinGuiZhiNv_name','yongGroup',3,[],],
+            jinGuiZhiNv:['jinGuiZhiNv_name','yongGroup',3,['gaoLingZhiHua','moFaRuMen','Magic','qiangYuYuanXing','youQingJiBan'],],
             nvPuZhang:['nvPuZhang_name','jiGroup',5,[],],
             jieJieShi:['jieJieShi_name','huanGroup',5,[],],
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,[],],
@@ -27,7 +27,209 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wuRanZhe:`染污者操弄体内戾气，迸发强烈的力量。靠近她的人都会被她蔓延的戾气伤害，人人望而生畏。背弃神，诅咒神，婕姬海德没有宽恕，她品尝着最真实的痛楚`,
         },
 		
-		skill:{},
+		skill:{
+            //矜贵之女
+            gaoLingZhiHua:{
+                trigger:{player:'_tiLian_backupEnd'},
+                forced:true,
+                filter:function(event,player){
+                    return event.links.includes('baoShi');
+                },
+                content:function(){
+                    player.addNengLiang('shuiJing');
+                }
+            },
+            moFaRuMen:{
+                type:'faShu',
+                enable:['faShu'],
+                content:async function(event,trigger,player){
+                    var cards=[];
+                    if(event.bool){
+                        let targets=await player.chooseTarget('我方2名角色各弃置1张牌',2,true,function(card,player,target){
+                            return player.side==target.side;
+                        }).set('ai',function(target){
+                            return Math.random();
+                        }).forResultTargets();
+                        game.log(player,'选择了',targets);
+                        for(var target of targets){
+                            let card=await target.chooseToDiscard('h',true,'showCards')
+                            .set('ai',function(card){
+                                var num=0;
+                                if(get.type(card)=='faShu') num++;
+                                if(get.mingGe(card)=='yong') num++;
+                                if(get.xiBie(card)=='shui') num++;
+                                return num;
+                            }).forResultCards();
+                            if(card.length>0) cards.push(card[0]);
+                        }
+                        for(var target of targets){
+                            target.draw();
+                        }
+                    }else{
+                        let card=await player.draw().forResult();
+                        await player.showCards(card);
+                        cards.push(card[0]);
+                    }
+
+                    if(cards.length>0){
+                        event.faShu=false;
+                        event.yong=0;
+                        event.shui=0;
+
+                        for(var card of cards){
+                            if(!event.faShu&&get.type(card)=='faShu') event.faShu=true;
+                            if(get.mingGe(card)=='yong') event.yong++;
+                            if(get.xiBie(card)=='shui') event.shui++;
+                        }
+                        if(event.faShu){
+                            let targets=await player.chooseTarget('对2名目标对手各造成1点法术伤害③',2,true,function(card,player,target){
+                                return target.side!=player.side;
+                            }).set('ai',function(target){
+                                return -get.damageEffect(target,1);
+                            }).forResultTargets();
+                            game.log(player,'选择了',targets);
+                            for(var target of targets){
+                                await target.faShuDamage(1,player);
+                            }
+                        }
+                        if(event.yong>0){
+                            let targets=await player.chooseTarget(`对${event.yong}名目标角色各造成1点法术伤害③`,true,event.yong).set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.damageEffect2(target,player,1);
+                            }).forResultTargets();
+                            game.log(player,'选择了',targets);
+                            for(var target of targets){
+                                await target.faShuDamage(1,player);
+                            }
+                        }
+                        if(event.shui>0){
+                            let targets=await player.chooseTarget(`${event.shui}名目标角色各+1点[治疗]`,true,event.shui).set('ai',function(target){
+                                var player=_status.event.player;
+                                return get.zhiLiaoEffect2(target,player,1);
+                            }).forResultTargets();
+                            game.log(player,'选择了',targets);
+                            for(var target of targets){
+                                target.changeZhiLiao(1,player);
+                            }
+                        }
+                    }else{
+                        return;
+                    }
+                },
+                ai:{
+                    order:function(card,player){
+                        if(player.countCards('h')>=player.getHandcardLimit()) return 1;
+                        return 4;
+                    },
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            Magic:{
+                trigger:{player:'moFaRuMenEnd'},
+                content:function(){
+                    'step 0'
+                    if(trigger.faShu==false&&trigger.yong==0&&trigger.shui==0){
+                        player.addFaShu();
+                    }else{
+                        player.chooseToDiscard(2,true);
+                    }
+                    'step 1'
+                    if(player.countSkill('moFaRuMen')==3){
+                        player.addZhanJi('baoShi',2);
+                    }
+                },
+                check:function(event,player){
+                    var num=player.countSkill('moFaRuMen');
+                    if(num==3) return true;
+                    return player.countSkill('moFaRuMen')<4;
+                }
+            },
+            qiangYuYuanXing:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    var num=player.countCards('h');
+                    if(num>4){
+                        player.chooseToDiscard(num-4,true);
+                    }else if(num<4){
+                        player.draw(4-num);
+                    }
+                    'step 2'
+                    var list=get.zhanJi(player.side);
+                    if(list.length>0){
+                        var listx=[];
+                        for(var i=0;i<list.length;i++){
+                            listx.push([list[i],get.translation(list[i])]);
+                        }
+                        var next=player.chooseButton([
+                            '是否移除1个星石<br>将一名其他角色手牌调整为4张[强制]',
+                            [listx,'tdnodes'],
+                        ]);
+                        next.set('selectButton',1);
+                        next.set('ai',function(button){
+                            return -1;
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    if(result.bool){
+                        if(result.links[0]=='baoShi'){
+                            player.removeZhanJi("baoShi");
+                        }else{
+                            player.removeZhanJi("shuiJing");
+                        }
+                    }else{
+                        event.finish();
+                    }
+                    'step 4'
+                    player.chooseTarget('将一名其他角色手牌调整为4张[强制]',true,function(card,player,target){
+                        return target!=player;
+                    }).set('ai',function(target){
+                        if(target.countCards('h')==4) return -1;
+                        return Math.random();
+                    });
+                    'step 5'
+                    var target=result.targets[0];
+                    var num=target.countCards('h');
+                    if(num>4){
+                        target.chooseToDiscard(num-4,true);
+                    }else if(num<4){
+                        target.draw(4-num);
+                    }
+                },
+                check:function(event,player){
+                    if(player.countCards('h')==4) return false;
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            youQingJiBan:{
+                ai:{
+                    baoShi:true,
+                },
+                trigger:{player:'moFaRuMenBegin'},
+                usable:1,
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    trigger.bool=true;
+                }
+            },
+        },
 		
 		translate:{
             jinGuiZhiNv:'矜贵之女',
@@ -48,11 +250,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             moFaRuMen:"[法术]魔法入门",
             moFaRuMen_info:"你摸1张牌[强制][展示]，根据所展示的牌依序触发相应效果：<span class='tiaoJian'>(若有法术牌)</span>对2名目标对手各造成1点法术伤害③，<span class='tiaoJian'>(若有X张咏类命格)</span>你对X名目标角色各造成1点法术伤害③，<span class='tiaoJian'>(若有X张水系牌)</span>指定X名目标角色各+1[治疗]。",
             Magic:"[响应]Magic!",
-            Magic_info:"<span class='tiaoJian'>([魔法入门]展示牌触发效果时发动)</span>你弃2张牌；<span class='tiaoJian'>([魔法入门]展示牌未触发任何效果时发动)</span>你额外+1[法术行动]。 <span class='tiaoJian'>(本回合第3次[魔法入门]结算时发动)</span>我方[战绩区]+2[宝石]。",
+            Magic_info:"<span class='tiaoJian'>(【魔法入门】展示牌触发效果时发动)</span>你弃2张牌；<span class='tiaoJian'>([魔法入门]展示牌未触发任何效果时发动)</span>你额外+1[法术行动]。 <span class='tiaoJian'>(本回合第3次[魔法入门]结算时发动)</span>我方[战绩区]+2[宝石]。",
             qiangYuYuanXing:"[启动]强予愿行",
             qiangYuYuanXing_info:"[水晶]将你的手牌调整为4张[强制]；<span class='tiaoJian'>(若你额外移除我方[战绩区]1星石)</span>将一名其他角色手牌调整为4张[强制]。",
             youQingJiBan:"[响应]友情羁绊[回合限定]",
-            youQingJiBan_info:"[宝石]<span class='tiaoJian'>(发动[魔法入门]时发动)</span>将“你摸1张牌[强制][展示]”改为“我方2名角色各弃1张牌[强制][展示]，然后各摸1张牌[强制]”。",
+            youQingJiBan_info:"[宝石]<span class='tiaoJian'>(发动【魔法入门】时发动)</span>将“你摸1张牌[强制][展示]”改为“我方2名角色各弃1张牌[强制][展示]，然后各摸1张牌[强制]”。",
 
             //女仆长
             yingZhiXue:"[启动]影之穴",
