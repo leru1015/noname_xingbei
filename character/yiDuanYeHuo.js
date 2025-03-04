@@ -15,7 +15,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhanDouFaShi:['zhanDouFaShi_name','yongGroup',3,['fuWenZhiHuan','fuMoDaJi','shangBian','moLiShangZeng'],],
             xingZhuiNvWu:['xingZhuiNvWu_name','yongGroup','4/5',['mingDingZhiLi','xingHuan','xingKe','qunXingQiShi','huangJinLv','fanXing','yingYue','shiRi','chuangKeLvDong','luEn'],],
             shengTingJianChaShi:['shengTingJianChaShi_name','shengGroup',4,['kuangXinTu','caiJueLunDing','enDianShenShou','jingHuaZhiShu','biHuLingYu','caiJueZhe','shenShengBianCe','caiJue'],],
-            lieWuRen:['lieWuRen_name','jiGroup','3/4',[],],
+            lieWuRen:['lieWuRen_name','jiGroup','3/4',['zhuanHuan','shouMoCi','faShuBoLi','guanYinDuRen','touXi','moLiPing'],],
             shengDianQiShi:['shengDianQiShi_name','shengGroup',4,['shenXuanZhe','shenWei','shengCai','shengYu','shenZhiZi','shenLinShengQi','shengYanQiFu','shengYin'],],
 		},
         characterIntro:{
@@ -1354,6 +1354,224 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.discard(result.links);
                 }
+            },
+            //猎巫人
+            zhuanHuan:{
+                enable:['gongJi','yingZhan'],
+                filter:function(event,player){
+                    var event=event||_status.event;
+                    if(event.name=='yingZhan'){
+                        if(event.canYingZhan==false) return false;
+                        var cards=player.getCards('h');
+                        for(var i=0;i<cards.length;i++){
+                            var card=cards[i];
+                            if(card.name!='shengGuang'&&get.type(card)=='faShu'){
+                                if(get.xiBie(card)==get.xiBie(event.card)) return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    return player.countCards('h',function(card){
+                        return card.name!='shengGuang'&&get.type(card)=='faShu';
+                    });
+                },
+                filterCard:function(card,player,event){
+                    if(card.name=='shengGuang'||get.type(card)!='faShu') return false;
+                    var event=event||_status.event;
+                    if(event.name=='yingZhan'){
+                        return get.xiBie(card)==get.xiBie(event.card);
+                    }
+                    return card.name!='shengGuang'&&get.type(card)=='faShu';
+                },
+                position:'h',
+                viewAs:function(cards,player){
+                    if(cards.length==0) return;
+                    var xiBie=get.xiBie(cards[0]);
+                    var name;
+                    switch(xiBie){
+                        case 'shui':
+                            name='shuiLianZhan';
+                            break;
+                        case 'huo':
+                            name='huoYanZhan';
+                            break;
+                        case 'feng':
+                            name='fengShenZhan';
+                            break;
+                        case 'lei':
+                            name='leiGuangZhan';
+                            break;
+                        case 'di':
+                            name='diLieZhan';
+                            break;
+                    }
+                    var dict={name:name,xiBie:xiBie};
+					return dict;
+				},
+                ai:{
+                    order:3.5,
+                    result:{
+                        player:1,
+                    }
+                }
+            },
+            shouMoCi:{
+                trigger:{player:'gongJiShi'},
+                filter:function(event,player){
+                    var num=player.getExpansions('moLiPing').length;
+                    if(num>=4) return false;
+
+                    return get.is.zhuDongGongJi(event)&&event.target.countCards('h')<4&&event.target.countCards('h')>0;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.target.chooseToDiscard(true);
+                    'step 1'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('moLiPing');
+                }
+            },
+            faShuBoLi:{
+                trigger:{source:'gongJiMingZhong'},
+                filter:function(event,player){
+                    var num=player.getExpansions('moLiPing').length;
+                    if(num>=4) return false;
+
+                    return get.is.zhuDongGongJi(event);
+                },
+                async cost(event,trigger,player){
+                    event.result=await player.chooseTarget()
+                    .set('prompt',get.prompt('faShuBoLi'))
+                    .set('prompt2',lib.translate.faShuBoLi_info)
+                    .set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target.countCards('h')<=0) return -1;
+                        return -get.attitude(player,target);
+                    })
+                    .forResult();
+                },
+                content:function(){
+                    'step 0'
+                    var target=event.targets[0];
+                    if(target.countCards('h')>0){
+                        target.chooseToDiscard('h',true);
+                    }else event.finish();
+                    'step 1'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('moLiPing');
+                }
+            },
+            guanYinDuRen:{
+                trigger:{source:'chengShouShangHai'},
+                filter:function(event,player){
+                    return player.getExpansions('moLiPing').length>=1;
+                },
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('moLiPing');
+                    var result=await player.chooseCardButton(cards,`是否发动【灌银毒刃】，移除1个【魔力瓶】,本次伤害-1，将移除的【魔力瓶】加入他手牌[强制]，你+1[治疗]`).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cost_data,'moLiPing');
+                    trigger.changeDamageNum(-1);
+                    'step 1'
+                    game.log(trigger.player,'获得了一张牌');
+                    trigger.player.gain(event.cost_data,'draw');
+                    'step 2'
+                    player.changeZhiLiao(1);
+                },
+            },
+            touXi:{
+                usable:1,
+                trigger:{player:'gongJiEnd'},
+                filter:function(event,player){
+                    return player.canBiShaShuiJing()&&get.is.gongJiXingDong(event)&&player.getExpansions('moLiPing').length>=2;
+                },
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('moLiPing');
+                    var result=await player.chooseCardButton(cards,2,`是否发动【偷袭】，移除2个【魔力瓶】[展示]<br>每有X张法术牌，对X名目标对手造成1点法术伤害③；<span class='tiaoJian'>(若有2张攻击牌)</span>额外+1[攻击行动]。 <span class='tiaoJian'>(若为同系牌)</span>对目标角色造成1点法术伤害③。`).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaShuiJing();
+                    'step 1'
+                    player.discard(event.cost_data,'moLiPing','showHiddenCards');
+                    event.cards=event.cost_data;
+
+                    'step 2'
+                    event.faShu=0;
+                    event.gongJi=0;
+                    event.tongXi=false;
+
+                    for(var i=0;i<event.cards.length;i++){
+                        var card=event.cards[i];
+                        if(get.type(card)=='faShu'){
+                            event.faShu++;
+                        }else if(get.type(card)=='gongJi'){
+                            event.gongJi++;
+                        }
+                    }
+                    if(get.xiBie(event.cards[0])==get.xiBie(event.cards[1])) event.tongXi=true;
+
+                    'step 3'
+                    if(event.faShu>=1){
+                        player.chooseTarget(`对${event.faShu}个目标对手造成1点法术伤害③`,true,event.faShu,function(card,player,target){
+                            return target.side!=player.side;
+                        }).set('ai',function(target){
+                            return -get.damageEffect(target,1);
+                        });
+                    }else{
+                        event.goto(6);
+                    }
+                    'step 4'
+                    game.log(player,'选择了',result.targets);
+
+                    event.targets=result.targets;
+                    'step 5'
+                    var target=event.targets.shift();
+                    target.faShuDamage(1,player);
+                    if(event.targets.length>0) event.redo();
+
+                    'step 6'
+                    if(event.gongJi>=2) player.addGongJi();
+                    
+                    'step 7'
+                    if(event.tongXi){
+                        player.chooseTarget(`对目标角色造成1点法术伤害③`,true).set('ai',function(target){
+                            var player=_status.event.player;
+                            if(target.side==player.side) return -1;
+                            return -get.damageEffect(target,1);
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 8'
+                    result.targets[0].faShuDamage(1,player);
+                },
+                ai:{
+                    shuiJing:true,
+                }
+            },
+            moLiPing:{
+                intro:{
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('moLiPing');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
             },
         },
 		
