@@ -4107,6 +4107,7 @@ export default () => {
 							}
 						}
 						if(event.showCards==true) event.done.set('showCards',true);
+						if(event.showHiddenCards==true) event.done.set('showHiddenCards',true);
 						event.done.discarder=player;
 					}
 					if(event.dialog&&event.dialog.close) event.dialog.close();
