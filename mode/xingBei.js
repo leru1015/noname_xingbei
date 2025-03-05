@@ -6412,8 +6412,8 @@ export default () => {
 
 				setZhiShiWu(zhiShiWu, num) {
 					const count = this.countMark(zhiShiWu);
-					if (count > num) this.addZhiShiWu(zhiShiWu, count - num);
-					else if (count < num) this.removeZhiShiWu(zhiShiWu, num - count);
+					if (count > num) this.removeZhiShiWu(zhiShiWu, count - num);
+					else if (count < num) this.addZhiShiWu(zhiShiWu, num - count);
 				},
 				hasZhiShiWu:function(zhiShiWu){//是否拥有指示物
 					return this.hasMark(zhiShiWu);
