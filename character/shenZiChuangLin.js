@@ -17,14 +17,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nvPuZhang:['nvPuZhang_name','jiGroup',5,['yingZhiXue','miShuMuYing','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['jieJieShi_name','huanGroup',5,['jieJieYiShi','huangShenZhiLi','huangShenJiYi','jinMoJing','liuLiJing','jueJie','fuMoJing','jieJie','jiX'],],
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
-            ranWuZhe:['ranWuZhe_name','xueGroup',4,[],],
+            ranWuZhe:['ranWuZhe_name','xueGroup',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
 		},
         characterIntro:{
             jinGuiZhiNv:`身为一位魔法的初学者，艾丽卡施法总是让人提心吊胆，因为连她自己也不知道会发生什么事情。然而她似乎无法体会身旁人的种种暗示，依然我行我素。这样的大小姐，需要队友的多多包容与帮忙`,
             nvPuZhang:`谁能想到完美潇洒的女仆长背后身份则是隐藏于黑暗中的忍者呢？`,
             jieJieShi:`结界师的能力自然体现在他的结界上，适当的布置好结界能够有效的增幅队友，而不适当的结界则只会帮助你的对手`,
             shenMiXueZhe:`操弄言灵进行攻击，从不直接与对手对线，正是神秘学者给人的战斗体验。身为队友协同作战时总得聚精会神，因为说不准被打飞四散的言灵会往你头上飞来`,
-            wuRanZhe:`染污者操弄体内戾气，迸发强烈的力量。靠近她的人都会被她蔓延的戾气伤害，人人望而生畏。背弃神，诅咒神，婕姬海德没有宽恕，她品尝着最真实的痛楚`,
+            ranWuZhe:`染污者操弄体内戾气，迸发强烈的力量。靠近她的人都会被她蔓延的戾气伤害，人人望而生畏。背弃神，诅咒神，婕姬海德没有宽恕，她品尝着最真实的痛楚`,
         },
 		
 		skill:{
@@ -1198,6 +1198,230 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png',
             },
+
+            //染污者
+            shenQiZhiYi:{
+                group:['shenQiZhiYi_kaiShi','shenQiZhiYi_huoDe','shenQiZhiYi_shangHai','shenQiZhiYi_shiYong'],
+                subSkill:{
+                    kaiShi:{
+                        trigger:{global:'gameStart'},
+                        forced:true,
+                        content:function(){
+                            player.addNengLiang('shuiJing',1);
+                        }
+                    },
+                    huoDe:{
+                        trigger:{player:"changeZhiLiaoBefore"},
+                        forced:true,
+                        filter:function(event,player){
+                            return event.num>=0&&(!event.zhuanYi);
+                        },
+                        content:function(){
+                            trigger.cancel();
+                        }
+                    },
+                    shangHai:{
+                        trigger:{source:"zaoChengShangHai"},
+                        forced:true,
+                        filter:function(event,player){
+                            return event.player.zhiLiao>0;
+                        },
+                        content:function(){
+                            trigger.changeDamageNum(1);
+                        }
+                    },
+                    shiYong:{
+                        trigger:{player:'zhiLiao'},
+                        firstDo:true,
+                        forced:true,
+                        content:function(){
+                            trigger.cancel();
+                        }
+                    },
+                },
+                mod:{
+                    maxZhiLiao:function(player,num){
+                        return 0;
+                    },
+                    aiOrder:function(player,item,num){
+                        if(get.type(item)!='faShu') return;
+                        if(item.name=='zhongDu') return num+=0.5;
+                        else return;
+                    },
+                },
+                ai:{
+                    noZhiLiao:true,
+                }
+            },
+            liRuQuanYong:{
+                usable:1,
+                trigger:{player:['gongJiAfter','faShuAfter']},
+                filter:function(event,player,name){
+                    if(player.isHengZhi()) return false;
+                    if(player.countZhiShiWu('liQi')>=2) return false;
+                    if(name=='gongJiAfter') return get.is.gongJiXingDong(event);
+                    else return true;
+                },
+                content:function(){
+                    player.addZhiShiWu('liQi');
+                    player.addGongJi();
+                },
+                check:function(event,player){
+                    return player.countCards('h',card=>get.type(card)=='gongJi')>0;
+                }
+            },
+            kuangLiZhiXin:{
+                trigger:{player:['phaseBegin','chengShouShangHai']},
+                forced:true,
+                filter:function(event,player){
+                    if(player.isHengZhi()) return false;
+                    var num=get.info('liQi').intro.max;
+                    return player.countZhiShiWu('liQi')>=num;
+                },
+                content:function(){
+                    'step 0'
+                    player.chooseToDiscard(1,'h',true);
+                    'step 1'
+                    var next=player.chooseTarget(1,true,'移除目标角色2点[治疗]');
+                    next.set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target.side==player.side) return -1;
+                        return target.zhiLiao;
+                    });
+                    'step 2'
+                    result.targets[0].changeZhiLiao(-2);
+                    'step 3'
+                    player.hengZhi();
+                },
+                group:['kuangLiZhiXin_shangHai','kuangLiZhiXin_chongZhi'],
+                subSkill:{
+                    shangHai:{
+                        trigger:{source:"zaoChengShangHai"},
+                        forced:true,
+                        priority:-1,
+                        filter:function(event,player){
+                            return player.isHengZhi();
+                        },
+                        content:function(){
+                            trigger.changeDamageNum(1);
+                        }
+                    },
+                    chongZhi:{
+                        trigger:{player:"phaseEnd"},
+                        forced:true,
+                        filter:function(event,player){
+                            return player.isHengZhi()&&player.countZhiShiWu('liQi')==0;
+                        },
+                        content:function(){
+                            'step 0'
+                            player.chongZhi();
+                            'step 1'
+                            if(player.countNengLiang('shuiJing')>0){
+                                player.removeNengLiang('shuiJing');
+                            }else{
+                                event.finish();
+                            }
+                            'step 2'
+                            player.addNengLiang('baoShi',1);
+                        }
+                    }
+                },
+                mod:{
+                    cardEnabled:function(card,player){
+                        if(player.isHengZhi()&&card.name=='shengGuang'){
+                            return false;
+                        }else{
+                            return;
+                        }
+                    }
+                },
+
+            },
+            kuangLiZhiTi:{
+                trigger:{player:'zaoChengShangHai'},
+                forced:true,
+                priority:-1,
+                filter:function(event,player){
+                    return event.source&&player.isHengZhi()&&player.countZhiShiWu('liQi')>0;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('liQi');
+                    'step 1'
+                    trigger.changeDamageNum(1);
+                    if(trigger.num>4){
+                        trigger.num=4;
+                    }
+                }
+            },
+            shenZhiWuRan:{
+                trigger:{source:'zaoChengShangHai'},
+                priority:-2,
+                filter:function(event,player){
+                    return event.source&&player.isHengZhi()&&player.countZhiShiWu('liQi')>0;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('liQi');
+                    'step 1'
+                    trigger.changeDamageNum(1);
+                    trigger.canZhiLiao=false;
+                }
+            },
+            niuQuZhiAi:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    var list=['普通形态','狂戾形态'];
+                    player.chooseControl(list).set('prompt','选择你的形态');
+                    'step 2'
+                    if(result.control=='狂戾形态'){
+                        if(!player.isHengZhi()) player.hengZhi();
+                    }else{
+                        if(player.isHengZhi()) player.chongZhi();
+                    }
+                    'step 3'
+                    var list=['弃2张牌','摸2张牌'];
+                    player.chooseControl(list).set('prompt','选择你的行动').set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.countCards('h')>=3) return '弃2张牌';
+                        else return '摸2张牌';
+                    });
+                    'step 4'
+                    if(result.control=='弃2张牌'){
+                        player.chooseToDiscard(2,'h',true);
+                    }else{
+                        player.draw(2);
+                    }
+                    'step 5'
+                    var list=[0,1,2];
+                    player.chooseControl(list).set('prompt',`选择<span class='hong'>【戾气】</span>的数量`).set('ai',function(){
+                        return 1;
+                    });
+                    'step 6'
+                    player.setZhiShiWu('liQi',result.control);
+                },
+                check:function(event,player){
+                    return Math.random()<0.5;
+                },
+                ai:{
+                    baoShi:1,
+                }
+            },
+            liQi:{
+                intro:{
+                    content:'mark',
+                    max:2,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/hong.png',
+            },
         },
 		
 		translate:{
@@ -1311,17 +1535,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenQiZhiYi:"[被动]神弃之裔",
             shenQiZhiYi_info:"游戏初始时，你+1[水晶]。你的[治疗]上限为0[恒定]，你始终无法获得或使用[治疗]，你对拥有[治疗]的角色伤害额外+1。",
             liRuQuanYong:"[响应]戾如泉涌[回合限定]",
-            liRuQuanYong_info:"<span class='tiaoJian'>(仅【普通形态】下且你【戾气】数<2，[攻击行动]或[法术行动]结束后发动)</span>你+1【戾气】，额外+1[攻击行动]。",
+            liRuQuanYong_info:"<span class='tiaoJian'>(仅【普通形态】下且你</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数<2，[攻击行动]或[法术行动]结束后发动)</span>你+1<span class='hong'>【戾气】</span>，额外+1[攻击行动]。",
             kuangLiZhiXin:"[被动]狂戾之心[持续]",
-            kuangLiZhiXin_info:"<span class='tiaoJian'>(你的回合开始时或承受伤害时⑥，且【戾气】达到上限时)</span>你弃1张牌，指定目标角色移除2[治疗]，[横置]转为【狂戾形态】，此形态下你无法使用[圣光]，你造成的伤害额外+1。 <span class='tiaoJian'>(你的回合结束时若【戾气】数为0)</span>[转正]脱离【狂戾形态】，将你的1[水晶]转换为1[宝石]。",
+            kuangLiZhiXin_info:"<span class='tiaoJian'>(你的回合开始时或承受伤害时⑥，且</span><span class='hong'>【戾气】</span></span class='tiaoJian'>达到上限时)</span>你弃1张牌，指定目标角色移除2[治疗]，[横置]转为【狂戾形态】，此形态下你无法使用[圣光]，你造成的伤害额外+1。 <span class='tiaoJian'>(你的回合结束时若</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数为0)</span>[转正]脱离【狂戾形态】，将你的1[水晶]转换为1[宝石]。",
             kuangLiZhiTi:"[被动]狂戾之体",
-            kuangLiZhiTi_info:"<span class='tiaoJian'>(仅【狂戾形态】下且你【戾气】数>0，目标角色对你造成伤害时③)</span>移除1点【戾气】，本次伤害额外+1，但伤害最高为4。",
+            kuangLiZhiTi_info:"<span class='tiaoJian'>(仅【狂戾形态】下且你</span><span class='hong'>【戾气】</span></span class='tiaoJian'>数>0，目标角色对你造成伤害时③)</span>移除1点<span class='hong'>【戾气】</span>，本次伤害额外+1，但伤害最高为4。",
             shenZhiWuRan:"[响应]神智污染",
-            shenZhiWuRan_info:"<span class='tiaoJian'>(仅【狂戾形态】下，你对目标角色造成伤害时发动③，移除1点【戾气】)</span>本次伤害额外+1，本次你造成的伤害无法以[治疗]抵御。",
+            shenZhiWuRan_info:"<span class='tiaoJian'>(仅【狂戾形态】下，你对目标角色造成伤害时发动③，移除1点</span><span class='hong'>【戾气】</span></span class='tiaoJian'>)</span>本次伤害额外+1，本次你造成的伤害无法以[治疗]抵御。",
             niuQuZhiAi:"[启动]扭曲之爱",
-            niuQuZhiAi_info:"[宝石]调整你的形态为【普通形态】或【狂戾形态】，你弃2张牌或摸2张牌[强制]，并任意调整你的【戾气】数。",
+            niuQuZhiAi_info:"[宝石]调整你的形态为【普通形态】或【狂戾形态】，你弃2张牌或摸2张牌[强制]，并任意调整你的<span class='hong'>【戾气】</span>数。",
             liQi:"戾气",
-            liQi_info:"【戾气】为污染者专有指示物，上限为2。",
+            liQi_info:"<span class='hong'>【戾气】</span>为污染者专有指示物，上限为2。",
         },
 	};
 });
