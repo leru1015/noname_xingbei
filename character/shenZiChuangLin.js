@@ -14,7 +14,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
 		character:{
             jinGuiZhiNv:['jinGuiZhiNv_name','yongGroup',3,['gaoLingZhiHua','moFaRuMen','Magic','qiangYuYuanXing','youQingJiBan'],],
-            nvPuZhang:['nvPuZhang_name','jiGroup',5,[],],
+            nvPuZhang:['nvPuZhang_name','jiGroup',5,['yingZhiXue','miShuMuYing','shun','yingFeng','shiFengZhiDao','jinShu','fengXue','zhen','ying','mi'],],
             jieJieShi:['jieJieShi_name','huanGroup',5,[],],
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,[],],
             ranWuZhe:['ranWuZhe_name','xueGroup',4,[],],
@@ -229,6 +229,368 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.bool=true;
                 }
             },
+            //女仆长
+            yingZhiXue:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.countZhiShiWu('mi')>=1;
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('mi');
+                    'step 1'
+                    player.chooseTarget('将【风穴】转移或放置于目标对手前，他弃1张牌',true,function(card,player,target){
+                        if(target.hasZhiShiWu('fengXueX')) return false;
+                        return player.side!=target.side;
+                    }).set('ai',function(target){
+                        return Math.random();
+                    });
+                    'step 2'
+                    event.target=result.targets[0];
+                    if(player.storage.fengXue_target){
+                        var target=player.storage.fengXue_target;
+                        target.removeZhiShiWu('fengXueX');
+                        target.removeSkill('fengXueX');
+                    }
+                    'step 3'
+                    var target=event.target;
+                    player.storage.fengXue_target=target;
+                    target.storage.fengXue_player=player;
+                    target.addSkill('fengXueX');
+                    'step 4'
+                    target.addZhiShiWu('fengXueX');
+                    'step 5'
+                    event.target.chooseToDiscard(true);
+                },
+                check:function(event,player){
+                    var bool=game.hasPlayer(function(current){
+                        return current.hasZhiShiWu('fengXueX');
+                    });
+                    return player.countCards('h')>0&&!bool;
+                }
+            },
+            miShuMuYing:{
+                trigger:{source:'gongJiMingZhong'},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun');
+                },
+                content:function(){
+                    'step 0'
+                    player.addToExpansion('draw',trigger.cards,'log').gaintag.add('ying');
+                }
+            },
+            shun:{
+                trigger:{source:"gongJiWeiMingZhong"},
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event)&&player.getExpansions('ying').length>0;
+                },
+                usable:1,
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('ying');
+                    var result=await player.chooseCardButton(cards,'是否移除1个【影】，发动【瞬·影·杀】,额外+1[攻击行动]，本回合你的主动攻击无法应战但无法发动【秘术·摹影】').set('ai',function(button){
+                        var bool=_status.event.bool;
+                        if(bool) return Math.random();
+                        else return 0;
+                    }).set('bool',player.canGongJi()).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links,
+                    };
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cost_data,'ying');
+                    player.addGongJi();
+                    player.addTempSkill('shun_xiaoGuo');
+                },
+                subSkill:{
+                    xiaoGuo:{
+                        trigger:{player:'gongJiSheZhi'},
+                        direct:true,
+                        filter:function(event,player){
+                            return get.is.zhuDongGongJi(event);
+                        },
+                        content:function(){
+                            trigger.wuFaYingZhan();
+                        }
+                    }
+                },
+            },
+            yingFeng:{
+                trigger:{global:'phaseBegin'},
+                filter:function(event,player){
+                    return event.player.hasZhiShiWu('fengXueX')&&player.countZhiShiWu('mi')>0;;
+                },
+                async cost(event,trigger,player){
+                    var num=player.countZhiShiWu('mi');
+                    var list=[];
+                    for(var i=1;i<=num;i++){
+                        if(i>=4) break;
+                        list.push(i)
+                    }
+                    list.push('cancel2');
+                    var control=await player.chooseControl(list).set('prompt',`是否发动【影缝】,移除X点<span class='hong'>【糸】</span><br>他弃X张牌,你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】；<span class='tiaoJian'>(若因此弃牌数小于X)</span>对方士气-1`).set('ai',function(){
+                        return _status.event.x;
+                    }).set('x',list.length-2).forResultControl();
+                    event.result={
+                        bool:control!='cancel2',
+                        cost_data:control,
+                    }
+                },
+                content:function(){
+                    'step 0'
+                    player.removeZhiShiWu('mi',event.cost_data);
+                    event.num=event.cost_data;
+                    'step 1'
+                    trigger.player.chooseToDiscard(true,event.num);
+                    'step 2'
+                    event.cards=result.cards;
+                    if(event.cards.length>0){
+                        player.chooseCardButton(event.cards,true,1,'你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】').set('ai',function(button){
+                            return Math.random();
+                        });
+                    }else{
+                        event.goto(4);
+                    }
+                    'step 3'
+                    player.addToExpansion('draw',result.links,'log').gaintag.add('ying');
+                    'step 4'
+                    if(event.num>event.cards.length){
+                        trigger.player.changeShiQi(-1);
+                    }
+                }
+            },
+            shiFengZhiDao:{
+                trigger:{player:'phaseEnd'},
+                filter:function(event,player){
+                    return player.getExpansions('ying').length>=2;
+                },
+                async cost(event,trigger,player){
+                    var cards=player.getExpansions('ying');
+                    var result=await player.chooseCardButton(cards,2,`是否发动【侍奉之道】，移除2张【影】[展示]<br>你+1<span class='hong'>【糸】</span>；<span class='tiaoJian'>(若移除的【影】系别相同)</span>将其中1个【影】交给目标角色[强制]，然后你[横置][持续]`).set('ai',function(button){
+                        return 0.5-Math.random();
+                    }).forResult();
+                    event.result={
+                        bool:result.bool,
+                        cost_data:result.links,
+                    };
+                },
+                content:function(){
+                    'step 0'
+                    player.discard(event.cost_data,'ying',"showHiddenCards");
+                    event.cards=event.cost_data;
+                    'step 1'
+                    player.addZhiShiWu('mi');
+                    'step 2'
+                    var xiBie1=get.xiBie(event.cards[0]);
+                    var xiBie2=get.xiBie(event.cards[1]);
+                    if(xiBie1==xiBie2){
+                        player.chooseCardButton(event.cards,true,1,'将其中1个【影】交给目标角色[强制]').set('ai',function(button){
+                            return Math.random();
+                        });
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    event.card=result.links[0];
+                    player.chooseTarget('将【'+get.translation(event.card)+'】交给目标角色',true).set('ai',function(target){
+                        var player=_status.event.player;
+                        if(target.side==player.side){
+                            if(target.countCards('h')>=target.getHandcardLimit()) return -1;
+                            else Math.random();
+                        }else{
+                            if(target.countCards('h')>=target.getHandcardLimit()) return 2;
+                            else Math.random();
+                        }
+                    });
+                    'step 4'
+                    game.log(player,'交给了',result.targets[0],event.card);
+                    result.targets[0].gain(event.card,'draw');
+                    'step 5'
+                    player.hengZhi();
+                },
+                check:function(event,player){
+                    var num=Math.random();
+                    if(player.isHengZhi()) return num>0.1;
+                    var cards=player.getExpansions('ying');
+                    var num=get.countTongXiPai(cards);
+                    if(num>=2) return true;
+                    else return false;
+                }
+            },
+            jinShu:{
+                trigger:{global:'teShuEnd'},
+                filter:function(event,player){
+                    return event.player!=player;
+                },
+                content:function(){
+                    'step 0'
+                    player.addZhiShiWu('mi');
+                    'step 1'
+                    if(player.countZhiShiWu('mi')>=3&&player.isHengZhi()){
+                        var list=['是','否'];
+                        player.chooseControl(list).set('prompt',`是否额外移除3点<span class='hong'>【糸】</span><br>[重置]，对目标对手造成2点法术伤害③或指定目标队友弃1张牌`);
+                    }else{
+                        event.finish();
+                    }
+                    'step 2'
+                    if(result.control=='是'){
+                        player.removeZhiShiWu('mi',3);
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    player.chongZhi();
+                    'step 4'
+                    player.chooseTarget('对目标对手造成2点法术伤害③或指定目标队友弃1张牌',true,function(card,player,target){
+                        return target!=player;
+                    }).set('ai',function(target){
+                        return Math.random();
+                    });
+                    'step 5'
+                    var target=result.targets[0];
+                    if(target.side!=player.side){
+                        target.faShuDamage(2,player);
+                    }else{
+                        target.chooseToDiscard(true);
+                    }
+                }
+            },
+            fengXue:{},
+            fengXueX:{
+                intro:{
+                    name:"(专)风穴",
+                    content:`
+                    <span class="greentext">[被动]影之风</span><br>
+                    <span class='tiaoJian'>(若你拥有【风穴】，当你主动攻击命中的攻击牌置入弃牌堆时)</span>将该牌面朝下放置在女仆长角色旁作为【影】。 <span class='tiaoJian'>(你每次[攻击行动]结束时)</span>女仆长+1<span class='hong'>【糸】</span>。<br>
+                    <span class="greentext">[响应]风止</span><br>
+                    <span class='tiaoJian'>(若你拥有【风穴】，你的回合结束时发动)</span>将手牌补到上限[强制]，弃2张牌，将弃牌面朝下放置在女仆长角色旁作为【影】，然后移除【风穴】。
+                    `,
+                    nocount:true,
+                },
+                markimage:'image/card/zhuanShu/fengXue.png',
+                onremove:'storage',
+                global:'fengXueX_yingZhiFeng1_1',
+                group:['fengXueX_yingZhiFeng1_1','fengXueX_yingZhiFeng1_2','fengXueX_yingZhiFeng2','fengXueX_fengZhi'],
+                subSkill:{
+                    yingZhiFeng1_1:{
+                        trigger:{player:'gongJiMingZhong'},
+                        direct:true,
+                        filter:function(event,player){
+                            if(!player.hasZhiShiWu('fengXueX')) return false;
+                            return get.is.zhuDongGongJi(event)&&event.cards.length>0;
+                        },
+                        content:function(){
+                            player.storage.yingZhiFengCard=trigger.cards[0];
+                        }
+                    },
+                    yingZhiFeng1_2:{
+                        trigger:{global:'cardsDiscardAfter'},
+                        getIndex(event) {
+                            const cards = event.getd();
+                            if (!cards.length) return [];
+                            return cards;
+                        },
+                        filter(event, player, triggername, card) {
+                            if(!player.hasZhiShiWu('fengXueX')) return false;
+                            if(player.storage.yingZhiFengCard!=card) return false;
+                            return get.position(card, true) === "d";
+                        },
+                        forced:true,
+                        content:function(){
+                            'step 0'
+                            const cards = event.indexedData;
+                            player.storage.fengXue_player.addToExpansion('draw',cards,'log').gaintag.add('ying');
+                            'step 1'
+                            delete player.storage.yingZhiFengCard;
+                        }
+                    },
+                    yingZhiFeng2:{
+                        trigger:{player:'gongJiEnd'},
+                        filter:function(event,player){
+                            return get.is.gongJiXingDong(event)&&player.hasZhiShiWu('fengXueX');
+                        },
+                        forced:true,
+                        content:function(){
+                            player.storage.fengXue_player.addZhiShiWu('mi');
+                        }
+                    },
+                    fengZhi:{
+                        trigger:{player:'phaseEnd'},
+                        filter:function(event,player){
+                            return player.hasZhiShiWu('fengXueX');
+                        },
+                        content:function(){
+                            'step 0'
+                            var num=player.getHandcardLimit();
+                            player.drawTo(num);
+                            'step 1'
+                            player.chooseToDiscard(2,true);
+                            'step 2'
+                            if(result.cards.length>0){
+                                player.storage.fengXue_player.addToExpansion('draw',result.cards,'log').gaintag.add('ying');
+                            }
+                            'step 3'
+                            player.removeZhiShiWu('fengXueX');
+                            'step 4'
+                            player.removeSkill('fengXueX');
+                        }
+                    },
+                }
+            },
+            zhen:{
+                type:'qiDong',
+                trigger:{player:'qiDong'},
+                filter:function(event,player){
+                    return player.canBiShaBaoShi();
+                },
+                content:function(){
+                    'step 0'
+                    player.removeBiShaBaoShi();
+                    'step 1'
+                    player.chooseCard('h',2,true,'将2张手牌面朝下放置在你角色旁作为【影】');
+                    'step 2'
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('ying');
+                },
+                check:function(event,player){
+                    return player.countCards('h')>3&&player.countExpansions('ying')<=1;
+                }
+            },
+            ying:{
+                intro:{
+                    markcount:'expansion',
+                    mark:function(dialog,storage,player){
+						var cards=player.getExpansions('ying');
+						if(player.isUnderControl(true)) dialog.addAuto(cards);
+						else return '共有'+cards.length+'张牌';
+					},
+                },
+                onremove:function(player, skill) {
+                    const cards = player.getExpansions(skill);
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
+                direct:true,
+                trigger:{player:'addToExpansionEnd'},
+                filter:function(event,player){
+                    return player.getExpansions('ying').length>3;
+                },
+                content:function(){
+                    'step 0'
+                    var cards=player.getExpansions('ying');
+                    var next=player.chooseCardButton(cards,true,cards.length-3,`舍弃${cards.length-3}张【影】`);
+                    'step 1'
+                    player.discard(result.links);
+                }
+            },
+            mi:{
+                intro:{
+                    content:'mark',
+                    max:4,
+                },
+                onremove:'storage',
+                markimage:'image/card/zhiShiWu/hong.png',
+            },
         },
 		
 		translate:{
@@ -258,21 +620,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
             //女仆长
             yingZhiXue:"[启动]影之穴",
-            yingZhiXue_info:"<span class='tiaoJian'>(移除1点【糸】)</span>将【风穴】转移或放置于目标对手前，他弃1张牌。",
+            yingZhiXue_info:"<span class='tiaoJian'>(移除1点</span><span class='hong'>【糸】</span><span class='tiaoJian'>)</span>将【风穴】转移或放置于目标对手前，他弃1张牌。",
             miShuMuYing:"[响应]秘术·摹影",
             miShuMuYing_info:"<span class='tiaoJian'>(主动攻击命中时发动②)</span>将本次攻击牌面朝下放置在你角色旁作为【影】。",
             shun:"[响应]瞬·影·杀[回合限定]",
             shun_info:"<span class='tiaoJian'>(主动攻击未命中时发动②，移除1个【影】)</span>额外+1[攻击行动]，本回合你的主动攻击无法应战但无法发动【秘术·摹影】。",
             yingFeng:"[响应]影缝",
-            yingFeng_info:"<span class='tiaoJian'>(持有【风穴】的目标对手回合开始时发动，移除X点【糸】，X<4)</span>他弃X张牌，你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】；<span class='tiaoJian'>(若因此弃牌数小于X)</span>对方士气-1。",
+            yingFeng_info:"<span class='tiaoJian'>(持有【风穴】的目标对手回合开始时发动，移除X点</span><span class='hong'>【糸】</span><span class='tiaoJian'>，X<4)</span>他弃X张牌，你观看并将其中1张弃牌面朝下放置在你角色旁作为【影】；<span class='tiaoJian'>(若因此弃牌数小于X)</span>对方士气-1。",
             shiFengZhiDao:"[响应]侍奉之道",
-            shiFengZhiDao_info:"<span class='tiaoJian'>(你的回合结束时发动，移除2个【影】[展示])</span>你+1【糸】；<span class='tiaoJian'>(若移除的【影】系别相同)</span>将其中1个【影】交给目标角色[强制]，然后你[横置][持续]。",
+            shiFengZhiDao_info:"<span class='tiaoJian'>(你的回合结束时发动，移除2个【影】[展示])</span>你+1<span class='hong'>【糸】</span>；<span class='tiaoJian'>(若移除的【影】系别相同)</span>将其中1个【影】交给目标角色[强制]，然后你[横置][持续]。",
             jinShu:"[响应]禁术·影牢",
-            jinShu_info:"<span class='tiaoJian'>(其他角色[特殊行动]结束时发动)</span>你+1【糸】；<span class='tiaoJian'>(若你已[横置]，额外移除3点【糸】)</span>[重置]，对目标对手造成2点法术伤害③或指定目标队友弃1张牌。",
+            jinShu_info:"<span class='tiaoJian'>(其他角色[特殊行动]结束时发动)</span>你+1<span class='hong'>【糸】</span>；<span class='tiaoJian'>(若你已[横置]，额外移除3点</span><span class='hong'>【糸】</span><span class='tiaoJian'>)</span>[重置]，对目标对手造成2点法术伤害③或指定目标队友弃1张牌。",
             fengXue:"(专)风穴",
             fengXue_info:`
             <span class="greentext">[被动]影之风</span><br>
-            <span class='tiaoJian'>(若你拥有【风穴】，当你主动攻击命中的攻击牌置入弃牌堆时)</span>将该牌面朝下放置在女仆长角色旁作为【影】。 <span class='tiaoJian'>(你每次[攻击行动]结束时)</span>女仆长+1【糸】。<br>
+            <span class='tiaoJian'>(若你拥有【风穴】，当你主动攻击命中的攻击牌置入弃牌堆时)</span>将该牌面朝下放置在女仆长角色旁作为【影】。 <span class='tiaoJian'>(你每次[攻击行动]结束时)</span>女仆长+1<span class='hong'>【糸】</span>。<br>
             <span class="greentext">[响应]风止</span><br>
             <span class='tiaoJian'>(若你拥有【风穴】，你的回合结束时发动)</span>将手牌补到上限[强制]，弃2张牌，将弃牌面朝下放置在女仆长角色旁作为【影】，然后移除【风穴】。
             `,
@@ -281,8 +643,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             ying:"影",
             ying_info:"【影】为女仆长专有盖牌，上限为3。",
             mi:"糸",
-            mi_info:"【糸】为女仆长专有指示物，上限为4。",
-            fengXueX_yingZhiFeng1:"影之风",
+            mi_info:"<span class='hong'>【糸】</span>为女仆长专有指示物，上限为4。",
+            fengXueX_yingZhiFeng1_1:"",
+            fengXueX_yingZhiFeng1_2:"影之风",
             fengXueX_yingZhiFeng2:"影之风",
             fengXueX_fengZhi:"风止",
 
