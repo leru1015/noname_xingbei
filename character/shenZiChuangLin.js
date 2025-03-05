@@ -267,7 +267,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var bool=game.hasPlayer(function(current){
                         return current.hasZhiShiWu('fengXueX');
                     });
-                    return player.countCards('h')>0&&!bool;
+                    return player.countCards('h')>0&&!bool&&(player.canFaShu()||player.canGongJi());
                 }
             },
             miShuMuYing:{
