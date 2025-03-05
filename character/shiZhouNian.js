@@ -1247,10 +1247,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(!player.canBiShaShuiJing()){
                         return false;
                     }
-                    for(var p of game.players){
-                        return p.hasJiChuXiaoGuo();
-                    }
-                    return false;
+                    return game.hasPlayer(function(current){
+                        return current.hasJiChuXiaoGuo();
+                    });
                 },
                 async cost(event, trigger, player) {
                     event.result = await player.chooseTarget(function(card,player,target){
