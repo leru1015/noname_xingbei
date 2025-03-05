@@ -4741,16 +4741,20 @@ export default () => {
 				discard:function(){
 					"step 0"
 					//game.log(player,'弃置了',cards);
-					if(event.gaiPai){//移除了盖牌日志
-						let name=get.translation(event.gaiPai);
-						game.log(player,'移除了',cards.length,'张','【'+name+'】');
-					}else{
-						game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
-					}
-					//event.done=player.lose(cards,event.position,'visible');
 					event.done=player.lose(cards,event.position);
 					event.done.type='discard';
 					if(event.discarder) event.done.discarder=event.discarder;
+					if(event.visible) event.done.visible=true;
+					if(event.gaiPai){//移除了盖牌日志
+						let name=get.translation(event.gaiPai);
+						if(event.visible){
+							game.log(player,'移除了',cards.length,'张','【'+name+'】,',"(",card,")");
+						}else {
+							game.log(player,'移除了',cards.length,'张','【'+name+'】');
+						}
+					}else{
+						game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
+					}
 					"step 1"
 					if(event.baoPai==true){
 						if(event.shiQiXiaJiang!=false){
