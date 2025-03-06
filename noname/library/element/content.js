@@ -3277,6 +3277,15 @@ export const Content = {
 							if (event.choice.length === 1 || skillsToChoose.length === 1) {
 								event.current = currentChoice;
 							} else {
+								let bool=false;
+								for(let i=0;i<skillsToChoose.length;i++){
+									let info=get.info(skillsToChoose[i]);
+									if(info.silent||info.forced||info.direct){
+										bool=true;
+										break;
+									}
+								}
+								if(!bool) skillsToChoose.push("cancel2");
 								const currentPlayer = currentChoice.player;
 								const next = currentPlayer.chooseControl(skillsToChoose);
 								next.set("prompt", "选择下一个触发的技能");
@@ -3286,7 +3295,9 @@ export const Content = {
 								const { result } = await next;
 								//千里走单骑全责，把敌人打死可能会打断chooseControl
 								if (result) {
-									event.current = usableSkills.find(info => info.skill == result.control);
+									if(result.control=="cancel2"){
+										return;
+									}else event.current = usableSkills.find(info => info.skill == result.control);
 								} else {
 									event.current = usableSkills[0];
 								}
