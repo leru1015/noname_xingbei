@@ -2830,12 +2830,12 @@ export default () => {
                 filter:function(event,player){
                     return player.hasExpansions('_zhongDu');
                 },
-                content:function(){
+                content:async function(event,trigger,player){
                     var target;
                     while(player.storage.zhongDu.length){
                         target=player.storage.zhongDu.pop();
-                        var next=player.damage(target);
-                        next.faShu=true;
+                        var next=player.faShuDamage(target);
+						await next;
                     }
                     player.discard(player.getExpansions('_zhongDu'),'_zhongDu').set('visible',true);
                 },
