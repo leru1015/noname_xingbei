@@ -2185,8 +2185,6 @@ export default () => {
 				}
 			},
 		},
-		
-
 		translate:{
 			versus_single_control_config:'单人控制',
 		},
@@ -2201,8 +2199,6 @@ export default () => {
 			},
 		},
 		get:{
-			
-
 			rawAttitude:function(from,to){
 				if(from.side==to.side){
 					return 6;
@@ -2211,12 +2207,9 @@ export default () => {
 					return -6;
 				}
 			},
-
-			
-
 		},
 		help:{
-			
+			'星杯模式':`<div style="margin:10px">星杯模式</div><br>使对方士气降至0或者我方合成5个星杯即可获得胜利。对局中，右下角查看相关信息。`
 		}
 	};
 };
