@@ -13209,6 +13209,15 @@ export class Library {
 					_status.renku = state.renku;
 					lib.inpile = state.inpile;
 					lib.inpile_nature = state.inpile_nature;
+					//xingBei
+					game.hongShiQi = state.hongShiQi;
+					game.lanShiQi = state.lanShiQi;
+					game.hongZhanJi = state.hongZhanJi;
+					game.lanZhanJi = state.lanZhanJi;
+					game.hongXingBei = state.hongXingBei;
+					game.lanXingBei = state.lanXingBei;
+					game.moDanFangXiang = state.moDanFangXiang;
+					
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
 						var info = state.players[i];

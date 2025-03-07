@@ -1374,6 +1374,14 @@ export class Get extends GetCompatible {
 			inpile: lib.inpile,
 			inpile_nature: lib.inpile_nature,
 			renku: _status.renku,
+			//xingBei
+			hongZhanJi: game.hongZhanJi,
+			lanZhanJi: game.lanZhanJi,
+			hongShiQi: game.hongShiQi,
+			lanShiQi: game.lanShiQi,
+			hongXingBei: game.hongXingBei,
+			lanXingBei: game.lanXingBei,
+			moDanFangXiang: game.moDanFangXiang,
 		};
 		for (var i in lib.playerOL) {
 			state.players[i] = lib.playerOL[i].getState();

@@ -68,8 +68,7 @@ export default () => {
 			"step 3"
 			if(_status.connectMode){
 				_status.mode=lib.configOL.versus_mode;
-				game.zhanJiList={hongShiQi:game.hongShiQi,lanShiQi:game.lanShiQi,hongZhanJi:game.hongZhanJi,lanZhanJi:game.lanZhanJi,hongXingBei:game.hongXingBei,lanXingBei:game.lanXingBei};
-                _status.onreconnect=[function(zhanJiList){
+                _status.onreconnect=[function(){
                     var players=game.players;
                     for(var i=0;i<players.length;i++){
                         if(players[i].side==true){
@@ -79,16 +78,9 @@ export default () => {
                             players[i].node.identity.firstChild.innerHTML='蓝';
                         }
                     }
-					game.hongShiQi=zhanJiList['hongShiQi'];
-					game.lanShiQi=zhanJiList['lanShiQi'];
-					game.hongZhanJi=zhanJiList['hongZhanJi'];
-					game.lanZhanJi=zhanJiList['lanZhanJi'];
-					game.hongXingBei=zhanJiList['hongXingBei'];
-					game.lanXingBei=zhanJiList['lanXingBei'];
-					if(zhanJiList['moDanFangXiang']) game.moDanFangXiang=zhanJiList['moDanFangXiang'];
                     ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
                     ui.updateShiQiInfo();
-                },game.zhanJiList];
+                },];
 			};
 			var players=get.players(lib.sort.position);
 			var info=[];
