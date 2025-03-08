@@ -36,10 +36,9 @@
 	}
 
 	// 必须启用serviceWorker
-	/*
 	if (!("serviceWorker" in navigator)) {
 		return alert(globalText.SERVICE_WORKER_NOT_SUPPORT);
-	}*/
+	}
 
 	// 检查 window 对象中是否存在 "__core-js_shared__" 属性
 	if (!("__core-js_shared__" in window)) {
