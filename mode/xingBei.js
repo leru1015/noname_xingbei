@@ -35,6 +35,7 @@ export default () => {
 				return;
 			}
 			if(_status.connectMode){
+				lib.configOL.guDingRenShu=true;
 				game.waitForPlayer(function(){//联机人数确定
 					switch(lib.configOL.versus_mode){
 						case '2v2':lib.configOL.number=4;break;
