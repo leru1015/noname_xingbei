@@ -4765,11 +4765,12 @@ export class Library {
 						map.connect_choose_mode.show();
 					}	
 				},
+				/*
 				connect_remark:{
 					name:'房间备注',
 					input:true,
 					frequent:true,
-				},
+				},*/
 				connect_versus_mode:{
 					name:'游戏模式',
 					init:'2v2',
