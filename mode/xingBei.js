@@ -97,27 +97,9 @@ export default () => {
 			game.addVideo('init',null,info);
 			event.trigger('gameStart');
             'step 4'
-			if(_status.connectMode){
-                _status.first_less=true;
-                
-                var firstChoose=(_status.firstAct||game.players.randomGet());
-                if(firstChoose.next.side==firstChoose.side){
-                    firstChoose=firstChoose.next;
-                }
-                game.gameDraw(firstChoose,function(player){
-                    return 4;
-                });
-                game.phaseLoop(firstChoose);
-
-				event.finish();
-			}
-			else{
-                _status.first_less=true;
-                _status.first_less_forced=true;
-                var firstChoose=_status.firstAct;
-                game.gameDraw(firstChoose);
-                game.phaseLoop(firstChoose);
-			}
+			var firstChoose=(_status.firstAct||game.players.randomGet());
+			game.gameDraw(firstChoose);
+            game.phaseLoop(firstChoose);
 		},
 		game:{
 			checkResult:function(me){
