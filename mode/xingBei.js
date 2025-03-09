@@ -443,11 +443,6 @@ export default () => {
 					}
 
 					'step 3'
-					for(var i=0;i<game.players.length;i++){
-						game.players[i].storage.moDan=false;
-						game.players[i].storage.zhongDu=[];
-					}
-
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
@@ -836,15 +831,7 @@ export default () => {
 					if(event.ai_targets.length>0){
 						event.withai=true;
 						game.pause();
-					}
-					for(var i=0;i<game.players.length;i++){
-						game.players[i].storage.moDan=false;
-						game.players[i].storage.zhongDu=[];
-					}
-
-					
-
-					
+					}	
 					'step 5'
 					game.broadcastAll(function(id){
 						var dialog=get.idDialog(id);
