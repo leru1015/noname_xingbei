@@ -8743,7 +8743,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.gaintag.includes('jian')&&player.getExpansions('jian').length>8;
                 },
                 direct:true,
-                contentx:function(){
+                content:function(){
                     'step 0'
                     var num=player.getExpansions('jian').length;
                     var cards=player.getExpansions('jian');
