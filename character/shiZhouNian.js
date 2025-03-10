@@ -6730,7 +6730,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 forced:true,
                 content:function(){
-                    trigger.num=4
+                    trigger.zaoChengShangHaiMax=4
                 }
             },
             xuLiYiji:{
