@@ -4856,6 +4856,15 @@ export class Library {
 					}else{
 						map.team_sequence.show();
 					}
+					if(config.phaseswap==true){
+						map.change_identity.hide();
+						map.free_choose.hide();
+						map.viewHandcard.hide();
+					}else{
+						map.change_identity.show();
+						map.free_choose.show();
+						map.viewHandcard.show();
+					}
 				},
 				versus_mode:{
 					name:'游戏模式',
