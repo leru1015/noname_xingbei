@@ -2318,16 +2318,6 @@ export default () => {
 		translate:{
 			versus_single_control_config:'单人控制',
 		},
-		skill:{
-			viewHandcard:{
-				ai:{
-					viewHandcard:true,
-					skillTagFilter:function(player,tag,target){
-						return player.side==target.side;
-					},
-				},
-			},
-		},
 		get:{
 			rawAttitude:function(from,to){
 				if(from.side==to.side){

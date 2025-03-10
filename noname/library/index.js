@@ -12338,6 +12338,15 @@ export class Library {
 			},
 		},*/
 		//xingBei
+		viewHandcard:{
+			ai:{
+				viewHandcard:true,
+				skillTagFilter:function(player,tag,target){
+					return player.side==target.side;
+				},
+			},
+		},
+
 		_qiDong:{
 			trigger:{player:'triggerEnd'},
 			direct:true,
