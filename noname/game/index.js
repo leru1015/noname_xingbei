@@ -5999,7 +5999,7 @@ export class Game extends GameCompatible {
 		dialog.add(ui.create.div(".placeholder"));
 
 		for (let i = 0; i < game.players.length; i++) {
-			if (!_status.connectMode && game.players[i].isUnderControl(true) && game.layout != "long2") continue;
+			//if (!_status.connectMode && game.players[i].isUnderControl(true) && game.layout != "long2") continue;
 			let hs = game.players[i].getCards("h");
 			if (hs.length) {
 				dialog.add('<div class="text center">' + get.translation(game.players[i]) + "</div>");
