@@ -475,7 +475,7 @@ export default () => {
 						}
 					}
 
-					'step 3'
+					'step 2'
 					setTimeout(function(){
 						ui.arena.classList.remove('choose-character');
 					},500);
