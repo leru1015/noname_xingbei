@@ -5,7 +5,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             shenZiChuangLin:{
-                'FAQ':['FAQ_jinGuiZhiNv'],
+                'FAQ':['FAQ_jinGuiZhiNv','FAQ_shenMiXueZhe'],
                 "3xing":['jinGuiZhiNv'],
                 "3.5xing":[],
                 "4xing":['shenMiXueZhe','ranWuZhe'],
@@ -21,6 +21,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             ranWuZhe:['ranWuZhe_name','xueGroup',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
 
             FAQ_jinGuiZhiNv:['jinGuiZhiNv_name','yongGroup',3,['gaoLingZhiHua','FAQ_moFaRuMen','Magic','qiangYuYuanXing','FAQ_youQingJiBan'],['character:jinGuiZhiNv']],
+            FAQ_shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','FAQ_shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],['character:shenMiXueZhe']],
 		},
         characterIntro:{
             jinGuiZhiNv:`身为一位魔法的初学者，艾丽卡施法总是让人提心吊胆，因为连她自己也不知道会发生什么事情。然而她似乎无法体会身旁人的种种暗示，依然我行我素。这样的大小姐，需要队友的多多包容与帮忙`,
@@ -1529,6 +1530,48 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.bool=true;
                 }
             },
+
+            FAQ_shouHuLing:{
+                forced:true,
+                trigger:{target:'gongJiMingZhong'},
+                firstDo:true,
+                filter:function(event,player){
+                    return get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
+                },
+                content:function(){
+                    'step 0'
+                    if(player.getExpansions('yanLing').length>0){
+                        var cards=player.getExpansions('yanLing');
+                        player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
+                            return Math.random();
+                        });
+                    }else event.goto(2);
+                    'step 1'
+                    player.discard(result.links,'yanLing');
+                    'step 2'
+                    if(player.countZhiShiWu('miShu')>0){
+                        var list=['是','否'];
+                        player.chooseControl(list).set('prompt',`是否移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】`);
+                    }else{
+                        event.finish();
+                    }
+                    'step 3'
+                    if(result.control=='是'){
+                        player.removeZhiShiWu('miShu');
+                    }else{
+                        event.finish();
+                    }
+                    'step 4'
+                    if(player.countCards('h')>0){
+                        player.chooseCard('h',true,'将1张手牌面朝上放置在你的角色旁【展示】作为【言灵】');
+                    }
+                    'step 5'
+                    player.showCards(result.cards);
+                    event.cards=result.cards;
+                    'step 6'
+                    player.addToExpansion('draw',event.cards,'log').gaintag.add('yanLing');
+                }
+            },
         },
 		
 		translate:{
@@ -1660,6 +1703,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             FAQ_moFaRuMen_info:"你摸1张牌[强制][展示]，根据所展示的牌依序触发相应效果：<span class='tiaoJian'>(若有法术牌)</span>对2名目标对手各造成1点法术伤害③，<span class='tiaoJian'>(若有X张咏类命格)</span>你对X名目标角色各造成1点法术伤害③，<span class='tiaoJian'>(若有X张水系牌)</span>指定X名目标角色各+1[治疗]。",
             FAQ_youQingJiBan:"[响应]友情羁绊[回合限定]",
             FAQ_youQingJiBan_info:"[宝石]<span class='tiaoJian'>(发动【魔法入门】时发动)</span>将“你摸1张牌[强制][展示]”改为“我方2名角色各弃1张牌[强制][展示]”，语句最后增加“各摸1张牌[强制]”。",
+
+            FAQ_shenMiXueZhe:'FAQ神秘学者',
+            FAQ_shenMiXueZhe_prefix:'FAQ',
+            FAQ_shouHuLing:'[被动]守护灵',
+            FAQ_shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】。<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前，若你移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
         },
 	};
 });
