@@ -5,7 +5,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		connect:true,
         characterSort:{
             shiZhouNian:{
-                'FAQ':['FAQ_xianZhe'],
+                'FAQ':['FAQ_xianZhe','FAQ_geDouJia'],
                 "3xing":['fengZhiJianSheng','kuangZhanShi','shenJianShou','fengYinShi','anShaZhe','shengNv','tianShi','moFaShaoNv'],
                 "3.5xing":['moJianShi','shengQiangQiShi','yuanSuShi','maoXianJia','wenYiFaShi','zhongCaiZhe','jingLingSheShou','nvWuShen'],
                 "4xing":['shenGuan','yingLingRenXing','yinYangShi','moGong','xianZhe','lingFuShi','cangYanMoNv','moQiang','xueSeJianLing','qiDaoShi','hongLianQiShi'],
@@ -52,7 +52,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shouLingWuShi:['shouLingWuShi_name','jiGroup','4/5',['wuZheCanXin','yiJiWuNian','shouHunYiNian','shouHunJingJie','shouFan','yuHunLiuJuHeXingTai','niFanJuHeZhan','yuHunLiuJuHeShi','shouHun','canXin'],],
             shengGong:['shengGong_name','shengGroup','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
 
-            FAQ_xianZhe:['xianZhe_name','yongGroup',4,['zhiHuiFaDian','FAQ_faShuFanTan','moDaoFaDian','shengJieFaDian'],['character:xianZhe']]
+            FAQ_xianZhe:['xianZhe_name','yongGroup',4,['zhiHuiFaDian','FAQ_faShuFanTan','moDaoFaDian','shengJieFaDian'],['character:xianZhe']],
+            FAQ_geDouJia:['geDouJia_name','jiGroup','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','FAQ_qiJueBengJi','douShenTianQu','douQi'],['character:geDouJia']],
 
 		},
 
@@ -8795,6 +8796,33 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     one_damage:true,
                 }
             },
+            FAQ_qiJueBengJi:{
+                trigger:{player:"gongJiBefore"},
+                filter:function(event,player){
+                    if(!player.hasZhiShiWu('douQi')) return false;
+                    if(event.customArgs.xuLiYiji) return false;
+                    return event.yingZhan!=true;
+                },
+                content:function(){
+                    'step 0'
+                    trigger.customArgs.qiJueBengJi=true;
+                    player.removeZhiShiWu('douQi');
+                    trigger.wuFaYingZhan();
+                },
+                group:'FAQ_qiJueBengJi_ranHou',
+                subSkill:{
+                    ranHou:{
+                        trigger:{player:'gongJiAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.customArgs.qiJueBengJi;
+                        },
+                        content:function(){
+                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                        }
+                    }
+                },
+            },
         },
 		
 		translate:{
@@ -9479,6 +9507,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             FAQ_faShuFanTan:"[响应]法术反弹",
             FAQ_faShuFanTan_info:"<span class='tiaoJian'>(你每次承受法术伤害后⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
             
+            FAQ_geDouJia:"FAQ格斗家",
+            FAQ_geDouJia_prefix: "FAQ",
+            FAQ_qiJueBengJi:"[响应]气绝崩击",
+            FAQ_qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，本次攻击结束后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
 		},
 	};
 });
