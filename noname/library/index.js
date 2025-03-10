@@ -15090,7 +15090,7 @@ export class Library {
 					const span = document.createElement("span"),
 						style = span.style;
 					style.fontFamily = "MotoyaLMaru";
-					style.transform = "scaleY(0.5)";
+					style.fontSize = "10px";
 					style.color = "#E9F0F6";
 					span.textContent = "FAQ";
 					return span.outerHTML;
