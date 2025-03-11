@@ -6742,6 +6742,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xuLiYiji:{
                 trigger:{player:"gongJiBefore"},
                 filter:function(event,player){
+                    if(!player.hasSkill('douQi')) return false;
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
                     if(event.customArgs.qiJueBengJi) return false;
                     return event.yingZhan!=true;
@@ -6774,6 +6775,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             nianDan:{
                 trigger:{player:['faShuEnd']},
                 filter:function(event,player){
+                    if(!player.hasSkill('douQi')) return false;
                     if(player.countZhiShiWu('douQi')>=lib.skill.douQi.intro.max) return false;
                     return true;
                 },
@@ -8654,6 +8656,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['faShu'],
                 filter:function(event,player){
+                    if(!player.hasSkill('DWZyong')) return false;
                     return player.canBiShaBaoShi();
                 },
                 content:function(){
