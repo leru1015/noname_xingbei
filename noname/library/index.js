@@ -12865,7 +12865,7 @@ export class Library {
 		},
 		
 		_init:{
-			trigger:{player:'gameStart'},
+			trigger:{global:'gameStart'},
 			direct:true,
 			firstDo:true,
 			content:function(){
