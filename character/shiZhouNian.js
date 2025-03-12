@@ -7697,7 +7697,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.zhiShiWu=='shouHun'&&event.num<0;
                 },
                 content:function(){
-                    player.addZhiShiWu('canXin',trigger.num);
+                    player.addZhiShiWu('canXin',-trigger.num);
                 },
                 group:'shouHunYiNian_zhuDongGongJiMingZhong',
                 subSkill:{
