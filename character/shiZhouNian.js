@@ -7660,7 +7660,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             yiJiWuNian:{
-                trigger:{player:'gongJiEnd'},
+                trigger:{player:'gongJiAfter'},
                 filter:function(event,player){
                     return get.is.gongJiXingDong(event)&&player.countZhiShiWu('canXin')>=4;
                 },
