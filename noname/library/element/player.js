@@ -10957,20 +10957,21 @@ export class Player extends HTMLDivElement {
 	*/
 	changeZhiShiWu () {
 		var num_flag=0;
+		var num,max,zhiShiWu,forced;
 		for(var i=0;i<arguments.length;i++){
 			if(typeof arguments[i]=='number'){
 				if(num_flag==0){
-					var num=arguments[i];
-					var num_flag=1;
+					num=arguments[i];
+					num_flag=1;
 				}else if(num_flag==1){
-					var max=arguments[i];
+					max=arguments[i];
 				}
 			}
 			else if(typeof arguments[i]=='string'){
-				var zhiShiWu=arguments[i];
+				zhiShiWu=arguments[i];
 			}
 			else if(typeof arguments[i]=='boolean'){
-				var forced=arguments[i];
+				forced=arguments[i];
 			}
 		}
 		if(!this.hasSkill(zhiShiWu)&&!forced) return;
@@ -10978,11 +10979,11 @@ export class Player extends HTMLDivElement {
 		var info=get.info(zhiShiWu);
 		if(num>0){
 			if(typeof max=='number'){
-				var max=max;
+				max=max;
 			}else if(info&&info.intro&&info.intro.max){
-				var max=info.intro.max;
+				max=info.intro.max;
 			}else{
-				var max=Infinity;
+				max=Infinity;
 			}
 			var current=this.countMark(zhiShiWu);
 			if(current+num>max){
@@ -11001,10 +11002,32 @@ export class Player extends HTMLDivElement {
 			next.num=num;
 			next.setContent('changeZhiShiWu');
 			return next;
+		}else{
+			return;
 		}
 	}
-	addZhiShiWu(...args){//添加指示物
-		this.changeZhiShiWu(...args);
+	addZhiShiWu(){//添加指示物
+		var num_flag=0;
+		var num,max,zhiShiWu,forced;
+		for(var i=0;i<arguments.length;i++){
+			if(typeof arguments[i]=='number'){
+				if(num_flag==0){
+					num=arguments[i];
+					num_flag=1;
+				}else if(num_flag==1){
+					max=arguments[i];
+				}
+			}
+			else if(typeof arguments[i]=='string'){
+				zhiShiWu=arguments[i];
+			}
+			else if(typeof arguments[i]=='boolean'){
+				forced=arguments[i];
+			}
+		}
+		if(typeof num!='number'||!num) num=1;
+		if(num<0) num=-num;
+		return this.changeZhiShiWu(num,max,zhiShiWu,forced);
 	}
 	countZhiShiWu(zhiShiWu){//统计指示物
 		return this.countMark(zhiShiWu);
