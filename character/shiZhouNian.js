@@ -3519,7 +3519,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         event.target=result.targets[0];
                         if(result.targets[0].countNengLiang('shuiJing')){
                             event.target.removeNengLiang('shuiJing');
-                        }
+                        }else event.finish();
                     }else event.finish()
                     'step 3'
                     event.target.addNengLiang('baoShi');
