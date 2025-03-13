@@ -3531,7 +3531,7 @@ export class Player extends HTMLDivElement {
 				hp.classList.add("text");
 			} else if (get.is.newLayout() && (maxHp > 9 || (maxHp > 5 && this.classList.contains("minskin")) || ((game.layout == "mobile" || game.layout == "long") && this.dataset.position == 0 && maxHp > 7))) {
 			 */
-			} else if (maxHp > 5) {
+			} else if (maxHp > 8) {
 				hp.innerHTML = this.hp + "<br>/<br>" + maxHp + "<div></div>";
 				if (this.hp == 0) {
 					hp.lastChild.classList.add("lost");
