@@ -4171,9 +4171,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{source:'gongJiWeiMingZhong'},
                 filter:function(event,player){
                     if(event.yingZhan==true) return false;
+                    if(event.nuHuoYaZhi==false) return false;
                     return player.countZhiShiWu('zhanWen')>=1;
                 },
-                priority:1,
                 content:function(){
                     lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,1);
                     trigger.moWenRongHe=false
@@ -4205,7 +4205,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .forResult();
                 },
                 content:async function(event, trigger, player){
-                    'step 0'
                     var num=event.cards.length-1;
                     await player.discard(event.cards).set('showCards',true);
                     await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,1);
@@ -4222,7 +4221,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,control);
                         }
                     }
-                    trigger.changeDamageNum(num);
+                    await trigger.changeDamageNum(num);
                 }
             },
             moWenRongHe:{
@@ -4244,6 +4243,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         .forResult();
                 },
                 content:async function(event, trigger, player){
+                    trigger.nuHuoYaZhi=false;
                     await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,1);
                     await player.discard(event.cards).set('showCards',true);
                     var num=event.cards.length-1;
@@ -4260,8 +4260,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,control);
                         }
                     }
-                    'step 4'
-                    trigger.player.faShuDamage(num,player);
+                    await trigger.player.faShuDamage(num,player);
                 }
             },
             fuWenGaiZao:{
