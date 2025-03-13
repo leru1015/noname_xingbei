@@ -2288,7 +2288,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            player.canYingZhan=true;
+                            trigger.wuFaYingZhan();
                             'step 1'
                             player.removeSkill('cangBaiZhiYue_wuFaYingZhan');
                         }
