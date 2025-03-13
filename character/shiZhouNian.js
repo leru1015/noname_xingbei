@@ -4206,21 +4206,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:async function(event, trigger, player){
                     var num=event.cards.length-1;
-                    await player.discard(event.cards).set('showCards',true);
-                    await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,1);
-                    if(player.isHengZhi()&&player.countZhiShiWu('zhanWen')>0){
+                    var zhanWenNum=1;
+                    if(player.isHengZhi()&&player.countZhiShiWu('zhanWen')>1){
                         var list=[];
-                        for(var i=0;i<=player.countZhiShiWu('zhanWen');i++){
+                        for(var i=0;i<=player.countZhiShiWu('zhanWen')-1;i++){
                             list.push(i);
                         }
-                        var control=await player.chooseControl(list).set('prompt','额外翻转【战纹】数量').set('ai',function(){
+                        var control=await player.chooseControl(list).set('prompt',`额外翻转Y个【战纹】，本次攻击伤害额外+(${num}+Y)`).set('ai',function(){
                             return list.length;
                         }).set('num',list.length).forResultControl();
                         if(control>0){
                             num+=control;
-                            await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,control);
+                            zhanWenNum+=control;
                         }
                     }
+                    await lib.skill.zhanWenZhangWo.fanZhuanZhanWen(player,zhanWenNum);
+                    await player.discard(event.cards).set('showCards',true);
                     await trigger.changeDamageNum(num);
                 }
             },
@@ -4244,22 +4245,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:async function(event, trigger, player){
                     trigger.nuHuoYaZhi=false;
-                    await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,1);
-                    await player.discard(event.cards).set('showCards',true);
                     var num=event.cards.length-1;
-                    if(player.isHengZhi()&&player.countZhiShiWu('moWen')>0){
+                    var moWenNum=1;
+                    if(player.isHengZhi()&&player.countZhiShiWu('moWen')>1){
                         var list=[];
-                        for(var i=0;i<=player.countZhiShiWu('moWen');i++){
+                        for(var i=0;i<=player.countZhiShiWu('moWen')-1;i++){
                             list.push(i);
                         }
-                        var control=await player.chooseControl(list).set('prompt','额外翻转【魔纹】数量').set('ai',function(){
+                        var control=await player.chooseControl(list).set('prompt',`额外翻转Y个【魔纹】，本次法术伤害为${num}+Y`).set('ai',function(){
                             return list.length;
                         }).set('num',list.length).forResultControl();
                         if(control>0){
                             num+=control;
-                            await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,control);
+                            moWenNum+=control;
                         }
                     }
+                    await lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,moWenNum);
+                    await player.discard(event.cards).set('showCards',true);
                     await trigger.player.faShuDamage(num,player);
                 }
             },
