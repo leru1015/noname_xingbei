@@ -1423,13 +1423,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         target:function(player,target){
                             var num=target.countCards('h');
-                            if(num<5) return -5;
+                            if(num<5&&player.canGongJi()) return -5;
                             else return 0;
                         },
-                        player:function(player,target){
-                            if(player.canGongJi()) return 1;
-                            else return -10;
-                        }
                     }
                 }
             },
