@@ -2188,7 +2188,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yueDu:{
                 usable:1,
-                trigger:{source:'chengShouShangHai'},
+                trigger:{source:'chengShouShangHaiAfter'},
                 filter:function(event,player){
                     return event.faShu==true&&player.zhiLiao>0;
                 },
