@@ -11763,7 +11763,7 @@ export class Library {
 				return true;
 			},
 			content: function () {
-				console.log("autoswap", trigger);
+				//console.log("autoswap", trigger);
 				game.swapPlayerAuto(player);
 			},
 		},
