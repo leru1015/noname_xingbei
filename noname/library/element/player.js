@@ -10532,7 +10532,7 @@ export class Player extends HTMLDivElement {
 	}
 
 	yingZhan(use){
-		var next=game.createEvent('yingZhan',false);
+		var next=game.createEvent('yingZhan');
 		next.player = this;
 		if (arguments.length == 1 && get.objtype(arguments[0]) == "object") {
 			for (var i in use) {
