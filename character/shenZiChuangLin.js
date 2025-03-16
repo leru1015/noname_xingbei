@@ -705,8 +705,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     player.storage.jueJie_target=event.target;
                     event.target.addSkill('jueJieX');
-                    await event.target.addZhiShiWu('jueJieX');
                     event.target.storage.jueJie_player=player;
+                    await event.target.addZhiShiWu('jueJieX');
                     'step 4'
                     if(player.countCards('h')>0){
                         await player.chooseToDiscard(1,true);
