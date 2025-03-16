@@ -8083,7 +8083,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'qiDong',
                 trigger:{player:'qiDong'},
                 filter:function(event,player){
-                    //if(game.players.length==4) return false;
+                    if(game.players.length==4) return false;
                     if(player.storage.lingHunLianJieTarget) return false;
                     return player.hasZhiShiWu('huangSeLingHun')&&player.hasZhiShiWu('lanSeLingHun');
                 },
