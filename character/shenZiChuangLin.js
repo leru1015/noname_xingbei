@@ -938,7 +938,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:['faShu'],
                 filter:function(event,player){
-                    return player.countCards('h')>0;
+                    return player.countCards('h')>0&&player.hasSkill('yanLing');
                 },
                 selectCard:[1,2],
                 filterCard:true,
