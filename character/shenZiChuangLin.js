@@ -778,10 +778,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     zero:{
                         forced:true,
-                        trigger:{global:['discard','changeZhiShiWuAfter']},
+                        trigger:{global:['discard','changeZhiShiWuAfter','gainAfter']},
                         filter:function(event,player,name){
-                            if(name=='changeZhiShiWuAfter') return player.storage.jueJie_player.getExpansions('jieJie').length==0;
+                            if(name=='changeZhiShiWuAfter') return event.zhiShiWu=='jueJieX'&&player.storage.jueJie_player.getExpansions('jieJie').length==0;
                             else if(name=='discard') return event.gaiPai=='jieJie'&&player.storage.jueJie_player.getExpansions('jieJie').length==0;
+                            else if(name=='gainAfter') return event.jieJie==true&&player.storage.jueJie_player.getExpansions('jieJie').length==0;
                         },
                         content:function(){
                             'step 0'
