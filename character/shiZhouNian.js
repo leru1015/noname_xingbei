@@ -51,8 +51,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shouLingWuShi:['shouLingWuShi_name','jiGroup','4/5',['wuZheCanXin','yiJiWuNian','shouHunYiNian','shouHunJingJie','shouFan','yuHunLiuJuHeXingTai','niFanJuHeZhan','yuHunLiuJuHeShi','shouHun','canXin'],],
             shengGong:['shengGong_name','shengGroup','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
 
-            FAQ_geDouJia:['geDouJia_name','jiGroup','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','FAQ_qiJueBengJi','douShenTianQu','douQi'],['character:geDouJia']],
-
 		},
 
         characterIntro: {
@@ -6902,8 +6900,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     trigger.customArgs.qiJueBengJi=true;
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
-                    'step 1'
-                    player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                },
+                group:'qiJueBengJi_ranHou',
+                subSkill:{
+                    ranHou:{
+                        trigger:{player:'gongJiAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.customArgs.qiJueBengJi;
+                        },
+                        content:function(){
+                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                        }
+                    }
                 },
             },
             douShenTianQu:{
@@ -8761,34 +8770,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 onremove:'storage',
                 markimage:'image/card/zhiShiWu/hong.png'
             },
-
-            FAQ_qiJueBengJi:{
-                trigger:{player:"gongJiBefore"},
-                filter:function(event,player){
-                    if(!player.hasZhiShiWu('douQi')) return false;
-                    if(event.customArgs.xuLiYiji) return false;
-                    return event.yingZhan!=true;
-                },
-                content:function(){
-                    'step 0'
-                    trigger.customArgs.qiJueBengJi=true;
-                    player.removeZhiShiWu('douQi');
-                    trigger.wuFaYingZhan();
-                },
-                group:'FAQ_qiJueBengJi_ranHou',
-                subSkill:{
-                    ranHou:{
-                        trigger:{player:'gongJiAfter'},
-                        direct:true,
-                        filter:function(event,player){
-                            return event.customArgs.qiJueBengJi;
-                        },
-                        content:function(){
-                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
-                        }
-                    }
-                },
-            },
         },
 		
 		translate:{
@@ -9336,7 +9317,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xuLiYiji_info:"<span class='tiaoJian'>(主动攻击前发动①，+1</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击伤害额外+1；<span class='tiaoJian'>(若未命中②)</span>对自己造成X点法术伤害③，X为你所拥有的<span class='hong'>【斗气】</span>数；<span class='tiaoJian'>(若</span><span class='hong'>【斗气】</span><span class='tiaoJian'>已经达到上限)</span>你不能发动【蓄力一击】。",
             nianDan_info:"<span class='tiaoJian'>([法术行动]结束时发动，+1</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>，对目标对手造成1点法术伤害③，<span class='tiaoJian'>(若发动前对方的[治疗]为0)</span>对自己造成X点法术伤害③，X为你拥有的<span class='hong'>【斗气】</span>数；<span class='tiaoJian'>(若</span><span class='hong'>【斗气】</span><span class='tiaoJian'>已达到上限)</span>你不能发动【念弹】。",
             baiShiHuanLongQuan_info:"[持续]<span class='tiaoJian'>(移除3点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>[横置]你的所有主动攻击伤害额外+2，所有应战攻击伤害额外+1 ；在你接下来的行动阶段，你不能执行[法术行动]和[特殊行动]；你的主动攻击必须以同一名角色为目标，并且不能发动【蓄力一击】；若不如此做，则取消【百式幻龙拳】的效果并[重置]。",
-            qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，然后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
+            qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，本次攻击结束后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
+
             douShenTianQu_info:"[水晶]你弃到3张牌，+2[治疗]。",
             douQi_info:"<span class='hong'>【斗气】</span>为格斗家专有指示物，上限为6",
 
@@ -9466,12 +9448,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             daoNiZhiDie_info:"[水晶]你弃2张牌，再选择以下1项发动：<br>·对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御。<br> ·<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个<span class='hong'>【蛹】</span>。",
             jian_info:"【茧】为蝶舞者专有盖牌，上限为8。",
             DWZyong_info:"<span class='hong'>【蛹】</span>为蝶舞者专有指示物，无上限。",
-
-            FAQ_geDouJia:"FAQ格斗家",
-            FAQ_geDouJia_prefix: "FAQ",
-            FAQ_qiJueBengJi:"[响应]气绝崩击",
-            FAQ_qiJueBengJi_info:"<span class='tiaoJian'>(主动攻击前发动①，移除1点</span><span class='hong'>【斗气】</span><span class='tiaoJian'>)</span>本次攻击对方无法应战，本次攻击结束后对自己造成X点法术伤害③，X为你的<span class='hong'>【斗气】</span>数；不能和【蓄力一击】同时发动。",
-
 		},
 	};
 });
