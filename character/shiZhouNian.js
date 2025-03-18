@@ -51,9 +51,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shouLingWuShi:['shouLingWuShi_name','jiGroup','4/5',['wuZheCanXin','yiJiWuNian','shouHunYiNian','shouHunJingJie','shouFan','yuHunLiuJuHeXingTai','niFanJuHeZhan','yuHunLiuJuHeShi','shouHun','canXin'],],
             shengGong:['shengGong_name','shengGroup','4/5',['tianZhiGong','shengXieJuBao','shengHuangJiangLin','shengGuangBaoLie','liuXingShengDan','shengHuangHuiGuangPao','ziDongTianChong','xinYang','shengHuangHuiGuangPaoX'],],
 
-            FAQ_xianZhe:['xianZhe_name','yongGroup',4,['zhiHuiFaDian','FAQ_faShuFanTan','moDaoFaDian','shengJieFaDian'],['character:xianZhe']],
             FAQ_geDouJia:['geDouJia_name','jiGroup','4/5',['nianQiLiChang','xuLiYiji','nianDan','baiShiHuanLongQuan','FAQ_qiJueBengJi','douShenTianQu','douQi'],['character:geDouJia']],
-            //FAQ_yueZhiNvShen:['yueZhiNvShen_name','shengGroup',5,['xinYueBiHu','anYueZuZhou','FAQ_meiDuShaZhiYan','yueZhiLunHui','yueDu','anYueZhan','cangBaiZhiYue','xinYue','shiHua','anYue'],['character:yueZhiNvShen']],
 
 		},
 
@@ -5123,7 +5121,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 forced:true,
-                trigger:{player:'chengShouShangHai'},
+                trigger:{player:'chengShouShangHaiAfter'},
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     return event.num>3;
@@ -5138,7 +5136,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             faShuFanTan:{
-                trigger:{player:'chengShouShangHai'},
+                trigger:{player:'chengShouShangHaiAfter'},
                 filter:function(event,player){
                     if(event.faShu!=true) return false;
                     if(event.num!=1) return false;
@@ -8764,48 +8762,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/zhiShiWu/hong.png'
             },
 
-            FAQ_faShuFanTan:{
-                trigger:{player:'chengShouShangHaiAfter'},
-                filter:function(event,player){
-                    if(event.faShu!=true) return false;
-                    if(event.num!=1) return false;
-                    return player.countCards('h')>1;
-                },
-                async cost(event,trigger,player){
-                    event.result=await player.chooseCardTarget({
-                        filterCard:function(card){
-                            if(ui.selected.cards.length==0) return true;
-                            if(get.xiBie(card)==get.xiBie(ui.selected.cards[0])) return true;
-                            return false;
-                        },
-                        selectCard:[2,Infinity],
-                        filterTarget:true,
-                        complexCard:true,
-                        prompt:get.prompt('FAQ_faShuFanTan'),
-                        prompt2:lib.translate.FAQ_faShuFanTan_info,
-                        ai1(card) {
-                            return 6- get.value(card);
-                        },
-                        ai2:function(target){
-							var player=_status.event.player;
-                            return get.damageEffect2(target,player,1);
-						},
-                    }).forResult();
-                },
-                content:function(){
-                   'step 0'
-                    player.discard(event.cards).set('showCards',true);
-                    event.num=event.cards.length;
-                    event.target=event.targets[0];
-                    'step 2'
-                    event.target.faShuDamage(event.num-1,player);
-                    'step 3'
-                    player.faShuDamage(event.num,player);
-                },
-                ai:{
-                    one_damage:true,
-                }
-            },
             FAQ_qiJueBengJi:{
                 trigger:{player:"gongJiBefore"},
                 filter:function(event,player){
@@ -9511,11 +9467,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             jian_info:"【茧】为蝶舞者专有盖牌，上限为8。",
             DWZyong_info:"<span class='hong'>【蛹】</span>为蝶舞者专有指示物，无上限。",
 
-            FAQ_xianZhe:'FAQ贤者',
-            FAQ_xianZhe_prefix: "FAQ",
-            FAQ_faShuFanTan:"[响应]法术反弹",
-            FAQ_faShuFanTan_info:"<span class='tiaoJian'>(你每次承受法术伤害后⑥，若该伤害仅为1点，则可以弃X张同系牌[展示](X>1))</span>对目标角色造成(X-1)点法术伤害③，并对自己造成X点法术伤害③。",
-            
             FAQ_geDouJia:"FAQ格斗家",
             FAQ_geDouJia_prefix: "FAQ",
             FAQ_qiJueBengJi:"[响应]气绝崩击",
