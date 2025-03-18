@@ -20,7 +20,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],],
             ranWuZhe:['ranWuZhe_name','xueGroup',4,['shenQiZhiYi','liRuQuanYong','kuangLiZhiXin','kuangLiZhiTi','shenZhiWuRan','niuQuZhiAi','liQi'],],
 
-            FAQ_shenMiXueZhe:['shenMiXueZhe_name','yongGroup',4,['yanLingShu','FAQ_shouHuLing','zhenYanShu','jinJiMiFa','yaoJingMiShu','zhenYanYaZhi','yanLing','miShu'],['character:shenMiXueZhe']],
 		},
         characterIntro:{
             jinGuiZhiNv:`身为一位魔法的初学者，艾丽卡施法总是让人提心吊胆，因为连她自己也不知道会发生什么事情。然而她似乎无法体会身旁人的种种暗示，依然我行我素。这样的大小姐，需要队友的多多包容与帮忙`,
@@ -990,20 +989,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{target:'gongJiMingZhong'},
                 firstDo:true,
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.getParent())&&player.getExpansions('yanLing').length>0;
+                    return get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
                 },
                 content:function(){
                     'step 0'
-                    var cards=player.getExpansions('yanLing');
-                    player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
-                        return Math.random();
-                    });
+                    if(player.getExpansions('yanLing').length>0){
+                        var cards=player.getExpansions('yanLing');
+                        player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
+                            return Math.random();
+                        });
+                    }else event.goto(2);
                     'step 1'
                     player.discard(result.links,'yanLing');
                     'step 2'
                     if(player.countZhiShiWu('miShu')>0){
                         var list=['是','否'];
-                        player.chooseControl(list).set('prompt',`是否额外移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】`);
+                        player.chooseControl(list).set('prompt',`是否移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】`);
                     }else{
                         event.finish();
                     }
@@ -1430,48 +1431,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 markimage:'image/card/zhiShiWu/hong.png',
             },
 
-
-            FAQ_shouHuLing:{
-                forced:true,
-                trigger:{target:'gongJiMingZhong'},
-                firstDo:true,
-                filter:function(event,player){
-                    return get.is.zhuDongGongJi(event.getParent())&&(player.getExpansions('yanLing').length>0||player.countZhiShiWu('miShu')>0);
-                },
-                content:function(){
-                    'step 0'
-                    if(player.getExpansions('yanLing').length>0){
-                        var cards=player.getExpansions('yanLing');
-                        player.chooseCardButton(cards,true,'移除1个【言灵】').set('ai',function(){
-                            return Math.random();
-                        });
-                    }else event.goto(2);
-                    'step 1'
-                    player.discard(result.links,'yanLing');
-                    'step 2'
-                    if(player.countZhiShiWu('miShu')>0){
-                        var list=['是','否'];
-                        player.chooseControl(list).set('prompt',`是否移除1点<span class='hong'>【秘术】</span>，将1张手牌面朝上放置在你角色旁[展示]作为【言灵】`);
-                    }else{
-                        event.finish();
-                    }
-                    'step 3'
-                    if(result.control=='是'){
-                        player.removeZhiShiWu('miShu');
-                    }else{
-                        event.finish();
-                    }
-                    'step 4'
-                    if(player.countCards('h')>0){
-                        player.chooseCard('h',true,'将1张手牌面朝上放置在你的角色旁【展示】作为【言灵】');
-                    }
-                    'step 5'
-                    player.showCards(result.cards);
-                    event.cards=result.cards;
-                    'step 6'
-                    player.addToExpansion('draw',event.cards,'log').gaintag.add('yanLing');
-                }
-            },
         },
 		
 		translate:{
@@ -1566,7 +1525,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yanLingShu:"[法术]言灵术",
             yanLingShu_info:"<span class='tiaoJian'>(将1-2张手牌面朝上放置在你角色旁[展示]作为【言灵】)</span>你摸1张牌[强制]；<span class='tiaoJian'>(摸牌后，若你额外弃1张与现存【言灵】系别相同的牌[展示])</span>你+1<span class='hong'>【秘术】</span>。",
             shouHuLing:"[被动]守护灵",
-            shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】；<span class='tiaoJian'>(若你额外移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
+            shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】。<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前，若你移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
             zhenYanShu:"[法术]真言术",
             zhenYanShu_backup:'[法术]真言术',
             zhenYanShu_info:"<span class='tiaoJian'>(将1个除光系外的【言灵】视为手牌使用)</span>执行相应的行动；<span class='tiaoJian'>(若使用的【言灵】为咏类命格或法术牌，或你额外移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>本次相应行动执行完成后，对目标对手造成1点法术伤害③。",
@@ -1596,11 +1555,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             niuQuZhiAi_info:"[宝石]调整你的形态为【普通形态】或【狂戾形态】，你弃2张牌或摸2张牌[强制]，并任意调整你的<span class='hong'>【戾气】</span>数。",
             liQi:"戾气",
             liQi_info:"<span class='hong'>【戾气】</span>为污染者专有指示物，上限为2。",
-
-            FAQ_shenMiXueZhe:'FAQ神秘学者',
-            FAQ_shenMiXueZhe_prefix:'FAQ',
-            FAQ_shouHuLing:'[被动]守护灵',
-            FAQ_shouHuLing_info:"<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前)</span>移除1个【言灵】。<span class='tiaoJian'>(你被主动攻击命中时②，其他角色结算效果前，若你移除1点</span><span class='hong'>【秘术】</span><span class='tiaoJian'>)</span>将1张手牌面朝上放置在你角色旁[展示]作为【言灵】。",
         },
 	};
 });
