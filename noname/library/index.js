@@ -3264,6 +3264,7 @@ export class Library {
 						ui.arena.dataset.target_shake = bool;
 					},
 				},
+				/*
 				turned_style: {
 					name: "翻面文字",
 					intro: "角色被翻面时显示“翻面”",
@@ -3312,7 +3313,7 @@ export class Library {
 						}
 						ui.updatem();
 					},
-				},
+				},*/
 				cardshape: {
 					name: "手牌显示",
 					intro: "将手牌设置为正方形或长方形",
