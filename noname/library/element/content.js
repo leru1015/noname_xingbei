@@ -4487,9 +4487,17 @@ export const Content = {
 		}else if(player.storage.faShu>0){
 			event.xingDong='faShu';
 			var next=player.faShu().set('action',true).set('prompt','法术行动');
+			next.set('filterCard',function(card,player,event){
+				if(get.type(card)!='faShu') return false;
+                return lib.filter.cardEnabled(card,player,'forceEnable');
+			});
 		}else if(player.storage.gongJi>0){
 			event.xingDong='gongJi';
 			var next=player.gongJi().set('action',true).set('prompt','攻击行动');
+			next.set('filterCard',function(card,player,event){
+				if(get.type(card)!='gongJi') return false;
+                return lib.filter.cardEnabled(card,player,'forceEnable');
+			});
 		}
 		if(next){
 			if(!lib.config.show_phaseuse_prompt){
