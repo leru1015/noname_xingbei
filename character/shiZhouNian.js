@@ -141,18 +141,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content:function(){
-                    "step 0"
-                    trigger.getParent().insertAfter(function(){
-                        var str='风怒追击：风系[攻击行动]';
-                        var next=player.gongJi(function(card,player,event){
-                            if(get.xiBie(card)!='feng') return false;
+                    player.storage.extraXingDong.push({
+                        xingDong:'gongJi',
+                        filterCard:function(card,player,event){
+                            if(get.xiBie(card)!='feng'||get.type(card)!='gongJi') return false;
                             return lib.filter.cardEnabled(card,player,'forceEnable');
-                        },str);
-                        next.autodelay=true;
-                    },{
-                        player:player,
+                        },
+                        prompt:'风怒追击：风系[攻击行动]',
                     });
-					
                 },
                 check:function(event,player){
                     var num=player.countCards('h',card=>get.xiBie(card)=='feng'&&get.type(card)=='gongJi');
@@ -3289,17 +3285,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return event.yingZhan!=true;
                 },
                 content:function(){
-                    trigger.getParent().insertAfter(function(){
-                        var str='修罗连斩：火系[攻击行动]';
-					    var next=player.gongJi('h',function(card,player,event){
-                        if(get.xiBie(card)!='huo') return false;
-                        return lib.filter.cardEnabled(card,player,'forceEnable');
-					    },str);
-                    },{
-                        player:player,
+                    player.storage.extraXingDong.push({
+                        xingDong:'gongJi',
+                        filterCard:function(card,player,event){
+                            if(get.xiBie(card)!='huo'||get.type(card)!='gongJi') return false;
+                            return lib.filter.cardEnabled(card,player,'forceEnable');
+                        },
+                        prompt:'修罗连斩：火系[攻击行动]',
                     });
-
-					
                 },
                 check:function(event,player){
                     return player.hasCard(card=>get.xiBie(card)=='huo');

@@ -4436,6 +4436,7 @@ export const Content = {
 		player.storage.gongJiOrFaShu=1;
 		player.storage.faShu=0;
 		player.storage.gongJi=0;
+		player.storage.extraXingDong=[];
 		//判断是否有可启动技
 		var skills=player.skills;
 		var flag=false;
@@ -4499,6 +4500,12 @@ export const Content = {
                 return lib.filter.cardEnabled(card,player,'forceEnable');
 			});
 		}
+		if(!next&&player.storage.extraXingDong.length>0){
+			let extraXingDong=player.storage.extraXingDong.shift();
+			event.xingDong=extraXingDong.xingDong;
+			event.extraXingDong=true;
+			var next=player[event.xingDong](extraXingDong).set('action',true);
+		}
 		if(next){
 			if(!lib.config.show_phaseuse_prompt){
 				next.set('prompt',false);
@@ -4514,14 +4521,17 @@ export const Content = {
 		}
 
 		"step 5";
-		if(event.xingDong=='gongJiOrFaShu'){
-			player.storage.gongJiOrFaShu--;
-		}else if(event.xingDong=='faShu'){
-			player.storage.faShu--;
-		}else if(event.xingDong=='gongJi'){
-			player.storage.gongJi--;
+		if(event.extraXingDong) event.extraXingDong=false;
+		else{
+			if(event.xingDong=='gongJiOrFaShu'){
+				player.storage.gongJiOrFaShu--;
+			}else if(event.xingDong=='faShu'){
+				player.storage.faShu--;
+			}else if(event.xingDong=='gongJi'){
+				player.storage.gongJi--;
+			}
 		}
-		if(!event.skipped&&(player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
+		if(!event.skipped&&(player.storage.extraXingDong.length>0||player.storage.gongJiOrFaShu>0||player.storage.gongJi>0||player.storage.faShu>0)){
 			event.goto(4);
 		}
 		"step 6";
