@@ -7306,9 +7306,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    if(event.cost_data=='治疗'){
+                    if(event.cost_data=='zhiLiao'){
                         player.changeZhiLiao(-1);
-                    }else if(event.cost_data=='信仰'){
+                    }else if(event.cost_data=='xinYang'){
                         player.removeZhiShiWu('xinYang',1);
                     }
                     'step 1'
