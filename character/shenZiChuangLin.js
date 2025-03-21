@@ -326,7 +326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 0'
                             player.faShuDamage(event.num||3,event.indexedData.renMaster);
                             'step 1'
-                            let name=get.name(event.indexedData).slice(0,-4);
+                            let name=get.name(event.indexedData);
                             event.indexedData.renMaster.storage[name]=false;
                             event.indexedData.fix();
                             event.indexedData.remove();
