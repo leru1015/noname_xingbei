@@ -6604,7 +6604,7 @@ export class Player extends HTMLDivElement {
 				delete this.filterStop;
 				this.trigger("damageZero");
 				this.finish();
-				this._triggered = null;
+				this._triggered = 2;
 				return true;
 			}
 		};
