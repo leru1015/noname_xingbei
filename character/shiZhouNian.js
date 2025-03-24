@@ -6038,6 +6038,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(trigger.getParent().name=='yongHengYueZhang_jiAngKuangXiangQu'){
                         await event.trigger('yongHengYueZhang');
                         trigger.getParent().bool=true;
+                        if(player.isHengZhi()) return event.result={bool:false};
                     }
                     event.result=await player.chooseCard('h',2)
                     .set('complexCard',true)
