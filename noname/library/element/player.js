@@ -6566,7 +6566,7 @@ export class Player extends HTMLDivElement {
 	 * @returns { GameEventPromise }
 	 */
 	damage() {
-		const next = game.createEvent("damage");
+		const next = game.createEvent("shangHai");
 		next.player = this;
 		let noCard, noSource;
 		const event = _status.event;
