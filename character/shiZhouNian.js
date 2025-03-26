@@ -583,9 +583,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     baoShi:true,
                 },
                 check:function(event,player){
-                    if(!player.hasCard(function(card){
-                        return get.type(card)=='gongJi';
-                    })) return false;
+                    if(!player.canGongJi()) return false;
+                    if(player.countCards('h')>=player.getHandcardLimit()) return false;
                     if(player.countNengLiangAll()<=1) return false;
                     return true;
                 },
