@@ -821,6 +821,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await target.addZhiShiWu('san_yongHengYueZhang');
                     target.storage.yongHengYueZhang_player=player;
                 },
+                check:function(event,player){
+                    return player.canGongJi()||player.canFaShu();
+                },
                 ai:{
                     shuiJing:true,
                 }

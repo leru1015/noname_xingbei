@@ -6339,6 +6339,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 check:function(event,player){
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     return player.hasZhiShiWu('lingGan')<3;
                 },
                 ai:{
