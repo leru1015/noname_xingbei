@@ -8394,11 +8394,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(event,player){
                     if(player.isHengZhi()&&player.storage.tongShengGongSi_target.side==player.side) return false;
+                    if(!(player.canGongJi()||player.canFaShu())) return false;
                     var minus=player.getHandcardLimit()-player.countCards('h');
-                    var num=Math.random();
-                    if(player.isHengZhi()&&minus>=1) return num>0.1;
-                    if(minus>=3) return num>0.15;
-                    return false;
+                    return minus>=1;
                 }
             },
             liuXue:{
