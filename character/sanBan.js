@@ -434,6 +434,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         lib.skill.zhanWenZhangWo.fanZhuanMoWen(player,num-player.countZhiShiWu('zhanWen'));
                     }
                 },
+                check:function(event,player){
+                    return player.canGongJi();
+                },
                 group:['san_fuWenGaiZao_chongZhi'],
                 mod:{
                     maxHandcard:function(player,num){
