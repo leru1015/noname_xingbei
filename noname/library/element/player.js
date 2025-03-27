@@ -8672,6 +8672,7 @@ export class Player extends HTMLDivElement {
 	checkMarks() {
 		var skills = this.getSkills();
 		game.expandSkills(skills);
+		skills=skills.concat(lib.skill.global);
 		for (var i in this.marks) {
 			if (!skills.includes(i) && !this.marks[i].info.fixed) {
 				this.unmarkSkill(i);
