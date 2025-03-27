@@ -452,7 +452,9 @@ export default () => {
 						}
 					}
 					event.list.remove(game.me.name1);
-
+					if(lib.characterReplace[game.me.name1]&&lib.characterReplace[game.me.name1].length){
+						event.list=event.list.filter(item=>!lib.characterReplace[game.me.name1].includes(item));
+					}
 					let count=0;
 					for(var i=0;i<game.players.length;i++){
 						if(game.players[i]!=game.me){
