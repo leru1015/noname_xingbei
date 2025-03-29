@@ -1942,6 +1942,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tongDiao_info: "<span class='tiaoJian'>(你触发【渗蚀】时)</span>3点法术伤害变更为1点法术伤害。",
             ren: "(专)刃",
             ren_zhuanHuan1: "转换刃系别",
+            ren_zhuanHuan1_info: "转化【刃】的系别",
             ren_zhuanHuan2: "转换刃系别",
             ren_daChuQiZhi: "[被动]渗蚀",
             ren_biaoJi: "刃",
