@@ -11350,6 +11350,9 @@ export class Player extends HTMLDivElement {
 		return list;
 	}
 
+	canTeShu(){
+		return this.canXingDong('teShu');
+	}
 	canFaShu(){
 		return this.canXingDong('faShu');
 	}
