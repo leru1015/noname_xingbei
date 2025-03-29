@@ -212,14 +212,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai"],
                 contentx: function(){
                     for(var card of event.cards){
-                        if(get.name(card)=='moRen'){
-                            if(get.xiBie(card,false)=='huo') game.setXiBie(card,'shui');
-                            else game.setXiBie(card,'huo');
-                        }else if(get.name(card)=='yiRen'){
-                            if(get.xiBie(card,false)=='lei') game.setXiBie(card,'feng');
-                            else game.setXiBie(card,'lei');
-                        }
                         game.broadcastAll(function(card){
+                            if(get.name(card)=='moRen'){
+                                if(get.xiBie(card,false)=='huo') game.setXiBie(card,'shui');
+                                else game.setXiBie(card,'huo');
+                            }else if(get.name(card)=='yiRen'){
+                                if(get.xiBie(card,false)=='lei') game.setXiBie(card,'feng');
+                                else game.setXiBie(card,'lei');
+                            }
                             card.$init([card.xiBie,card.mingGe,card.name]);
                         },card);
                     }
