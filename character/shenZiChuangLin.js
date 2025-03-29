@@ -106,7 +106,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.yiRen=true;
                     }
                     if(card){
-                        card.renMaster=player;
+                        card.storage.renMaster=player;
                         game.log(player, "获得了1张【刃】")
                         player.gain(card,'draw');
                     }
@@ -129,7 +129,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         card=game.createCard("yiRen", "lei", 'xue');
                         player.storage.yiRen=true;
                     }
-                    card.renMaster=player;
+                    card.storage.renMaster=player;
                     game.log(trigger.target,'获得了',card);
                     trigger.target.gain(card,'draw');
                 },
@@ -209,7 +209,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai",'ren_biaoJi'],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai"],
                 contentx: function(){
                     for(var card of event.cards){
                         if(get.name(card)=='moRen'){
@@ -306,6 +306,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
                                 if(get.name(event.cards[i]) == 'moRen' || get.name(event.cards[i]) == 'yiRen') {
+                                    if(event.cards[i].destroyed) continue;
                                     cards.push(event.cards[i]);
                                 }
                             }
@@ -323,10 +324,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: function(){
                             'step 0'
-                            player.faShuDamage(event.num||3,event.indexedData.renMaster);
+                            trigger.cards=trigger.cards.remove(event.indexedData);
+                            player.faShuDamage(event.num||3,event.indexedData.storage.renMaster);
                             'step 1'
                             let name=get.name(event.indexedData);
-                            event.indexedData.renMaster.storage[name]=false;
+                            event.indexedData.storage.renMaster.storage[name]=false;
                             event.indexedData.fix();
                             event.indexedData.remove();
                             event.indexedData.destroyed = true;
@@ -334,13 +336,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                     },
                     gaiPai: {
-                        trigger: {
-                            player: "addToExpansionEnd",
-                        },
+                        trigger: {player: "addToExpansionEnd",},
                         getIndex(event, player) {
 							const cards = [];
 							for(let i = 0; i < event.cards.length; i++) {
                                 if(get.name(event.cards[i]) == 'moRen' || get.name(event.cards[i]) == 'yiRen') {
+                                    if(event.cards[i].destroyed) continue;
                                     cards.push(event.cards[i]);
                                 }
                             }
@@ -359,10 +360,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: function(){
                             'step 0'
-                            player.faShuDamage(1,event.indexedData.renMaster);
+                            player.faShuDamage(1,event.indexedData.storage.renMaster);
                             'step 1'
                             let name=get.name(event.indexedData);
-                            event.indexedData.renMaster.storage[name]=false;
+                            event.indexedData.storage.renMaster.storage[name]=false;
                             event.indexedData.fix();
                             event.indexedData.remove();
                             event.indexedData.destroyed = true;
@@ -415,7 +416,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     card=game.createCard('yiRen','lei','xue');
                                     player.storage.yiRen=true;
                                 }
-                                card.renMaster=player;
+                                card.storage.renMaster=player;
                                 cards.push(card);
                             }
                             game.log(player,`获得了${cards.length}张【刃】`);
