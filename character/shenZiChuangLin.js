@@ -290,6 +290,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             next.set('prompt','是否转化【刃】的系别');
                             next.set('selectCard',[1,2]);
                             next.set('zhuanHuan',true);
+                            if(event.triggername=='yingZhanBefore'){
+                                next.set('yingZhan',event.triggername=='yingZhanBefore');
+                                next.set('card',trigger.card);
+                            }
+                            next.set('ai',function(card){
+                                if(_status.event.yingZhan){
+                                    let xiBei1=get.xiBie(_status.event.card);
+                                    if(get.name(card)=='moRen'&&(xiBei1=='huo'||xiBei1=='shui')){
+                                        let xiBei2=get.xiBie(card);
+                                        if(xiBei2==xiBei1) return 0;
+                                        else return 1;
+                                    }else if(get.name(card)=='yiRen'&&(xiBei1=='lei'||xiBei1=='feng')){
+                                        let xiBei2=get.xiBie(card);
+                                        if(xiBei2==xiBei1) return 0;
+                                        else return 1;
+                                    }
+                                }
+                                return 0.5;
+                            });
                             event.result=await next.forResult();
                         },
                         content: function(){
