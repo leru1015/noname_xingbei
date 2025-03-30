@@ -209,7 +209,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             ren: {
-                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai"],
+                global: ["ren_zhuanHuan1","ren_zhuanHuan2","ren_daChuQiZhi","ren_gaiPai","ren_biaoJi"],
                 contentx: function(){
                     for(var card of event.cards){
                         game.broadcastAll(function(card){
