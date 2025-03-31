@@ -1046,6 +1046,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if (changed2.includes(from.link)) return true;
                             return changed.includes(to.link);
                         });
+                        next.set('filterOk',function(moved){
+                            var player=_status.event.player;
+                            var pushs = moved[0],
+                                gains = moved[1];
+                            pushs.removeArray(player.getExpansions("luEn"));
+                            gains.removeArray(player.getCards("h"));
+                            return pushs.length==1;
+                        });
                         var result=await next.forResult();
                         if(!result.moved) return;
                         var pushs = result.moved[0],
