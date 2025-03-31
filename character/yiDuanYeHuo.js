@@ -904,7 +904,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     var cards=get.cards();
-                    player.addToExpansion('draw',cards).gaintag.add('luEn');
+                    player.addToExpansion('draw',cards,'log').gaintag.add('luEn');
                 }
             },
             qunXingQiShi:{
@@ -953,7 +953,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.chooseCard('h',true,'将1张手牌面朝下放置在你角色旁，作为【卢恩】');
                     'step 3'
-                    player.addToExpansion('draw',result.cards).gaintag.add('luEn');
+                    player.addToExpansion('draw',result.cards,'log').gaintag.add('luEn');
                     var list=[];
                     if(!player.hasZhiShiWu('fanXing')) list.push('繁星');
                     if(!player.hasZhiShiWu('yingYue')) list.push('影月');
@@ -1020,7 +1020,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.draw(1);
                     var cards = player.getExpansions("luEn");
                     if(cards.length>0){
-                        var next = player.chooseToMove("黄金律：是否交换【卢恩】和手牌");
+                        var next = player.chooseToMove_new("黄金律：是否交换【卢恩】和手牌");
                         next.set("list", [
                             ["卢恩", cards],
                             ["手牌", player.getCards("h")],
@@ -1055,7 +1055,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if (!pushs.length || pushs.length != gains.length) return;
                         await player.lose(pushs);
                         await player.lose(gains);
-                        await player.addToExpansion(pushs, player, "giveAuto").gaintag.add("luEn");
+                        await player.addToExpansion(pushs, "draw",'log').gaintag.add("luEn");
+                        game.log(player,'获得了1张牌');
                         await player.gain(gains, "draw");
                     }
                 }
@@ -1316,7 +1317,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.chooseCard('h',`将最多${x+1}张手牌面朝下放置在你角色旁，作为【卢恩】`,[1,x+1]);
                     'step 3'
                     if(result.bool){
-                        player.addToExpansion('draw',result.cards).gaintag.add('luEn');
+                        player.addToExpansion('draw',result.cards,'log').gaintag.add('luEn');
                     }
                     player.storage.chuangKeLvDong=false;
                     'step 4'
