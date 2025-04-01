@@ -1020,7 +1020,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.draw(1);
                     var cards = player.getExpansions("luEn");
                     if(cards.length>0){
-                        var next = player.chooseToMove_new("黄金律：是否交换【卢恩】和手牌");
+                        var next = player.chooseToMove("黄金律：是否交换【卢恩】和手牌");
                         next.set("list", [
                             ["卢恩", cards],
                             ["手牌", player.getCards("h")],
@@ -1028,23 +1028,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         next.set("filterMove", function (from, to, moved) {
                             if (typeof to == "number") return false;
                             var player = _status.event.player;
-                            var hs = player.getCards("h");
-                            var changed = hs.filter(function (card) {
-                                return !moved[1].includes(card);
-                            });
-                            var changed2 = moved[1].filter(function (card) {
-                                return !hs.includes(card);
-                            });
-                            if (changed.length < 1) return true;
-                            var pos1 = moved[0].includes(from.link) ? 0 : 1,
-                                pos2 = moved[0].includes(to.link) ? 0 : 1;
-                            if (pos1 == pos2) return true;
-                            if (pos1 == 0) {
-                                if (changed.includes(from.link)) return true;
-                                return changed2.includes(to.link);
-                            }
-                            if (changed2.includes(from.link)) return true;
-                            return changed.includes(to.link);
+                            //交换前
+                            if (moved[0].length < 1) return true;
+                            //交换回去
+                            if((moved[0].includes(from.link)&&moved[1].includes(to.link))||moved[0].includes(to.link)&&moved[1].includes(from.link)) return true;
+                            var luEn = player.getExpansions("luEn");
+                            //卢恩间交换
+                            if(luEn.includes(from.link)&&luEn.includes(to.link)) return true;
+                            var h=player.getCards("h");
+                            //手牌间交换
+                            if (h.includes(from.link) == h.includes(to.link)) return true;
+                            //移动后，移动的牌在卢恩区交换
+                            if(moved[0].includes(from.link)&&luEn.includes(to.link)) return true;
+                            if(moved[0].includes(to.link)&&luEn.includes(from.link)) return true;
+                            //移动后，移动的牌在手牌区交换
+                            if(moved[1].includes(from.link)&&h.includes(to.link)) return true;
+                            if(moved[1].includes(to.link)&&h.includes(from.link)) return true;
+
+                            return moved[0].length <1;
                         });
                         next.set('filterOk',function(moved){
                             var player=_status.event.player;
@@ -1058,8 +1059,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(!result.moved) return;
                         var pushs = result.moved[0],
                             gains = result.moved[1];
-                        pushs.removeArray(player.getExpansions("luEn"));
-                        gains.removeArray(player.getCards("h"));
                         if (!pushs.length || pushs.length != gains.length) return;
                         await player.lose(pushs);
                         await player.lose(gains);
