@@ -8004,10 +8004,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var cards=player.getCards('h');
                         var bool=false;
                         for(var card of cards){
-                            if(player.hasUseTarget(card)) bool=true;
+                            if(player.hasUseTargetXingBei(card)) bool=true;
                             if(bool) break;
                         }
-                        if(bool) return '摸';
+                        if(!bool) return '摸';
                         if(player.countCards('h')+1>=player.getHandcardLimit()) return '弃';
                         if(player.countCards('h')<player.getHandcardLimit()-2) return '摸';
                         return '放弃';
