@@ -2558,7 +2558,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         name='anMie';
                     }
                     var card={name:name,xiBie:xiBie};
-                    await player.useCard(card,event.target);
+                    await player.useCard(card,event.target).set('action',true);
                 },
                 ai:{
                     order:3.7,
