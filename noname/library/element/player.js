@@ -8034,6 +8034,19 @@ export class Player extends HTMLDivElement {
 	 * @param { boolean | GameEvent } [includecard] 是否受使用次数限制，可以填入用于检测的事件
 	 * @returns { boolean }
 	 */
+	hasUseTargetXingBei(card, distance, includecard) {
+		var player = this;
+		return game.hasPlayer(function (current) {
+			return player.canUseXingBei(card, current, distance, includecard);
+		});
+	}
+	/**
+	 * 场上是否存在能对其使用card的目标
+	 * @param { Card | VCard | object | string } card
+	 * @param { false } [distance] false：无距离限制
+	 * @param { boolean | GameEvent } [includecard] 是否受使用次数限制，可以填入用于检测的事件
+	 * @returns { boolean }
+	 */
 	hasUseTarget(card, distance, includecard) {
 		var player = this;
 		return game.hasPlayer(function (current) {
