@@ -9414,12 +9414,13 @@ export const Content = {
 		}else{
 			game.log(player,'弃置了',cards.length,'张牌');//星杯暗置弃牌日志
 		}
+		event.nun=cards.length;
 		'step 1'
 		event.trigger('discard');
 		"step 2"
 		if(event.baoPai==true){
 			if(event.shiQiXiaJiang!=false){
-				var next=player.changeShiQi(-cards.length).set('baoPai',true).set('cards',cards);
+				var next=player.changeShiQi(-event.nun).set('baoPai',true).set('cards',cards);
 				if(event.cause=='damage'){
 					next.set('cause','damage');
 					if(event.faShu){
