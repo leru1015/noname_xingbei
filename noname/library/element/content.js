@@ -11915,7 +11915,7 @@ export const Content = {
 			game.hongXingBei+=num;
 			if(num>0){
 				game.log('<span style="color:red;">红方</span>星杯数量增加',num);
-			}else{
+			}else if(num<0){
 				num=-num;
 				game.log('<span style="color:red;">红方</span>星杯数量减少',num);
 			}
@@ -11923,7 +11923,7 @@ export const Content = {
 			game.lanXingBei+=num;
 			if(num>0){
 				game.log('<span style="color:lightblue;">蓝方</span>星杯数量增加',num);
-			}else{
+			}else if(num<0){
 				num=-num;
 				game.log('<span style="color:lightblue;">蓝方</span>星杯数量减少',num);
 			}
