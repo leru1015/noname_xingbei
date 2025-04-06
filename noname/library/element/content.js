@@ -12082,6 +12082,8 @@ export const Content = {
 		}else if(num<0){
 			player.removeMark(zhiShiWu,-num)
 		}
+		'step 1'
+		if(event.yiChu==true) event.trigger('zhiShiWuYiChu');
 	},
 
 	changeZhiLiao:function(){
