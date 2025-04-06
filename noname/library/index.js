@@ -9792,7 +9792,7 @@ export class Library {
 				}
 
 				//判断是否有可使用手牌
-				var cards=player.getCards('h').concat(player.getCards('e'));
+				var cards=player.getCards('h').concat(player.getCards('s'));
 				for(var i=0;i<cards.length;i++){
 					if(player.hasUseTarget(cards[i])) return false;
 				}
