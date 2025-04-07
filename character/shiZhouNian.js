@@ -7003,22 +7003,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     'step 0'
-                    trigger.customArgs.qiJueBengJi=true;
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
-                },
-                group:'qiJueBengJi_ranHou',
-                subSkill:{
-                    ranHou:{
-                        trigger:{player:'gongJiAfter'},
-                        direct:true,
-                        filter:function(event,player){
-                            return event.customArgs.qiJueBengJi;
-                        },
-                        content:function(){
-                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
-                        }
-                    }
+                    'step 1'
+                    player.faShuDamage(player.countZhiShiWu('douQi'),player);
                 },
             },
             douShenTianQu:{
