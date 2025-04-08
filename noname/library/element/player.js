@@ -11110,7 +11110,7 @@ export class Player extends HTMLDivElement {
 	qiPai(){//执行一次超出手牌上限的弃牌
 		var num=this.needsToDiscard();
 		if(num>0){
-			return this.chooseToDiscard(num,true).set('useCache',true).set('baoPai',true);
+			return this.chooseToDiscard(num,true,`爆牌：弃${num}张牌`).set('useCache',true).set('baoPai',true);
 		}
 	}
 	countTongXiPai(type){//统计同系牌数
