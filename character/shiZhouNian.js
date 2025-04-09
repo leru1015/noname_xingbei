@@ -42,7 +42,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             hongLianQiShi:['hongLianQiShi_name','xueGroup',4,['xingHongShengYue','xingHongXinYang','xueXingDaoYan','shaLuShengYan','reXueFeiTeng','jieJiaoJieZao','xingHongShiZi','xueYin'],],
             yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['moQiang_name','huanGroup',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
-            cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDianKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
+            cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDuanKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
             yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','xiWangFuGeQu','lingGan','yongHengYueZhangX'],],
             jingLingSheShou:['jingLingSheShou_name','jiGroup','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['yinYangShi_name','huanGroup',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
@@ -4999,12 +4999,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 }
             },
-            tianHuoDianKong:{
+            tianHuoDuanKong:{
                 type:'faShu',
                 enable:'faShu',
                 filter:function(event,player){
                     if(player.countZhiShiWu('chongSheng')<1&&!player.isHengZhi()) return false;
-                    return player.countCards('h',card=>lib.skill.tianHuoDianKong.filterCard(card))>1;
+                    return player.countCards('h',card=>lib.skill.tianHuoDuanKong.filterCard(card))>1;
                 },
                 selectCard:2,
                 filterCard:function(card,player){
@@ -9314,8 +9314,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             //苍炎魔女
             cangYanFaDian:"[法术]苍炎法典",
             cangYanFaDian_info:"<span class='tiaoJian'>(弃1张火系牌[展示])</span>对目标角色和自己造成2点法术伤害③。",
-            tianHuoDianKong:"[法术]天火断空",
-            tianHuoDianKong_info:"<span class='tiaoJian'>(弃2张火系牌[展示]，移除1点</span><span class='hong'>【重生】</span><span class='tiaoJian'>)</span>对目标角色和自己造成3点火焰伤害③，<span class='tiaoJian'>(若我方士气落后于该目标)</span>本次法术伤害额外+1[强制]。",
+            tianHuoDuanKong:"[法术]天火断空",
+            tianHuoDuanKong_info:"<span class='tiaoJian'>(弃2张火系牌[展示]，移除1点</span><span class='hong'>【重生】</span><span class='tiaoJian'>)</span>对目标角色和自己造成3点火焰伤害③，<span class='tiaoJian'>(若我方士气落后于该目标)</span>本次法术伤害额外+1[强制]。",
             moNvZhiNu:"[启动]魔女之怒",
             moNvZhiNu_info:"<span class='tiaoJian'>(手牌<4张时)</span>[横置]摸0-2张牌，数值由你决定，持续到你的下个行动阶段开始前，你都处于【烈焰形态】，在此形态下你的所有除水系和暗系外的攻击牌均视为火系[强制]，你释放【天火断空】时无需消耗<span class='hong'>【重生】</span>，你的手牌上限+(X-2)(X为你的<span class='hong'>【重生】</span>数量)；脱离【烈焰形态】时[重置]。",
             tiShenWanOu:"[响应]替身玩偶",
