@@ -5064,7 +5064,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return 'huo';
                     }
                 },
-                group:'moNvZhiNu_chongZhi',
+                group:['moNvZhiNu_chongZhi','moNvZhiNu_showCards'],
                 subSkill:{
                     chongZhi:{
                         trigger:{player:'xingDongBefore'},
@@ -5077,6 +5077,26 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.chongZhi();
                         }
                     },
+                    showCards:{
+                        trigger:{player:'showCardsBefore'},
+                        filter:function(event,player){
+                            return event.cards.length>0&&player.isHengZhi()&&event.moNvZhiNu!=true;
+                        },
+                        direct:true,
+                        content:async function(event, trigger, player){
+                            var cards=[];
+                            for(var card of trigger.cards){
+                                if (get.type(card) != 'gongJi' || ['shui', 'an', 'huo'].includes(get.xiBie(card))) {
+                                    cards.push(card);
+                                    continue;
+                                }
+                                var tempCard=game.createCard(card.name,'huo',card.mingGe,card.duYou);
+                                cards.push(tempCard);
+                            }
+                            await player.showCards(cards).set('moNvZhiNu',true);
+                            await trigger.finish();
+                        }
+                    }
                 }
             },
             tiShenWanOu:{
