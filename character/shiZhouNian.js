@@ -43,7 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             yingLingRenXing:['yingLingRenXing_name','yongGroup',4,['zhanWenZhangWo','nuHuoYaZhi','zhanWenSuiJi','moWenRongHe','fuWenGaiZao','shuangChongHuiXiang','zhanWen','moWen'],],
             moQiang:['moQiang_name','huanGroup',4,['anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],],
             cangYanMoNv:['cangYanMoNv_name','xueGroup',4,['cangYanFaDian','tianHuoDuanKong','moNvZhiNu','tiShenWanOu','yongShengYinShiJi','tongKuLianJie','moNengFanZhuan','chongSheng'],],
-            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','xiWangFuGeQu','lingGan','yongHengYueZhangX'],],
+            yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['chenLunXieZouQu','buXieHeXian','jinJiShiPian','yongHengYueZhangX','xiWangFuGeQu','lingGan'],],
             jingLingSheShou:['jingLingSheShou_name','jiGroup','3/4',['yuanSuSheJi','dongWuHuoBan','jingLingMiYi','chongWuQiangHua','zhuFu'],],
             yinYangShi:['yinYangShi_name','huanGroup',4,['shiShenJiangLin','yinYangZhanHuan','shiShenZhuanHuan','heiAnJiLi','shiShenZhouShu','shengMingJieJie','guiHuo'],],
             xueSeJianLing:['xueSeJianLing_name','xueGroup',4,['xueSeJingJi','chiSeYiShan','xueRanQiangWei','xueQiPingZhang','xueQiangWeiTingYuan','sanHuaLunWu','xianXue'],],
