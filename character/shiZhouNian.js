@@ -4983,7 +4983,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 selectTarget:1,
                 filterTarget:true,
                 discard:true,
-                shwoCards:true,
+                showCards:true,
                 content:function(){
                     'step 0'
                     target.faShuDamage(2,player);
