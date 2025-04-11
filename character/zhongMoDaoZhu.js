@@ -7,18 +7,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhongMoDaoZhu:{
                 "4xing":['yiJiaoTu',],
                 '4.5xing':['jiLuZhe','chuanJiaoShi',],
-                "5xing":['tieLvZhe','hongYiZhuJiao'],
+                "5xing":['zhuLvZhe','hongYiZhuJiao'],
             }
         },
 		character:{
-            tieLvZhe:['tieLvZhe_name','xueGroup',5,['shenLvFengSuo','shengXueZhiJi','wangCheYiWei','zuiDuanHuoMian','shengYinSongEn','wangQuanBaoZhu','xinYangChongZhu','shengYiWu','yinZhiZiDan']],
-            hongYiZhuJiao:['tieLvZhe_name','shengGroup',5,['shengYueYinQi','quMoShi','daoGaoShi','quanNengNiWei','shenXuanDaoYan','shengDian','shengYiWu','yinZhiZiDan']],
+            zhuLvZhe:['zhuLvZhe_name','xueGroup',5,['shenLvFengSuo','shengXueZhiJi','wangCheYiWei','zuiDuanHuoMian','shengYinSongEn','wangQuanBaoZhu','xinYangChongZhu','shengYiWu','yinZhiZiDan']],
+            hongYiZhuJiao:['zhuLvZhe_name','shengGroup',5,['shengYueYinQi','quMoShi','daoGaoShi','quanNengNiWei','shenXuanDaoYan','shengDian','shengYiWu','yinZhiZiDan']],
             jiLuZhe:['jiLuZhe_name','huanGroup','4/5',['chuanShuoZhiDi','zhiXingHeYi','jiGuShiDian','yiJiLunPo','xuanCuiJingLian','miJingWanXiang','shiShu','guJinHuzheng','yiJi','shiLiao']],
             chuanJiaoShi:['chuanJiaoShi_name','shengGroup','4/5',['shenDeWenTu','xinYangZhiLu','chuanDao','qiShi','shiFeng','luBiao','shuLingEnCi','miSa','qianCheng']],
             yiJiaoTu:['yiJiaoTu_name','huanGroup',4,['yiDuanXieShuo','shenPanYJT','xianJi','moRiYuYan','fangZhu','tanLan','yuYan']],
 		},
         characterIntro: {
-            tieLvZhe:`红衣主教对于教义的理解总是那么深刻，有的时候是一人之下万人之上的红衣主教，而有的时候却是铁血暗流的铸律者。而他真正的目的，只有他自己知晓~`,
+            zhuLvZhe:`红衣主教对于教义的理解总是那么深刻，有的时候是一人之下万人之上的红衣主教，而有的时候却是铁血暗流的铸律者。而他真正的目的，只有他自己知晓~`,
             hongYiZhuJiao:`有的时候是一人之下万人之上的红衣主教，而有的时候却是铁血暗流的铸律者。而他真正的目的，只有他自己知晓~`,
             jiLuZhe:`多拉贡幻，一个落后于时代的记录者罢了~想要了解么？尝试读懂字里行间的意义吧`,
             chuanJiaoShi:`侍奉、弥撒、启示、传道，伊丽莎白在自己的信仰之路上永不停歇。她坚信自己虔诚的路标不会改变。`,
@@ -633,7 +633,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 return 8-get.value(card);
                             });
                             next.set('type',type);
-                            next.set('prompt','请选择一张与【王权宝珠】上牌种类相同的牌,弃置之[展示],否则摸2张牌，铁律者阵营士气-1，若【圣遗物】数<1移除此卡');
+                            next.set('prompt','请选择一张与【王权宝珠】上牌种类相同的牌,弃置之[展示],否则摸2张牌，铸律者阵营士气-1，若【圣遗物】数<1移除此卡');
                             var result=await next.forResult();
                             if(result.bool){
                                 await player.discard(result.cards[0],'showCards');
@@ -661,7 +661,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         trigger:{player:'addToExpansionEnd'},
                         forced:true,
                         filter:function (event,player){
-                            return event.gaintag.includes('wangQuanBaoZhuX_biaoJi')&&player.getExpansions('wangQuanBaoZhuX_biaoJi').length>0&&event.type=='zhuanYi'&&player.name=='tieLvZhe';
+                            return event.gaintag.includes('wangQuanBaoZhuX_biaoJi')&&player.getExpansions('wangQuanBaoZhuX_biaoJi').length>0&&event.type=='zhuanYi'&&player.name=='zhuLvZhe';
                         },
                         content:async function (event,trigger,player){
                             var choiceList=["将角色卡替换为【红衣主教】，然后移除此卡","<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡"];
@@ -877,7 +877,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(player.zhiLiao>0) await player.changeZhiLiao(-player.zhiLiao);
                     if(player.countCards('h')>4) player.chooseToDiscard('h',true,player.countCards('h')-4);
                     game.broadcastAll(function(current){
-                        current.init('tieLvZhe');
+                        current.init('zhuLvZhe');
                     },player);
                     player.update();
                     if(player.hasZhiShiWu('shengYiWu')) player.markSkill('shengYiWu');
@@ -1629,9 +1629,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         },
 		
 		translate: {
-            tieLvZhe:'铁律者',
+            zhuLvZhe:'铸律者',
             hongYiZhuJiao:'红衣主教',
-            tieLvZhe_name:'阿斯兰',
+            zhuLvZhe_name:'阿斯兰',
             jiLuZhe:'记录者',
             jiLuZhe_name:'多拉贡幻',
             chuanJiaoShi:'传教士',
@@ -1660,9 +1660,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wangQuanBaoZhu:'(专)王权宝珠',
             wangQuanBaoZhu_info:`
             <span class="greentext">[被动]圣律威压</span><br>
-            <span class='tiaoJian'>(此卡转移或放置到你面前是)</span>选择一下一项发动：<br>·<span class='tiaoJian'>(选择1张与此卡上牌种类相同的牌)</span>弃置之[展示]。<br>·摸2张牌[强制]，铁律者阵营士气-1。<span class='tiaoJian'>(若</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>数<1)</span>移除此卡。<br>
+            <span class='tiaoJian'>(此卡转移或放置到你面前是)</span>选择一下一项发动：<br>·<span class='tiaoJian'>(选择1张与此卡上牌种类相同的牌)</span>弃置之[展示]。<br>·摸2张牌[强制]，铸律者阵营士气-1。<span class='tiaoJian'>(若</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>数<1)</span>移除此卡。<br>
             <span class="greentext">[被动]神言咏赞</span><br>
-            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铁律者面前)</span>铁律者选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
+            <span class='tiaoJian'>(【圣律威压】结算完后)</span>将此卡转移到你右手边最近的玩家面前。<span class='tiaoJian'>(若因此转移至铸律者面前)</span>铸律者选择以下一项发动：<br>·将角色卡替换为【红衣主教】，然后移除此卡。<br>·<span class='tiaoJian'>(移除X点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>，X<3)</span>目标角色摸X张牌[强制]，然后移除此卡。
             `,
             wangQuanBaoZhuX:'(专)王权宝珠',
             wangQuanBaoZhuX_shengLvWeiYa:'[被动]圣律威压',
@@ -1671,9 +1671,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             xinYangChongZhu:'[响应]信仰重铸(回合限定)',
             xinYangChongZhu_info:"[水晶]<span class='tiaoJian'>(你的回合结束时，若本回合你未执行【特殊行动】，将1张手牌面朝上放置在【王权宝珠】上[展示][强制])</span>你摸1张牌[强制]，你+2<span class='lan'>【圣遗物】</span>，将【王权宝珠】放置在你面前。",
             shengYiWu:'圣遗物',
-            shengYiWu_info:"<span class='lan'>【圣遗物】</span>为红衣主教与铁律者共有指示物，上限为3。",
+            shengYiWu_info:"<span class='lan'>【圣遗物】</span>为红衣主教与铸律者共有指示物，上限为3。",
             yinZhiZiDan:'银质子弹',
-            yinZhiZiDan_info:"<span class='hong'>【银质子弹】</span>为红衣主教与铁律者共有指示物，上限为3。",
+            yinZhiZiDan_info:"<span class='hong'>【银质子弹】</span>为红衣主教与铸律者共有指示物，上限为3。",
 
             shengYueYinQi:"[被动]圣约银契",
             shengYueYinQi_info:"<span class='tiaoJian'>([攻击行动]或[法术行动]结束时)</span>你+1<span class='hong'>【银质子弹】</span>。",
@@ -1682,7 +1682,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             daoGaoShi:"[响应]祷告式",
             daoGaoShi_info:"<span class='tiaoJian'>(主动攻击前①，移除1点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>)</span>目标角色+1[治疗]。",
             quanNengNiWei:"[法术]权能逆位",
-            quanNengNiWei_info:"<span class='tiaoJian'>(移除1点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>或我方角色合计2[治疗])</span>你+2<span class='lan'>【圣遗物】</span>，移除你的所有基础效果与[治疗]，将手牌弃到4张，然后将你的角色卡替换为【铁律者】。",
+            quanNengNiWei_info:"<span class='tiaoJian'>(移除1点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>或我方角色合计2[治疗])</span>你+2<span class='lan'>【圣遗物】</span>，移除你的所有基础效果与[治疗]，将手牌弃到4张，然后将你的角色卡替换为【铸律者】。",
             shenXuanDaoYan:"[响应]神宣祷言",
             shenXuanDaoYan_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除1点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御1点士气下降，你+1<span class='hong'>【银质子弹】</span>。",
             shengDian:"[启动]圣典",
