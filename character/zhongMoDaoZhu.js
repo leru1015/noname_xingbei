@@ -1198,7 +1198,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var control=await next.forResultControl();
                     if(control=='选项一'){
                         if(player.countCards('h')==0) return;
-                        var cards=await player.chooseToDiscard('h',1,true).set('selfSkil',true).set('ai',function(card){
+                        var cards=await player.chooseToDiscard('h','showCards',1,true).set('selfSkil',true).set('ai',function(card){
                             var player=_status.event.player;
                             if(player.side==player.storage.luBiaoTarget.side){
                                 if(get.name(card)=='shengDun') return 1;
@@ -1209,7 +1209,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 else return 0.5;
                             }
                         }).forResultCards();
-                        await player.showCards(cards);
                         var name=get.name(cards[0]);
                         if(((name=='xuRuo'||name=='shengDun')&&player.storage.luBiaoTarget.getExpansions("_"+name).length==0)||name=='zhongDu'){
                             await player.storage.luBiaoTarget.addToExpansion(cards,player,'gain2').set('gaintag',["_"+name]);

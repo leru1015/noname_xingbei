@@ -508,7 +508,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						.set("ai",function(card){
 							return 6 - get.value(card);
 						})
-                        .set('showCards',true)
 						.forResult();
 				},
                 content:function(){

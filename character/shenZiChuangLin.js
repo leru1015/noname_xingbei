@@ -1469,7 +1469,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             xiBie.push(get.xiBie(yanLing[i]));
                         }
                     }
-                    var next=player.chooseToDiscard('h','是否额外弃1张与现存【言灵】系别相同的牌【展示】',function(card){
+                    var next=player.chooseToDiscard('h','showCards','是否额外弃1张与现存【言灵】系别相同的牌【展示】',function(card){
                         var xiBie=_status.event.xiBie;
                         return xiBie.includes(get.xiBie(card));
                     }).set('xiBie',xiBie);
@@ -1478,12 +1478,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     });
                     'step 4'
                     if(result.bool){
-                        player.showCards(result.cards);
-                    }else{
-                        event.finish();
+                        player.addZhiShiWu('miShu');
                     }
-                    'step 5'
-                    player.addZhiShiWu('miShu');
                 },
                 ai:{
                     order:3.8,
