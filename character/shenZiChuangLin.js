@@ -789,7 +789,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             miShuMuYing:{
                 trigger:{source:'gongJiMingZhong'},
                 filter:function(event,player){
-                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun');
+                    return get.is.zhuDongGongJi(event)&&!player.usedSkill('shun')&&event.cards.length>0;
                 },
                 content:function(){
                     'step 0'
