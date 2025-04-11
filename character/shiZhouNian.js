@@ -9074,7 +9074,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianShiJiBan_info:"<span class='tiaoJian'>(每当你移除场上任意一个基础效果或使用【圣盾】时)</span>目标角色+1[治疗]。",
             tianShiZhiQiang:"(独)[法术]天使之墙",
             tianShiZhiQiang_info:"可作为【圣盾】使用。",
-            tianShiZhiGe:"[响应]天使之歌(回合限定)",
+            tianShiZhiGe:"[响应]天使之歌[回合限定]",
             tianShiZhiGe_info:"[水晶]<span class='tiaoJian'>(在你的回合开始前发动)</span>移除场上任意一个基础效果。",
             shenZhiBiHu:"[响应]神之庇护",
             shenZhiBiHu_info:"X[水晶]为我方抵御X点因法术伤害而造成的士气下降。",

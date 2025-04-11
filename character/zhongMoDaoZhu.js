@@ -1121,7 +1121,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     name:'路标',
                     nocount:true,
                     content:`
-                    <span class="greentext">[响应]告解式(回合限定)</span><br>
+                    <span class="greentext">[响应]告解式[回合限定]</span><br>
                     <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，传教士弃1张牌。
                     `,
                 },
@@ -1655,7 +1655,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wangCheYiWei_info:"<span class='tiaoJian'>(移除场上合计2[治疗])</span>你+2<span class='hong'>【银质子弹】</span>，移除你的所有基础效果和[治疗]，将你的角色卡替换为【红衣主教】并额外+1[攻击行动]。",
             zuiDuanHuoMian:'[响应]罪断豁免',
             zuiDuanHuoMian_info:"<span class='tiaoJian'>(我方非因承受伤害而导致士气下降时，移除X点</span><span class='lan'>【圣遗物】</span><span class='tiaoJian'>)</span>抵御X点士气下降，你+X<span class='hong'>【银质子弹】</span>。",
-            shengYinSongEn:'[响应]圣银颂恩(回合限定)',
+            shengYinSongEn:'[响应]圣银颂恩[回合限定]',
             shengYinSongEn_info:"<span class='tiaoJian'>([攻击行动]结束时，移除2点</span><span class='hong'>【银质子弹】</span><span class='tiaoJian'>)</span>额外+1[攻击行动]，目标角色+1[治疗]。",
             wangQuanBaoZhu:'(专)王权宝珠',
             wangQuanBaoZhu_info:`
@@ -1668,7 +1668,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wangQuanBaoZhuX_shengLvWeiYa:'[被动]圣律威压',
             wangQuanBaoZhuX_shenYanYongZan1:'[被动]神言咏赞',
             wangQuanBaoZhuX_shenYanYongZan2:'[被动]神言咏赞',
-            xinYangChongZhu:'[响应]信仰重铸(回合限定)',
+            xinYangChongZhu:'[响应]信仰重铸[回合限定]',
             xinYangChongZhu_info:"[水晶]<span class='tiaoJian'>(你的回合结束时，若本回合你未执行【特殊行动】，将1张手牌面朝上放置在【王权宝珠】上[展示][强制])</span>你摸1张牌[强制]，你+2<span class='lan'>【圣遗物】</span>，将【王权宝珠】放置在你面前。",
             shengYiWu:'圣遗物',
             shengYiWu_info:"<span class='lan'>【圣遗物】</span>为红衣主教与铸律者共有指示物，上限为3。",
@@ -1694,7 +1694,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             zhiXingHeYi_info:"展示牌堆顶2张牌[展示]；你可选择其中1张牌，将此牌作为相应行动发出并起1张牌。<span class='tiaoJian'>(结算完成后)</span>将以此法展示的剩余X张牌弃掉，你+X<span class='hong'>【史料】</span>。",
             jiGuShiDian:"[被动]稽古识典",
             jiGuShiDian_info:"<span class='tiaoJian'>(</span><span class='hong'>【史料】</span><span class='tiaoJian'>达到上限时)</span>移除所有<span class='hong'>【史料】</span>，你弃1张牌，将【史书】加入手牌[强制]。",
-            yiJiLunPo:"[响应]遗迹论破(回合限定)",
+            yiJiLunPo:"[响应]遗迹论破[回合限定]",
             yiJiLunPo_info:"<span class='tiaoJian'>(主动攻击时①，移除与攻击牌同系的X个【遗迹】)</span>本次攻击伤害额外+(X-1)；<span class='tiaoJian'>(若X>1)</span>额外+1[法术行动]；<span class='tiaoJian'>(若因此使【遗迹】数减少为0)</span>我方【战绩区】+1[宝石]。",
             xuanCuiJingLian:"[响应]选淬精炼",
             xuanCuiJingLian_info:"<span class='tiaoJian'>(每当你移除【遗迹】时)</span>将光系与暗系的【遗迹】视为任意系别。",
@@ -1728,10 +1728,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             shiFeng_info:"<span class='tiaoJian'>(你因自身技能弃的牌置入弃牌堆时，移除你1[治疗])</span>将该弃牌加入拥有【路标】的角色手牌[强制]。<span class='tiaoJian'>(若没有因此造成对方士气下降)</span>指定除你外的目标角色+1[治疗]。",
             luBiao:"(专)路标",
             luBiao_info:`
-            <span class="greentext">[响应]告解式(回合限定)</span><br>
+            <span class="greentext">[响应]告解式[回合限定]</span><br>
             <span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，传教士弃1张牌。
             `,
-            luBiaoX:"[响应]告解式(回合限定)",
+            luBiaoX:"[响应]告解式[回合限定]",
             luBiaoX_info:"<span class='tiaoJian'>(此卡被转移至你面前时，你摸2张牌[强制])</span>我方【战绩区】+1[水晶]，然后将此卡转移至你左手边最近的角色面前，传教士弃1张牌。",
             shuLingEnCi:"[启动]属灵恩赐",
             shuLingEnCi_info:"[水晶]你+1[治疗]，弃1张牌。",
@@ -1762,7 +1762,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             <span class="greentext">[被动]灾殃止息</span><br>
             <span class='tiaoJian'>(异教徒的回合开始时，若存在【天雷劫火】或【地裂波涛】)</span>移除此卡。
             `,
-            fangZhu:"[法术]放逐(回合限定)",
+            fangZhu:"[法术]放逐[回合限定]",
             fangZhu_info:"[水晶]<span class='tiaoJian'>(无视你的手牌上限摸6-8张牌[强制])</span>移除场上所有【末日预言】和【预言】，将1个【末日预言】放置入场，然后将6张手牌面朝下洗混放置到【末日预言】上作为【预言】，额外+1[攻击行动]或者[法术行动]。",
             tanLan:"[响应]贪婪",
             tanLan_info:"[水晶]<span class='tiaoJian'>(与【天雷劫火】或【地裂波涛】同时发动)</span>将“选择以下一项发动”改为“发动以下项目，顺序由你决定”。",
