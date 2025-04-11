@@ -5052,6 +5052,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.chooseDraw(2,true);
                 },
+                check:function(event,player){
+                    var num=player.countCards('h',function(card){
+                        if(get.type(card)!='gongJi') return false;
+                        var xiBie=get.xiBie(card);
+                        if(xiBie=='shui'||xiBie=='an') return false;
+                        return true;
+                    });
+                    if(num>=2){
+                        var players=game.filterPlayer(function(current){
+                            if(current.side==player.side) return false;
+                            let num=current.getHandcardLimit()-current.countCards('h');
+                            return num<=2;
+                        });
+                        return players.length>0;
+                    }
+                    return false;
+                },
                 mod:{
                     maxHandcard:function(player,num){
                         if(player.isHengZhi()){
