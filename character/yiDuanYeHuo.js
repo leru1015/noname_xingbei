@@ -241,7 +241,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content:function(){
                             'step 0'
-                            trigger.cancel();
+                            trigger.num=0;
                             'step 1'
                             player.faShuDamage(1,player).set('step',4);
                             'step 2'
