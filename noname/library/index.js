@@ -5109,7 +5109,7 @@ export class Library {
 			},
 		},
 		tutorial:{
-			name:'教程',
+			name:'新手向导',
 		}
 	};
 	status = {
