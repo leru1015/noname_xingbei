@@ -3405,6 +3405,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.hengZhi();                 
                 },
                 check:function(event,player){
+                    if(player.countCards('h',card=>get.type(card)=='faShu')==player.countCards('h')) return true;
                     var num=player.getHandcardLimit()-player.countCards('h');
                     return num>0;
                 },
@@ -3490,6 +3491,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(dict.baoShi>0) await player.changeZhanJi('baoShi',-dict.baoShi);
                     await player.chongZhi();
                     await player.addNengLiang('baoShi');
+                },
+                group:'anYingLiuXing_wuFaXingDong',
+                subSkill:{
+                    wuFaXingDong:{
+                        trigger:{player:'triggerSkill'},
+                        direct:true,
+                        filter:function(event,player){
+                            if(event.skill=='anYingLiuXing_wuFaXingDong') return false;//需要排除自身，防止嵌套
+                            if(player.countCards('h',card=>get.type(card)=='faShu')!=player.countCards('h')) return false;
+                            return get.info('_wuFaXingDong').group.includes(event.skill);
+                        },
+                        content:function(){
+                            trigger.cancelled=true;
+                        }
+                    }
                 },
                 ai:{
 					order:function(item,player){
