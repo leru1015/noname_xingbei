@@ -1853,7 +1853,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             kuangLiZhiTi:{
                 trigger:{player:'zaoChengShangHai'},
                 forced:true,
-                priority:-1,
+                //priority:-1,
                 filter:function(event,player){
                     return event.source&&player.isHengZhi()&&player.countZhiShiWu('liQi')>0;
                 },
