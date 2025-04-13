@@ -9834,6 +9834,7 @@ export class Player extends HTMLDivElement {
 		}
 	}
 	isUnderControl(self, me) {
+		if(_status.playback) return true;//使在录像模式下可以查看其他角色盖牌
 		me = me || game.me;
 		var that = this._trueMe || this;
 		if (that.isMad() || game.notMe) return false;
