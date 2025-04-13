@@ -8787,6 +8787,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     .set('filterButton',function(button){
                         return get.type(button)=='faShu';
                     })
+                    .set('ai',function(button){
+                        var player=_status.event.player;
+                        var num=player.getHandcardLimit()-player.countCards('h');
+                        if(num>2) return 1;
+                        else return 0;
+                    })
                     .forResult();
                     event.result={
                         bool:result.bool,
