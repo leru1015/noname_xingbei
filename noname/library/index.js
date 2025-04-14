@@ -1136,12 +1136,14 @@ export class Library {
 				},
 				update_link: {
 					name: "更新地址",
-					init: "github",
+					init: "gitcode",
 					unfrequent: true,
 					item: {
 						//coding: "URC",
 						github: "GitHub",
+						gitcode: "GitCode",
 					},
+					intro: "GitHub可同时下载无素材(离线)更新包和完整包，但网络条件要求较高；GitCode尽可更新无素材更新包，素材更新请使用单独的‘检测素材更新’；安卓启动器只能下载完整包，win启动器都可。",
 					onclick(item) {
 						game.saveConfig("update_link", item);
 						lib.updateURL = lib.updateURLS[item] || lib.updateURLS.coding;
