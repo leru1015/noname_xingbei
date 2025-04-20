@@ -17,7 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		character:{
             zhuLvZhe:['zhuLvZhe_name','xueGroup',5,['shenLvFengSuo','shengXueZhiJi','wangCheYiWei','zuiDuanHuoMian','shengYinSongEn','wangQuanBaoZhu','xinYangChongZhu','shengYiWu','yinZhiZiDan'],['forbidai']],
             hongYiZhuJiao:['zhuLvZhe_name','shengGroup',5,['shengYueYinQi','quMoShi','daoGaoShi','quanNengNiWei','shenXuanDaoYan','shengDian','shengYiWu','yinZhiZiDan']],
-            jiLuZhe:['jiLuZhe_name','huanGroup','4/5',['chuanShuoZhiDi','zhiXingHeYi','jiGuShiDian','yiJiLunPo','xuanCuiJingLian','miJingWanXiang','shiShu','guJinHuzheng','yiJi','shiLiao'],['unseen']],
+            jiLuZhe:['jiLuZhe_name','huanGroup','4/5',['chuanShuoZhiDi','zhiXingHeYi','jiGuShiDian','yiJiLunPo','xuanCuiJingLian','miJingWanXiang','shiShu','guJinHuzheng','yiJi','shiLiao']],
             chuanJiaoShi:['chuanJiaoShi_name','shengGroup','4/5',['shenDeWenTu','xinYangZhiLu','chuanDao','qiShi','shiFeng','luBiao','shuLingEnCi','miSa','qianCheng']],
             yiJiaoTu:['yiJiaoTu_name','huanGroup',4,['yiDuanXieShuo','shenPanYJT','xianJi','moRiYuYan','fangZhu','tanLan','yuYan']],
 		},
@@ -30,7 +30,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		},
         card: {
             shiShuCard:{
-                type: "gongJi",
+                //type: "gongJi",
                 enable: true,
                 selectTarget: 1,
                 filterTarget: function(card,player,target){
@@ -269,8 +269,51 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiShu:{},
             shiShuX:{
-                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian'],
+                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_showCards','shiShuX_mod'],
                 subSkill:{
+                    showCards:{
+                        priority:0.5,
+                        trigger:{player:'showCardsBefore'},
+                        filter:function(event,player){
+                            var bool=false;
+                            for(var card of event.cards){
+                                if(card.name=='shiShuCard'){
+                                    bool=true;
+                                    break;
+                                }
+                            }
+                            return bool&&event.getParent().name=='discard'&&event.getParent().player==player;
+                        },
+                        direct:true,
+                        content:async function(event, trigger, player){
+                            var cards=[];
+                            for(var card of trigger.cards){
+                                if (card.name=='shiShuCard') {
+                                    var tempCard=game.createCard(card.name,'di','huan',card.duYou);
+                                    cards.push(tempCard);
+                                }else{
+                                    cards.push(card);
+                                }
+                            }
+                            trigger.cards=cards;
+                        }
+                    },
+                    mod:{
+                        priority:-1,
+                        mod:{
+                            cardname:function(card,player,name){
+                                if(name=='shiShuCard'){
+                                    return 'diLieZhan';
+                                }
+                            },
+                            cardMingGe:function(card,player,mingGe){
+                                if(card.name=='shiShuCard') return 'huan';
+                            },
+                            cardXiBie:function(card,player,xiBie){
+                                if(card.name=='shiShuCard') return 'di';
+                            },
+                        },
+                    }, 
                     yiShiWeiJing:{
                         forced:true,
                         trigger:{player:['daChuPai','discard','addToExpansionEnd'],global:'gainEnd'},
@@ -1300,7 +1343,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             cards=cards.randomGets(6-player.getExpansions('yuYan').length);
                         }
                         game.log(player,`将${cards.length}张牌 加入`,`#g【预言】`);
-                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]);
+                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
                     }
                     
                 },
@@ -1360,7 +1403,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     else{
                         let cards=get.cards();
                         game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
-                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]);
+                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
                         game.log(player,`将1张牌加入手牌`);
                         await player.gain(card);
                     }
@@ -1406,7 +1449,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }).forResultCards();
                     cards=cards.randomSort();
                     game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
-                    await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]);
+                    await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
 
                     player.addGongJiOrFaShu();
                     player.storage.fangZhu=false;
