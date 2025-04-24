@@ -7063,7 +7063,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 filter:function(event,player){
                     if(!player.hasZhiShiWu('douQi')) return false;
                     if(event.customArgs.xuLiYiji) return false;
-                    return event.yingZhan!=true;
+                    return true;
                 },
                 content:function(){
                     'step 0'
@@ -7074,6 +7074,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.faShuDamage(player.countZhiShiWu('douQi'),player);
                 },
                 check:function(event,player){
+                    if(event.canYingZhan==false) return false;
                     if(player.countZhiShiWu('douQi')-1+player.countCards('h')>=player.getHandcardLimit()) return false;
                     else return true;
                 }
