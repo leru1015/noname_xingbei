@@ -65,7 +65,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:async function (event,trigger,player){
                     for(var current of game.players) current.update();
                     var cards=get.cards(3);
-                    await player.addToExpansion('draw',cards,'log').set('gaintag',['wangQuanBaoZhuX_biaoJi']);
+                    await player.addToExpansion('draw',cards,'log').set('gaintag',['yiJi']);
                     await player.showHiddenCards(cards);
                 }
             },
