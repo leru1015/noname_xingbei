@@ -116,7 +116,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.addSkill('shiShuX');
                     }
                     if(!player.hasCard(card=>get.name(card)=='shiShuCard')){
-                        var card=game.createCard('shiShuCard','di','huan');
+                        var card=game.createCard('shiShuCard','','');
+                        game.broadcastAll(function(card){
+                            card.$init(['di','huan',card.name]);
+                        },card);
                         await player.gain(card,'gain2').set('skill','jiGuShiDian');
                     }
                 }
@@ -269,42 +272,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiShu:{},
             shiShuX:{
-                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_showCards','shiShuX_mod'],
+                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod'],
                 subSkill:{
-                    showCards:{
-                        priority:0.5,
-                        trigger:{player:'showCardsBefore'},
-                        filter:function(event,player){
-                            var bool=false;
-                            for(var card of event.cards){
-                                if(card.name=='shiShuCard'){
-                                    bool=true;
-                                    break;
-                                }
-                            }
-                            return bool&&event.getParent().name=='discard'&&event.getParent().player==player;
-                        },
-                        direct:true,
-                        content:async function(event, trigger, player){
-                            var cards=[];
-                            for(var card of trigger.cards){
-                                if (card.name=='shiShuCard') {
-                                    var tempCard=game.createCard(card.name,'di','huan',card.duYou);
-                                    cards.push(tempCard);
-                                }else{
-                                    cards.push(card);
-                                }
-                            }
-                            trigger.cards=cards;
-                        }
-                    },
                     mod:{
                         priority:-1,
                         mod:{
-                            cardname:function(card,player,name){
-                                if(name=='shiShuCard'){
-                                    return 'diLieZhan';
-                                }
+                            cardType:function(card,player,type){
+                                if(card.name=='shiShuCard') return 'gongJi';
                             },
                             cardMingGe:function(card,player,mingGe){
                                 if(card.name=='shiShuCard') return 'huan';
