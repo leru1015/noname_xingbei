@@ -1741,6 +1741,7 @@ export default () => {
 					//角色列表
 					var list = get.charactersOL();
 					event.list = get.characterGets(list,event.choose_number);
+					game.log('本局可选角色：',event.list);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];
@@ -1749,7 +1750,7 @@ export default () => {
 					event.num=1;
 					
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色", [list, "characterx"]);
+						var dialog = ui.create.dialog("Ban角色1名", [list, "characterx"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -1800,11 +1801,12 @@ export default () => {
 							if (dialog) {
 								if (choosing.side == true) {
 									choosing = "<span style='color:red;'>红方</span>";
+									var choosing2 = "<span style='color:lightblue;'>蓝方</span>";
 								} else {
 									choosing = "<span style='color:lightblue;'>蓝方</span>";
 								}
 								dialog.content.firstChild.innerHTML =
-									choosing + "Ban了" + get.translation(links);
+									choosing + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban角色1名";
 								for (var i = 0; i < dialog.buttons.length; i++) {
 									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
 										if (first) {
@@ -1822,6 +1824,12 @@ export default () => {
 						event.videoId
 					);
 					event.selected.addArray(result.links);
+					if (event.choosing.side == true) {
+						var str = "<span style='color:red;'>红方</span>";
+					} else {
+						var str = "<span style='color:lightblue;'>蓝方</span>";
+					}
+					game.log(str,'Ban了',result.links);
 					if(event.choosing.side==true){
 						event.red_ban.addArray(result.links);
 					}else{
@@ -1910,6 +1918,7 @@ export default () => {
 					});
 					"step 9";
 					event.selected.push(result.links[0]);
+					
 					if(event.choosing.side==true){
 						event.red_chooseList.push(result.links[0]);
 						var id=event.red_list.shift().playerid;
@@ -1919,7 +1928,7 @@ export default () => {
 					}
 
 					var name=event.choosing.node.name.innerHTML;
-
+					game.log(name,'选择了',result.links[0]);
 					game.broadcastAll(function(id,link){
 							if(!lib.playerOL[id].name1){
 								lib.playerOL[id].init(link);
@@ -2087,6 +2096,7 @@ export default () => {
 					//角色列表
 					var list = get.charactersOL();
 					event.list = get.characterGets(list,event.choose_number);
+					game.log('本局可选角色：',event.list);
 					event.choosing=event.red_list[0];
 					event.videoId = lib.status.videoId++;
 					event.red_ban=[];
@@ -2095,7 +2105,7 @@ export default () => {
 					event.num=1;
 					
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色", [list, "characterx"]);
+						var dialog = ui.create.dialog("Ban角色1名", [list, "characterx"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -2146,11 +2156,12 @@ export default () => {
 							if (dialog) {
 								if (choosing.side == true) {
 									choosing = "<span style='color:red;'>红方</span>";
+									choosing2 = "<span style='color:lightblue;'>蓝方</span>";
 								} else {
 									choosing = "<span style='color:lightblue;'>蓝方</span>";
 								}
 								dialog.content.firstChild.innerHTML =
-									choosing + "Ban了" + get.translation(links);
+									choosing + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban角色1名";
 								for (var i = 0; i < dialog.buttons.length; i++) {
 									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
 										if (first) {
@@ -2265,7 +2276,7 @@ export default () => {
 					}
 
 					var name=event.choosing.node.name.innerHTML;
-
+					game.log(name,'选择了',result.links[0]);
 					game.broadcastAll(function(id,link){
 							if(!lib.playerOL[id].name1){
 								lib.playerOL[id].init(link);
