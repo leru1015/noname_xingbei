@@ -1707,10 +1707,12 @@ div:not(.handcards) > .card > .info > span,
 	font-family: "huangcao", "xinwei";
 	padding-top: 4px;
 }
-.marks > .card.overflowmark {
+.marks > .card.overflowmark,
+.marks2 > .card.overflowmark {
 	overflow: visible;
 }
-.marks > div > .markcount.menubutton {
+.marks > div > .markcount.menubutton,
+.marks2 > div > .markcount.menubutton {
 	font-family: "xinwei";
 	font-size: 16px;
 	width: 14px;
@@ -2701,10 +2703,12 @@ div:not(.handcards) > .card > .info > span,
 	left: 14px;
 	top: 112px;
 }
-.player > .marks {
+.player > .marks,
+.player > .marks2 {
 	z-index: 4;
 }
 .judges > div,
+.marks2 > div,
 .marks > div {
 	width: 26px;
 	height: 26px;
