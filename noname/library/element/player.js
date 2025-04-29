@@ -2826,6 +2826,9 @@ export class Player extends HTMLDivElement {
 				else str += '人数：<span class="firetext">' + this.hp + "/" + this.maxHp + "</span>";
 
 				str += "　(" + info[0].slice(0, 12) + " 的房间)";
+				if(info[2].remark && info[2].remark!='无'){
+					str+=`备注[${info[2].remark}]`;
+				}
 				/*
 				if (config.mode != "guozhan" && (config.mode != "doudizhu" || config.doudizhu_mode != "online")) {
 					str += "【";
@@ -2846,10 +2849,6 @@ export class Player extends HTMLDivElement {
 						if(i<config.characterPack.length-1) str+='+';
 					}
 					str+='】';
-				}
-
-				if(info[2].remark && info[2].remark!='无'){
-					str+=`备注[${info[2].remark}]`;
 				}
 
 				this.config = config;
