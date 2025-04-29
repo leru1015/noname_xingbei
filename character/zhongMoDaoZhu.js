@@ -1372,7 +1372,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var xiBie2=get.xiBie(card);
                     if(xiBie==xiBie2){
                         await player.discard(card,'yuYan');
-                        await player.addZhanJi('baoShi');
+                        await player.addZhanJi('shuiJing');
                         await event.trigger('xianJi');
                     }
                     else{
