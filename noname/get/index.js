@@ -25,6 +25,7 @@ export class Get extends GetCompatible {
 	 * @returns {GameEvent|string}
 	 */
 	cardsetion(player, sourceEvent) {
+		if(_status.playback) return;
 		if (game.online) return;
 		if (!player && sourceEvent) player = game.me;
 		const info = lib.translate;
@@ -45,6 +46,7 @@ export class Get extends GetCompatible {
 			name2 = _status.event.getParent(3).name;
 			evt2 = _status.event.getParent(3);
 		}
+		console
 		if (name1 == "compareMultiple" || name2 == "compareMultiple" || name1.indexOf("Callback") != -1 || name2.indexOf("Callback") != -1) {
 			name1 = _status.event.getParent(4).name;
 			evt1 = _status.event.getParent(4);
