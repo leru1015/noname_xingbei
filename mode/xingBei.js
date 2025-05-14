@@ -713,7 +713,7 @@ export default () => {
 					}
 
 					for (var i in result) {//计算ai的选择
-						if(!lib.playerOL[i].isOnline() || (lib.playerOL[i]==game.me&& game.me.isAuto)){
+						if((lib.playerOL[i]!=game.me && !lib.playerOL[i].isOnline()) || (lib.playerOL[i]==game.me && game.me.isAuto)){
 							if (result[i].links[0] == "红方") {
 								lib.playerOL[i].side=true;
 							}else{
