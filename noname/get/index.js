@@ -1302,14 +1302,20 @@ export class Get extends GetCompatible {
 	}
 	modetrans(config, server) {
 		if (config.mode == "xingBei") {
+			var str='';
 			switch (config.versus_mode) {
 				case "2v2":
-					return "2v2";
+					str="2v2";
+					break;
 				case "3v3":
-					return "3v3";
+					str="3v3";
+					break;
 				case "4v4":
-					return "4v4";
+					str="4v4";
+					break;
 			}
+			if(config.phaseswap) str+='多控';
+			return str;
 		}
 		if (server) {
 			return get.translation(config.mode) + "模式";
@@ -5874,6 +5880,9 @@ export class Get extends GetCompatible {
 		var name=player.name;
 		var str=`<span style="color:${c};">${get.translation(name)}</span>`;
 		return str;
+	}
+	phaseswap(){
+		return (!_status.connectMode&&get.config('phaseswap'))||(_status.connectMode&&lib.configOL.phaseswap);
 	}
 }
 

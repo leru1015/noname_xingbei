@@ -9848,14 +9848,19 @@ export class Player extends HTMLDivElement {
 			return false;
 		}
 		if (that === me || this == me._trueMe) return true;
-		if (_status.connectMode) return false;
+		//if (_status.connectMode) return false;
 		//if (lib.config.mode == "versus") {
-		if (lib.config.mode == "xingBei") {
-			return get.config("phaseswap") && this.side == me.side;
-		} else if (lib.config.mode == "boss") {
-			if (me.side) return false;
-			return this.side == me.side && get.config("single_control");
+		if(_status.connectMode){
+			return lib.configOL.phaseswap && this.side == me.side;
+		}else{
+			if (lib.config.mode == "xingBei") {
+				return (get.config("phaseswap")) && this.side == me.side;
+			} else if (lib.config.mode == "boss") {
+				if (me.side) return false;
+				return this.side == me.side && get.config("single_control");
+			}
 		}
+		
 		return false;
 	}
 	isOnline() {

@@ -4756,7 +4756,7 @@ export class Library {
 		xingBei:{
 			name:'星杯传说',
 			connect:{
-				update:function(config,map){				
+				update:function(config,map){		
 					if(config.connect_versus_mode=='4v4'){
 						map.connect_team_sequence.hide();
 						map.connect_choose_mode.hide();
@@ -4830,6 +4830,11 @@ export class Library {
 						3:'3',
 						4:'4',
 						5:'5',
+						6:'6',
+						7:'7',
+						8:'8',
+						9:'9',
+						10:'10',
 					},
 					frequent:true,
 				},
@@ -4856,6 +4861,14 @@ export class Library {
 					init:false,
 					onclick:function(bool){
 						game.saveConfig('connect_chooseSide',bool,this._link.config.mode);
+					},
+					frequent:true,
+				},
+				connect_phaseswap:{
+					name:'多控',
+					init:false,
+					onclick:function(bool){
+						game.saveConfig('connect_phaseswap',bool,this._link.config.mode);
 					},
 					frequent:true,
 				},
@@ -11500,7 +11513,7 @@ export class Library {
 						}
 					}
 					state = get.parsedResult(state);
-					ui.arena.setNumber(state.number);
+					
 					_status.mode = state.mode;
 					_status.renku = state.renku;
 					lib.inpile = state.inpile;
@@ -11514,11 +11527,18 @@ export class Library {
 					game.lanXingBei = state.lanXingBei;
 					game.moDanFangXiang = state.moDanFangXiang;
                     
+					if(lib.configOL.phaseswap && observe) ui.arena.setNumber(state.number-1);
+					else ui.arena.setNumber(state.number);
+
 					var pos = state.players[observe || game.onlineID].position;
 					for (var i in state.players) {
 						var info = state.players[i];
 						var player = ui.create.player(ui.arena).addTempClass("start");
-						player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+						if(lib.configOL.phaseswap && !observe){
+							player.dataset.position = info.position;
+						}else{
+							player.dataset.position = info.position < pos ? info.position - pos + parseInt(state.number) : info.position - pos;
+						}
 						if (i == observe || i == game.onlineID) {
 							game.me = player;
 						}
@@ -11630,8 +11650,15 @@ export class Library {
 						}
 						player.update();
 					}
-					game.arrangePlayers();
 					ui.create.me(true);
+					if(lib.configOL.phaseswap && !observe){
+						game.singleHandcard = true;
+						ui.arena.classList.add("single-handcard");
+						ui.window.classList.add("single-handcard");
+						ui.fakeme = ui.create.div(".fakeme.avatar");
+						ui.me.appendChild(ui.fakeme);
+					}
+					game.arrangePlayers();
 					//xingBei更新战绩区
 					ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
                     ui.updateShiQiInfo();
