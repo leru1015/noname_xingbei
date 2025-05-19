@@ -392,9 +392,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             let name=get.name(event.indexedData);
                             event.indexedData.storage.renMaster.storage[name]=false;
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         },
                     },
@@ -428,9 +430,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             'step 1'
                             let name=get.name(event.indexedData);
                             event.indexedData.storage.renMaster.storage[name]=false;
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            },event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         },
                     },
