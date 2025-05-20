@@ -4757,6 +4757,11 @@ export class Library {
 			name:'星杯传说',
 			connect:{
 				update:function(config,map){		
+					if(config.connect_phaseswap){
+						map.connect_viewHandcard.hide();
+					}else{
+						map.connect_viewHandcard.show();
+					}
 					if(config.connect_versus_mode=='4v4'){
 						map.connect_team_sequence.hide();
 						map.connect_choose_mode.hide();
