@@ -315,9 +315,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         content: async function(event, trigger, player){
                             trigger.cards.remove(event.indexedData);
-                            event.indexedData.fix();
-                            event.indexedData.remove();
-                            event.indexedData.destroyed = true;
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            }, event.indexedData);
                             game.log(event.indexedData, "被移除了");
                         }
                     },
