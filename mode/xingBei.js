@@ -1781,9 +1781,10 @@ export default () => {
 						game.addGlobalSkill('viewHandcard');
 					}
 					if(get.phaseswap()){
-						var list=game.getActivePlayersBySide();
-						for(var player of list){
-							if(get.itemtype(player)=='player') game.onSwapControl(player);
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
 						}
 					}
 				});
@@ -2166,7 +2167,13 @@ export default () => {
 					if(viewHandcard==true){
 						game.addGlobalSkill('viewHandcard');
 					}
-					
+					if(get.phaseswap()){
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}
 				});
 			},
 
@@ -2545,7 +2552,13 @@ export default () => {
 					if(viewHandcard==true){
 						game.addGlobalSkill('viewHandcard');
 					}
-					
+					if(get.phaseswap()){
+						for(var player of game.players){
+							if(player==game.me || player.isOnline2()){
+								game.onSwapControl(player);
+							}
+						}
+					}
 				});
 			},
 
