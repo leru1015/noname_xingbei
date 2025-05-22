@@ -1775,15 +1775,16 @@ export default () => {
 					}, event.videoId);
 					
 					'step 17'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
-					}
 					if(get.phaseswap()){
 						for(var player of game.players){
 							if(player==game.me || player.isOnline2()){
 								game.onSwapControl(player);
 							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
 						}
 					}
 				});
@@ -2161,15 +2162,16 @@ export default () => {
 					}, event.videoId);
 					
 					'step 12'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
-					}
 					if(get.phaseswap()){
 						for(var player of game.players){
 							if(player==game.me || player.isOnline2()){
 								game.onSwapControl(player);
 							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
 						}
 					}
 				});
@@ -2545,15 +2547,16 @@ export default () => {
 					}, event.videoId);
 					
 					'step 12'
-					var viewHandcard=lib.configOL.viewHandcard;
-					if(viewHandcard==true){
-						game.addGlobalSkill('viewHandcard');
-					}
 					if(get.phaseswap()){
 						for(var player of game.players){
 							if(player==game.me || player.isOnline2()){
 								game.onSwapControl(player);
 							}
+						}
+					}else{
+						var viewHandcard=lib.configOL.viewHandcard;
+						if(viewHandcard==true){
+							game.addGlobalSkill('viewHandcard');
 						}
 					}
 				});
