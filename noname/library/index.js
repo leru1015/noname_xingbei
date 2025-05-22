@@ -10313,7 +10313,7 @@ export class Library {
 				order:function(item,player){
 					var num=3.15;
 					num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
-					num+=(0.1*get.zhanJi(player.side).length);
+					num+=(0.05*get.zhanJi(player.side).length);
 					return num;
 				},
 				result:{
