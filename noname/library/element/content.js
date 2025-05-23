@@ -3522,15 +3522,13 @@ export const Content = {
 			return false;
 		};
 		if (info.direct) {
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if (!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
+			if(get.phaseswap()) game.swapPlayerAuto(player);
 			if (player.isOnline()) void 0;
 			event._result = { bool: true };
 			event._direct = true;
 		} else if (typeof info.cost === "function") {
 			if (checkFrequent(info)) event.frequentSkill = true;
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if(!_status.connectMode&&player.isUnderControl()) game.swapPlayerAuto(player);
+			if(get.phaseswap()) game.swapPlayerAuto(player);
 			//创建cost事件
 			var next = game.createEvent(`${event.skill}_cost`);
 			next.player = player;
@@ -4190,10 +4188,7 @@ export const Content = {
 			game.getGlobalHistory().isRound = true;
 		}
 		"step 1";
-		if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-		if (!_status.connectMode && !_status.auto && player.isUnderControl()) {
-			game.swapPlayerAuto(player);
-		}
+		if(get.phaseswap()) game.swapPlayerAuto(player);
 
 		//规则集中的“回合开始后⑤”，进行翻面检测
 		if (player.isTurnedOver() && !event._noTurnOver) {
@@ -4581,10 +4576,8 @@ export const Content = {
 	chooseToUse: function () {
 		"step 0";
 		if (event.responded) return;
-		if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-		if (!_status.connectMode && !_status.auto && player.isUnderControl()) {
-			game.swapPlayerAuto(player);
-		}
+		if(get.phaseswap()) game.swapPlayerAuto(player);
+
 		var skills = player.getSkills("invisible").concat(lib.skill.global);
 		game.expandSkills(skills);
 		for (var i = 0; i < skills.length; i++) {
@@ -4873,10 +4866,8 @@ export const Content = {
 		if (!_status.connectMode && lib.config.skip_shan && event.autochoose && event.autochoose()) {
 			event.result = { bool: false };
 		} else {
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if (!_status.connectMode&&!_status.auto && player.isUnderControl()) {
-				game.swapPlayerAuto(player);
-			}
+			if(get.phaseswap()) game.swapPlayerAuto(player);
+
 			if (event.isMine()) {
 				if (event.hsskill && !event.forced && _status.prehidden_skills.includes(event.hsskill)) {
 					ui.click.cancel();
@@ -5354,10 +5345,8 @@ export const Content = {
 		}
 		else{
 			// &&!lib.filter.wuxieSwap(trigger)
-			if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
-			if(!_status.connectMode&&!_status.auto&&player.isUnderControl()){
-				game.swapPlayerAuto(player);
-			}
+			if(get.phaseswap()) game.swapPlayerAuto(player);
+
 			event.rangecards=player.getCards(event.position);
 			for(var i=0;i<event.rangecards.length;i++){
 				if(lib.filter.cardDiscardable(event.rangecards[i],player,event)){
