@@ -50,6 +50,16 @@ export class Game extends GameCompatible {
 	nengLiangMax=3;
 
 	$initZhanJi(){
+		if(_status.connectMode){
+			game.shiQiMax=parseInt(lib.configOL.shiQiMax)||game.shiQiMax;
+			game.zhanJiMax=parseInt(lib.configOL.zhanJiMax)||game.zhanJiMax;
+			game.xingBeiMax=parseInt(lib.configOL.xingBeiMax)||game.xingBeiMax;
+		}else{
+			game.shiQiMax=parseInt(get.config('shiQiMax'))||game.shiQiMax;
+			game.zhanJiMax=parseInt(get.config('zhanJiMax'))||game.zhanJiMax;
+			game.xingBeiMax=parseInt(get.config('xingBeiMax'))||game.xingBeiMax;
+		}
+
 		game.broadcastAll(function(){
 			ui.shiQiInfo=ui.create.div('.touchinfo.bottom-right',ui.window);
 		});

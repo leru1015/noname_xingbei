@@ -4877,6 +4877,37 @@ export class Library {
 					},
 					frequent:true,
 				},
+				connect_shiQiMax:{
+					name:'士气最大值',
+					init:15,
+					item:{
+						10:'10',
+						15:'15',
+						18:'18',
+						30:'30',
+						45:'45',
+					},
+				},
+				connect_zhanJiMax:{
+					name:'战绩最大值',
+					init:5,
+					item:{
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+				},
+				connect_xingBeiMax:{
+					name:'星杯最大值',
+					init:5,
+					item:{
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+						15:'15',
+					}
+				},
 			},
 			config:{
 				update:function(config,map){
@@ -5009,6 +5040,37 @@ export class Library {
 							delete ui.cheat;
 						}
 					},
+				},
+				shiQiMax:{
+					name:'士气最大值',
+					init:15,
+					item:{
+						10:'10',
+						15:'15',
+						18:'18',
+						30:'30',
+						45:'45',
+					},
+				},
+				zhanJiMax:{
+					name:'战绩最大值',
+					init:5,
+					item:{
+						5:'5',
+						7:'7',
+						10:'10',
+					},
+				},
+				xingBeiMax:{
+					name:'星杯最大值',
+					init:5,
+					item:{
+						3:'3',
+						5:'5',
+						7:'7',
+						10:'10',
+						15:'15',
+					}
 				},
 			}
 		},
