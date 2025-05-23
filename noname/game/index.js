@@ -6638,22 +6638,9 @@ export class Game extends GameCompatible {
 					}
 				}
 			},player);
-
-			var ws=player.ws;
-			player.ws=from.ws;
-			from.ws=ws;
-			var formid=from.playerid;
-			var playerid=player.playerid;
-
-			game.broadcastAll(function(player,form,formid,playerid){
-				player.playerid = formid;
-				form.playerid = playerid;
-
-				lib.playerOL[formid] = player;
-				lib.playerOL[playerid] = form;
-			},player,from,formid,playerid);
 		}else{
 			if (player == game.me) return;
+			if(!from) var from=game.me;
 
 			game.me.node.handcards1.remove();
 			game.me.node.handcards2.remove();
@@ -6686,6 +6673,30 @@ export class Game extends GameCompatible {
 				}
 			}
 		}
+		
+
+		if(_status.connectMode){
+			var ws=player.ws;
+			player.ws=from.ws;
+			from.ws=ws;
+			var formid=from.playerid;
+			var playerid=player.playerid;
+			var playerNickname=player.nickname;
+			var fromNickname=from.nickname;
+
+			game.broadcastAll(function(player,form,formid,playerid,playerNickname,fromNickname){
+				player.playerid = formid;
+				form.playerid = playerid;
+
+				lib.playerOL[formid] = player;
+				lib.playerOL[playerid] = form;
+
+				player.nickname=fromNickname;
+				form.nickname=playerNickname;
+				player.setNickname();
+				form.setNickname();
+			},player,from,formid,playerid,playerNickname,fromNickname);	
+			}
 	}
 	swapPlayerAuto(player) {
 		if (game.modeSwapPlayer) {
