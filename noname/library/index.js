@@ -4850,6 +4850,8 @@ export class Library {
 						12:'12',
 						16:'16',
 						20:'20',
+						24:'24',
+						30:'30',
 					},
 					frequent:true,
 				},
