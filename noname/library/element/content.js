@@ -4190,6 +4190,11 @@ export const Content = {
 			game.getGlobalHistory().isRound = true;
 		}
 		"step 1";
+		if(_status.connectMode&&lib.configOL.phaseswap) game.swapPlayerAuto(player);
+		if (!_status.connectMode && !_status.auto && player.isUnderControl()) {
+			game.swapPlayerAuto(player);
+		}
+
 		//规则集中的“回合开始后⑤”，进行翻面检测
 		if (player.isTurnedOver() && !event._noTurnOver) {
 			player.turnOver();
