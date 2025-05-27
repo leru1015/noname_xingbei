@@ -3240,13 +3240,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return target!=player;
                 },
                 content:async function(event, trigger, player){
-                    var shiQiListBefore=[get.shiQi(true),get.shiQi(false)];
                     await event.target.faShuDamage(1,player).set('wenYi',true);
-                    var shiQiAfter=[get.shiQi(true),get.shiQi(false)];
-                    if(shiQiListBefore[0]!=shiQiAfter[0]||shiQiListBefore[1]!=shiQiAfter[1]){
-                        player.addTempSkill('wenYi_zhiLiao');
-                    }
                 },
+                group:'wenYi_shiQiXiaJiang',
                 subSkill:{
                     zhiLiao:{
                         trigger:{player:'phaseEnd'},
@@ -3255,7 +3251,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             player.changeZhiLiao(1);
                             player.removeSkill('wenYi_zhiLiao');
                         }
-                    }
+                    },
+                    shiQiXiaJiang:{
+                        trigger:{global:'changeShiQiAfter'},
+                        lastDo:true,
+                        direct:true,
+                        filter:function(event,player){
+                            return event.getParent('damage').wenYi==true&&event.num<0;
+                        },
+                        content:function(){
+                            if(!player.hasSkill('wenYi_zhiLiao')){
+                                player.addTempSkill('wenYi_zhiLiao');
+                            }
+                        }
+                    },
                 },
                 ai:{
                     order:3.6,
