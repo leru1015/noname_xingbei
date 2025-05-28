@@ -964,7 +964,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         var bool1=_status.event.bool1;
                         var bool2=_status.event.bool2;
                         var player=_status.event.player;
-                        if(player.getExpansions('luEn').length>2&&bool2) return '选项二';
+                        if(player.getExpansions('luEn').length>=5&&bool2) return '选项二';
                         if(bool1) return '选项一';
                     }).set('bool1',bool1).set('bool2',bool2);
                     'step 1'
