@@ -2731,9 +2731,10 @@ export default () => {
 					},list,ref);
 
 					game.addGlobalSkill('autoswap');
-					var list=game.getActivePlayersBySide();
-					for(var player of list){
-						if(get.itemtype(player)=='player') game.onSwapControl(player);
+					for(var player of game.players){
+						if(player==game.me || player.isOnline2()){
+							game.onSwapControl(player);
+						}
 					}
 				});
 			},
