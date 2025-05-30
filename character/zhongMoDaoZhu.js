@@ -837,7 +837,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     next.set('prompt2',lib.translate.daoGaoShi_info);
                     next.set('ai',function(target){
                         var player=_status.event.player;
-                        return get.zhiLiaoEffect2(target,player,1)-0.1;
+                        return get.zhiLiaoEffect2(target,player,1);
                     });
                     event.result=await next.forResult();
                 },

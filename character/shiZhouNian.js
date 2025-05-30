@@ -5416,7 +5416,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     result:{
                         target:function(player,target){
                             if(player.side!=target.side) return 0;
-                            return get.zhiLiaoEffect(target,2)-0.1;
+                            return get.zhiLiaoEffect(target,2);
                         },
                     }
                 }
