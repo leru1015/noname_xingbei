@@ -6073,7 +6073,7 @@ export class Game extends GameCompatible {
 		let clients = game.players.concat(game.dead);
 		for (let i = 0; i < clients.length; i++) {
 			if (clients[i].isOnline2()) {
-				clients[i].send(game.over, dialog.content.innerHTML, game.checkOnlineResult(clients[i]));
+				clients[i].send(game.over, dialog.content.innerHTML, game.checkOnlineResult(clients[i],resultbool));
 			}
 		}
 
