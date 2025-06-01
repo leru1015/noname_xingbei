@@ -8674,6 +8674,7 @@ export const Content = {
 		}
 		"step 8";
 		if(event.type=='gongJi' && event.target){
+			event.gongJiMingZhong= true;
 			event.trigger("gongJiMingZhong");
 		}
 		'step 9';
