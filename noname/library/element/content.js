@@ -4178,7 +4178,7 @@ export const Content = {
 				custom: [],
 				useSkill: [],
 			});
-			current.stat.push({ card: {}, skill: {} ,gongJi: {all:[],zhuDong:[],yingZhan:[]}});
+			current.stat.push({ card: {}, skill: {} ,gongJi: {all:[],zhuDong:[],yingZhan:[]},faShu:[]});
 			if (isRound) {
 				current.getHistory().isRound = true;
 				current.getStat().isRound = true;
@@ -8586,6 +8586,8 @@ export const Content = {
 
 		}else if(type=='faShu'&&get.is.xingDong(event)){//防止传递魔弹时触发该时机
 			event.type='faShu';
+			let dict={name:get.name(card),xiBie: get.xiBie(card),mingGe:card.mingGe,duYou:card.duYou};
+			player.stat[player.stat.length - 1].faShu.push(dict);
 		}else if(card.name=='shengGuang'){
 			event.type='shengGuang';
 		}
