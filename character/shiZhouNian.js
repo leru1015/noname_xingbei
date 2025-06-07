@@ -2726,24 +2726,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     },
                     huan:{
                         type:'faShu',
-                        content:function(){
-                            'step 0'
-                            player.removeBiShaShuiJing();
-                            'step 1'
+                        content:async function(event, trigger, player){
+                            await player.removeBiShaShuiJing();
                             var zhanJi=get.zhanJi(player.side).slice();
-                            event.num=0;
-                            for(var i=0;i<zhanJi.length;i++){
-                                event.num++;
+                            var num=0;
+                            for(var xingShi of zhanJi){
+                                if(xingShi == 'shuiJing') num++;
                             }
-                            'step 2'
-                            if(event.num>0){
-                                player.changeZhanJi('shuiJing',-event.num);
+                            if(num>0){
+                                await player.changeZhanJi('shuiJing',-num);
+                                await player.changeZhanJi('baoShi',num);
                             }
-                            'step 3'
-                            if(event.num>0){
-                                player.changeZhanJi('baoShi',event.num);
-                            }
-                            'step 4'
                             player.addGongJiOrFaShu();
                         }
                     }
