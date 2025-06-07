@@ -126,7 +126,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             yiJiLunPo:{
                 usable:1,
-                trigger:{player:'gongJiBefore'},
+                trigger:{player:'gongJiShi'},
                 filter:function (event,player){
                     return player.getExpansions('yiJi').length>0&&event.yingZhan!=true;s
                 },
