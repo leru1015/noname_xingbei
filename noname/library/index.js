@@ -10016,18 +10016,18 @@ export class Library {
 		},
 		_faShuXianZhi:{
 			mod:{
-				cardEnabled:function(card){
+				cardEnabled:function(card,player){
 					if(_status.event.name=='faShu'){
-						if(get.type(card)!='faShu') return false;
+						if(get.type(card,player)!='faShu') return false;
 					}
 				}
 			},
 		},
 		_gongJiXianZhi:{
 			mod:{
-				cardEnabled:function(card){
+				cardEnabled:function(card,player){
 					if(_status.event.name=='gongJi'){
-						if(get.type(card)!='gongJi') return false;
+						if(get.type(card,player)!='gongJi') return false;
 					}
 				}    
 			}
