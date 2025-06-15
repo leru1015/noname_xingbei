@@ -4773,12 +4773,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					event.result=await player.yingZhan(propmt)
                     .set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
-							if(_status.event.canYingZhan==false) return false;//不能应战设置
-							if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
-						}else if(get.type(card)=='faShu'){
-                            return false;
+                            if(_status.event.canYingZhan==false) return false;//不能应战设置
+                            if(_status.event.canAnMie==false){
+                                if(get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+                            }else{
+                                if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
+                            }
+                        }else if(get.type(card)=='faShu'){
+                            if(_status.event.canShengGuang==false) return false;
+                            if(get.name(card)!='shengGuang') return false;
                         }
-						return lib.filter.cardEnabled(card,player,'forceEnable');
+                        return lib.filter.cardEnabled(card,player,'forceEnable');
 					})
 					.set('filterTarget',function(card,player,target){
 						if(target==_status.event.source) return false;
@@ -4788,10 +4793,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					.set('card',event.card)
                     .set('source',event.source)
                     .set('yingZhan',true)
-					.set('canYingZhan',trigger.canYingZhan)
-					.set('canShengGuang',trigger.canShengGuang)
-                    .set('shiShenZhouShu',true)
+				    .set('canYingZhan',trigger.canYingZhan)
+				    .set('canShengGuang',trigger.canShengGuang)
+				    .set('canAnMie',trigger.canAnMie)
                     .set('prompt2',lib.translate.shiShenZhouShu_info)
+                    .set('oncard',function(card,player){
+                        _status.event.yingZhan=true;//设置本次攻击为应战攻击
+                    })
                     .forResult();
                 },
                 content:function(){
