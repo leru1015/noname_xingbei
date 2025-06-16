@@ -1004,7 +1004,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         markimage:'image/card/zhuanShu/wuXiShuFu.png',
                         intro:{
-                            content:'(将【五系束缚】放置于目标对手面前)该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。',
+                            content:`<span class='tiaoJian'>(将【五系束缚】放置于目标对手面前)</span>该对手跳过其下个行动阶段。在其下个行动阶段开始前他可以选择摸(2+X)张牌来取消【五系束缚】的效果。X为场上封印的数量，X最高为2。无论效果是否发动，触发后移除此牌。`,
                             nocount:true,
                         },
                         onremove:'storage',
