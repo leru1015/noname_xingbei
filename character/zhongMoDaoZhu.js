@@ -309,7 +309,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                     break;
                                 }
                             }
-                            if(bool&&name=='gainEnd'&&event.player==player) return false;
+                            if(bool&&name=='gainEnd'&&event.skill=='jiGuShiDian') return false;
                             
                             return bool;
                         },
