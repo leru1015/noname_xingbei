@@ -905,7 +905,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 contentAfter:function(){
+                    'step 0'
                     player.changeZhiLiao(1);
+                    'step 1'
                     player.draw();
                     player.addFaShu();
                 },
