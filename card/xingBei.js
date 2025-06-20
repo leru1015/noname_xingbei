@@ -198,7 +198,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:3,
 					basic:{
-						useful:[7,4,2],
+						useful:[4,3,2],
 						value:[7,4,2],
 					},
 					result:{player:1},
