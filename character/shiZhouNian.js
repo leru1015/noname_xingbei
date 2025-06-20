@@ -7572,6 +7572,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var choiceList=['红方士气设置为蓝方士气','蓝方士气设置为红方士气'];
                     var list=['选项一','选项二']
                     player.chooseControl().set('choiceList',choiceList).set('ai',function(){
+                        var player=_status.event.player;
+                        if(player.side==true){
+                            if(game.hongShiQi<game.lanShiQi) return '选项一';
+                        }else{
+                            if(game.lanShiQi<game.hongShiQi) return '选项二';
+                        }
                         var num=Math.random();
                         if(num<0.5) return '选项一';
                         else return '选项二';
