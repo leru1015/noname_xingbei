@@ -1207,6 +1207,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.addZhiShiWu('jiX');
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:4,
                     result:{
@@ -1558,6 +1561,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     if(result.bool){
                         player.addZhiShiWu('miShu');
                     }
+                },
+                check:function(card){
+                    if(get.xiBie(card)=='guang') return 0;
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.8,

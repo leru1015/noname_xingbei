@@ -592,6 +592,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.addZhiShiWu('lanSeLingHun',cards.length+1);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:function(item,player){
                         return 2.1+player.countCards('h',card=>lib.skill.san_lingHunZhaoHuan.filterCard(card))*0.7;

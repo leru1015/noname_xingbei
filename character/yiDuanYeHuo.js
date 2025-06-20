@@ -704,6 +704,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.addGongJi();
                     }
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.8,
                     result:{
@@ -910,6 +913,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.draw();
                     player.addFaShu();
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:function(item,player){

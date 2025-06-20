@@ -1780,6 +1780,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.addFaShu();
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.5,
                     result:{
@@ -1839,6 +1842,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         result.targets[0].changeZhiLiao(1,player);
                     }
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.5,
                     result:{
@@ -1893,6 +1899,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.faShuDamage(event.num,player);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.5,
                     result:{
@@ -1945,6 +1954,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 2'
                     player.addGongJi();
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.5,
                     result:{
@@ -1996,6 +2008,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.faShuDamage(event.num,player);
                     'step 2'
                     player.changeZhanJi('baoShi',1);
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.5,
@@ -2529,6 +2544,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     var card={name:name,xiBie:xiBie};
                     await player.useCard(card,event.target).set('action',true);
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.7,
@@ -4185,6 +4203,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     target.faShuDamage(3,player);
                 },
+                check:function(card){
+                    return 7-get.value(card);
+                },
                 ai:{
                     shuiJing:true,
                     order:function(item,player){
@@ -4478,6 +4499,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.changeZhiLiao(2);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.6,
                     result:{
@@ -4515,6 +4539,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.changeZhiLiao(1);
                     'step 3'
                     target.changeZhiLiao(1,player);
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.5,
@@ -4656,6 +4683,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.addZhiShiWu('guiHuo');
                     player.addGongJi();
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:4,
@@ -4943,6 +4973,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             await player.chongZhi();
                             await event.target.chooseToDiscard(1,true);
                         },
+                        check:function(card){
+                            return 7-get.value(card);
+                        },
                         ai:{
                             result:{
                                 target:function(player,target){
@@ -4990,6 +5023,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     player.faShuDamage(2,player);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.6,
                     result:{
@@ -5029,6 +5065,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     target.faShuDamage(event.num,player);
                     'step 2'
                     player.faShuDamage(event.num,player);
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:3.7,
@@ -5335,6 +5374,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 3'
                     player.damageFaShu(cards.length-1,player);
                 },
+                check:function(card){
+                    return 8-get.value(card);
+                },
                 ai:{
                     baoShi:true,
                     order:3.5,
@@ -5380,6 +5422,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 contentAfter:function(){
                     player.faShuDamage(cards.length-1,player);
+                },
+                check:function(card){
+                    return 7-get.value(card);
                 },
                 ai:{
                     baoShi:true,
@@ -5933,6 +5978,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         }   
                     }
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
 					order:4,
 					result:{
@@ -6005,6 +6053,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.faShuDamage(player.storage.lingFu_leiMing,player);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:function(item,player){
                         var num=2.5;
@@ -6038,6 +6089,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:function(){
                     target.chooseToDiscard('h',true);
+                },
+                check:function(card){
+                    return 6-get.value(card);
                 },
                 ai:{
                     order:function(item,player){
@@ -7169,6 +7223,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     player.useCard({name:name,xiBie:xiBie,mingGe:'sheng',shengXieJuBao:true},target);
                 },
+                check(card) {
+					return 4- get.value(card);
+				},
                 group:'shengXieJuBao_gongJiWeiMingZhong',
                 subSkill:{
                     gongJiWeiMingZhong:{
@@ -8118,6 +8175,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     player.addZhiShiWu('lanSeLingHun',cards.length);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:function(item,player){
                         return 2.1+player.countCards('h',card=>lib.skill.lingHunZhaoHuan.filterCard(card))*0.7;
@@ -8513,6 +8573,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     player.changeZhiLiao(1);
                 },
+                check:function(card){
+                    return 6-get.value(card);
+                },
                 ai:{
                     order:3.6,
                     result:{
@@ -8682,6 +8745,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 1'
                     var cards=get.cards();
                     player.addToExpansion('draw',cards,'log').gaintag.add('jian');
+                },
+                check:function(card){
+                    var player = _status.event.player;
+                    if(player.countCards('h')>2) return 5-get.value(card);
+                    else return 0;
                 },
                 ai:{
                     order:3.6,
