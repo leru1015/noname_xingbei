@@ -8513,6 +8513,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                     if(result.bool){
                         await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
+                        player.storage.tongShengGongSi_target.removeSkill('tongShengGongSi_xiaoGuo');
                         var target=result.targets[0];
                         if(!target.hasSkill('tongShengGongSi_xiaoGuo')){
                             target.addSkill('tongShengGongSi_xiaoGuo');                
@@ -8521,9 +8522,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.storage.tongShengGongSi_target=target;
                         await target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                     }else{
-                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
                         player.storage.tongShengGongSi_use=false;
-                        player.storage.tongShengGongSi_target=undefined;
+                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
+                        player.storage.tongShengGongSi_target.removeSkill('tongShengGongSi_xiaoGuo');
+                        player.storage.tongShengGongSi_target=undefined; 
                     }
                 },
                 check:function(event,player){
