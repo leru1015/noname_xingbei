@@ -2114,7 +2114,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             fengXueX_yingZhiFeng1_2:"影之风",
             fengXueX_yingZhiFeng2:"影之风",
             fengXueX_fengZhi:"风止",
-
+            fengXueX_fengZhi_info:"<span class='tiaoJian'>(若你拥有【风穴】，你的回合结束时发动)</span>将手牌补到上限[强制]，弃2张牌，将弃牌面朝下放置在女仆长角色旁作为【影】，然后移除【风穴】。",
 
 
             //结界师
