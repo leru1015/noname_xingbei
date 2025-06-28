@@ -3305,7 +3305,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
                     prompt:function(links,player){
-                        var num=links.length;
+                        var num=links[0];
 						return `弃置Y张同系牌[展示]至少2张，对目标角色造成(${num}+Y-3)点伤害`;
 					},
                     check: function (button) {
