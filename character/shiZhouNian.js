@@ -283,7 +283,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     gongJiMingZhong:{
                         trigger:{source:'gongJiMingZhong'},
-                        forced:true,
+                        direct:true,
+                        priority:0.5,
                         filter:function(event,player){
                             return event.customArgs.xueYingKuangDao==true&&(event.target.countCards('h')==2||event.target.countCards('h')==3);
                         },
