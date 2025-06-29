@@ -302,11 +302,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 duYou:'xueXingPaoXiao',
                 trigger:{player:'gongJiShi'},
                 filter:function(event,player){
-                    return event.card.hasDuYou('xueXingPaoXiao')&&event.yingZhan!=true&&event.target.zhiLiao==2;
+                    return event.card.hasDuYou('xueXingPaoXiao')&&event.yingZhan!=true;
                 },
                 content:function(){
-                    'step 0'
-                    trigger.qiangZhiMingZhong();
+                    if(trigger.target.zhiLiao==2) trigger.qiangZhiMingZhong();
+                    
                 }
             },
             siLie:{
