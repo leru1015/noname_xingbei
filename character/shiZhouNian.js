@@ -7706,7 +7706,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jianQiZhan:{
-                trigger:{source:'gongJiMingZhong'},
+                trigger:{source:'gongJiMingZhongAfter'},
                 filter:function(event,player){
                     return event.yingZhan!=true&&player.countZhiShiWu('jianQi')>0;
                 },
