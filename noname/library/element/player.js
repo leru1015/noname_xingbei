@@ -2493,9 +2493,9 @@ export class Player extends HTMLDivElement {
 		};
 		this.sex = info.sex;
 		this.group = info.group;
-		this.hp = hp1;
-		this.maxHp = maxHp1;
-		this.zhiLiao = zhiLiao1;
+		this.hp = 0;
+		this.maxHp = 2;//显示为治疗上限为2
+		this.zhiLiao = 0;
 		this.node.intro.innerHTML = lib.config.intro;
 		this.node.name.dataset.nature = get.groupnature(this.group);
 		lib.setIntro(this);
@@ -2521,8 +2521,8 @@ export class Player extends HTMLDivElement {
 			this.name2 = character2;
 			var hp2 = info2.hp;
 			var maxHp2 = info2.maxHp;
-			var zhiLiao2 = info2.zhiLiao;
-			this.zhiLiao += zhiLiao2;
+			//var zhiLiao2 = info2.zhiLiao;
+			//this.zhiLiao += zhiLiao2;
 			var double_hp;
 			if (_status.connectMode || (get.mode() == "single" && _status.mode == "changban")) {
 				double_hp = "pingjun";
