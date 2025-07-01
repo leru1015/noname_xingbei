@@ -488,20 +488,50 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         player.changeShiQi(-1);
                     }
                 },
-                global:'shenLvFengSuo_zhiLiao',
-                init:function(player,skill){
-                    for(var current of game.players){
-                        current.storage['shenLvFengSuo']=player;
-                    }
-                },
+                //global:'shenLvFengSuo_shangXian',
+                group:'shenLvFengSuo_zhiLiao',
                 subSkill:{
-                    zhiLiao:{
+                    shangXian:{
                         mod:{
                             maxHandcard:function (player,num){
-                                if(player.storage.shenLvFengSuo.zhiLiao<player.storage.shenLvFengSuo.getZhiLiaoLimit()&&player.zhiLiao==0){
+                                if(player.zhiLiao==0){
                                     return num-1;
                                 }
-                            
+                            }
+                        }
+                    },
+                    zhiLiao:{
+                        trigger:{player:'changeZhiLiaoEnd'},
+                        direct:true,
+                        init:function (player){
+                            var flag=false;
+                            if(player.zhiLiao<player.getZhiLiaoLimit()&&!lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.addGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }else if (player.zhiLiao>=player.getZhiLiaoLimit()&&lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.removeGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }
+                            if(flag){
+                                for(var current of game.players){
+                                    current.update();
+                                }
+                            }
+                        },
+                        priority:-0.1,
+                        content:async function (event,trigger,player){
+                            var flag=false;
+                            if(player.zhiLiao<player.getZhiLiaoLimit()&&!lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.addGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }else if (player.zhiLiao>=player.getZhiLiaoLimit()&&lib.skill.global.includes('shenLvFengSuo_shangXian')){
+                                game.removeGlobalSkill('shenLvFengSuo_shangXian');
+                                flag=true;
+                            }
+                            if(flag){
+                                for(var current of game.players){
+                                    current.update();
+                                }
                             }
                         }
                     }
