@@ -6127,7 +6127,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var xiBie=get.xiBie(card);
                             if(xiBie=='huo') return 2;
                             else return 1;
-                        }).forResult();
+                        })
+                        .set('prompt',get.prompt('nianZhou'))
+                        .set('prompt2',lib.translate.nianZhou_info)
+                        .forResult();
                 },
                 content:function(){
                     player.addToExpansion('draw',event.cards,'log').gaintag.add('yaoLi');
