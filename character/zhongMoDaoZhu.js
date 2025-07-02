@@ -1418,7 +1418,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 content:async function (event,trigger,player){
                     await player.removeBiShaShuiJing();
-                    player.storage.fangZhu=true;
+                    player.addSkill('fangZhu_wuXian');
 
                     var list=[6,7,8];
                     var num=await player.chooseControl(list).set('prompt',`无视手牌上限摸6-8张牌`).set('ai',function(){
@@ -1448,7 +1448,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
 
                     player.addGongJiOrFaShu();
-                    player.storage.fangZhu=false;
+                    player.removeSkill('fangZhu_wuXian');
+                },
+                subSkill:{
+                    wuXian:{
+                        mod:{
+                            maxHandcardWuShi:function(player,num){
+                                return Infinity;
+                            },
+                        }
+                    },
                 },
                 ai:{
                     shuiJing:true,
@@ -1461,9 +1470,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                 },
                 mod:{
-                    maxHandcardWuShi:function(player,num){
-                        if(player.storage.fangZhu) return Infinity;
-                    },
                     aiOrder:function(player,item,num){
                         if(item=='_tiLian'&&player.hasExpansions('yuYan')<=1&&player.countNengLiang()<1) return num+1;
                     }
