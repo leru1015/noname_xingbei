@@ -28,7 +28,6 @@ import security from "../util/security.js";
 import { ErrorManager } from "../util/error.js";
 
 import { defaultSplashs } from "../init/onload/index.js";
-import { connect } from "http2";
 
 export class Library {
 	configprefix = "noname_0.9_";
