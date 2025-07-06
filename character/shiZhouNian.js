@@ -4811,8 +4811,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
                             }
                         }else if(get.type(card)=='faShu'){
-                            if(_status.event.canShengGuang==false) return false;
-                            if(get.name(card)!='shengGuang') return false;
+                            return false;//法术牌不能应战
                         }
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					})
