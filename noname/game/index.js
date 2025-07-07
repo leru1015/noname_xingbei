@@ -40,14 +40,16 @@ export class Game extends GameCompatible {
 	moDan=2;
 	moDanFangXiang='you';
 	jiChuXiaoGuo={
-		all:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin','leiZhiFengYin','weiLiCiFu','xunJieCiFu','shengDun','xuRuo','zhongDu'],
-		all_xiaoGuo:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo','weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo','_shengDun','_xuRuo','_zhongDu'],
+		all:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin','leiZhiFengYin','weiLiCiFu','xunJieCiFu','shengDun','xuRuo','zhongDu','tricky'],
+		all_xiaoGuo:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo','weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo','_shengDun','_xuRuo','_zhongDu','tricky_xiaoGuo'],
 		fengYinShi:['diZhiFengYin','shuiZhiFengYin','huoZhiFengYin','fengZhiFengYin_xiaoGuo','leiZhiFengYin'],
 		fengYinShi_xiaoGuo:['diZhiFengYin_xiaoGuo','shuiZhiFengYin_xiaoGuo','huoZhiFengYin_xiaoGuo','fengZhiFengYin_xiaoGuo','leiZhiFengYin_xiaoGuo'],
 		qiDaoShi:['weiLiCiFu','xunJieCiFu'],
 		qiDaoSh_xiaoGuo:['weiLiCiFu_xiaoGuo','xunJieCiFu_xiaoGuo'],
 		pai:['shengDun','xuRuo','zhongDu'],
 		pai_xiaoGuo:['_shengDun','_xuRuo','_zhongDu'],
+		daoDanLuoLi:["tricky"],
+		daoDanLuoLi_xiaoGuo:["tricky_xiaoGuo"],
 	};
 	handcardLimit=6;
 	zhiLiaoMax=2;

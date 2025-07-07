@@ -4910,6 +4910,13 @@ export class Library {
 						15:'15',
 					}
 				},
+				connect_AItiLian:{
+					name:'降低AI提炼数量',
+					init:true,
+					onclick:function(bool){
+						game.saveConfig('connect_AItiLian',bool,this._link.config.mode);
+					},
+				},
 			},
 			config:{
 				update:function(config,map){
@@ -5073,6 +5080,13 @@ export class Library {
 						10:'10',
 						15:'15',
 					}
+				},
+				AItiLian:{
+					name:'降低AI提炼数量',
+					init:true,
+					onclick:function(bool){
+						game.saveConfig('AItiLian',bool,this._link.config.mode);
+					},
 				},
 			}
 		},
@@ -10360,7 +10374,9 @@ export class Library {
 				},
 				check:function(button){
 					var player=_status.event.player;
-					if(ui.selected.buttons.length>=1) return -1;
+					if((!_status.connectMode&&get.config('AItiLian'))||(_status.connectMode&&lib.configOL.phaseswap)){
+						if(ui.selected.buttons.length>=1) return -1;
+					}
 					if(player.hasSkillTag('baoShi')&&!player.hasSkillTag('shuiJing')){
 						if(button.link=='baoShi') return 5;
 						else return -1;

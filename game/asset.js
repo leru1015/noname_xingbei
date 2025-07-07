@@ -1,6 +1,6 @@
 window.noname_asset_list=
 [
-	"v1.2.1",
+	"v1.3.0",
 	"audio/background/music_default.mp3",
 	"audio/card/default.mp3",
 	'audio/card/atk_an.mp3',
@@ -133,6 +133,8 @@ window.noname_asset_list=
 	'image/card/zhuanShu/moRiYuYan.png',
 	'image/card/zhuanShu/tianLeiJieHuo.png',
 	'image/card/zhuanShu/diLieBoTao.png',
+	'image/card/zhuanShu/yuanChu_shengHuangYuHui.png',
+	'image/card/zhuanShu/yuanChu_shengHuangHuiGuangPao.png',
 
 	'image/character/anShaZhe.jpg',
 	'image/character/cangYanMoNv.jpg',
@@ -188,7 +190,18 @@ window.noname_asset_list=
 	'image/character/jiLuZhe.jpg',
 	'image/character/chuanJiaoShi.jpg',
 	'image/character/yiJiaoTu.jpg',
-	
+	'image/character/luoLiFanZhang.jpg',
+	'image/character/tanLanShaoNv.jpg',
+	'image/character/youJiShi.jpg',
+	'image/character/yuanChuZhiGong.jpg',
+	'image/character/zhouFuShi.jpg',
+	'image/character/nong_baoShiShaoNv.jpg.jpg',
+	'image/character/daoDanLuoLi.jpg',
+	'image/character/jianXiZhiPian.jpg',
+	'image/character/jianZhiMoNv.jpg',
+	'image/character/jieRiMoDao.jpg',
+	'image/character/lingXiZhiChao.jpg',
+
 	"image/emotion/xingBei_emotion/1.gif",
 	"image/emotion/xingBei_emotion/2.gif",
 	"image/emotion/xingBei_emotion/3.gif",
@@ -342,4 +355,5 @@ window.noname_skin_list=
 	jieJieShi:2,
 	shengTingJianChaShi:1,
 	wenYiFaShi:1,
+	nong_baoShiShaoNv:1,
 };

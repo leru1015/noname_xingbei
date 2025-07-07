@@ -4796,11 +4796,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     event.source=trigger.player;
 					event.yingZhan=trigger.yingZhan;
 					event.card=trigger.card;
-					var name=get.translation(event.source);
-                    var name2=get.translation(trigger.target);
-					var propmt=`${name2}受到${name}的`;
+					var name=get.colorName(event.source);
+                    var name2=get.colorName(trigger.target);
+					var propmt=get.prompt('shiShenZhouShu');
 					propmt+=get.translation(get.xiBie(event.card))+'系主动攻击，';
-					propmt+=get.prompt('shiShenZhouShu');
+					propmt+=`${name2}受到${name}的`;
 					event.result=await player.yingZhan(propmt)
                     .set('filterCard',function(card,player,event){
 						if(get.type(card)=='gongJi'){
@@ -4811,8 +4811,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 if(get.name(card)!='anMie'&&get.xiBie(card)!=get.xiBie(_status.event.card)) return false;
                             }
                         }else if(get.type(card)=='faShu'){
-                            if(_status.event.canShengGuang==false) return false;
-                            if(get.name(card)!='shengGuang') return false;
+                            return false;//法术牌不能应战
                         }
                         return lib.filter.cardEnabled(card,player,'forceEnable');
 					})
@@ -4831,6 +4830,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     .set('oncard',function(card,player){
                         _status.event.yingZhan=true;//设置本次攻击为应战攻击
                     })
+                    .set('shiShenZhouShu',true)
                     .forResult();
                 },
                 content:function(){
@@ -4854,7 +4854,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                                 listx.push([list[i],get.translation(list[i])]);
                             }
                             var next=player.chooseButton([
-                                '移除1[宝石]1[水晶]',
+                                '式神咒束：移除1[宝石]1[水晶]',
                                 [listx,'tdnodes'],
                             ]);
                             next.set('forced',true);
@@ -6127,7 +6127,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             var xiBie=get.xiBie(card);
                             if(xiBie=='huo') return 2;
                             else return 1;
-                        }).forResult();
+                        })
+                        .set('prompt',get.prompt('nianZhou'))
+                        .set('prompt2',lib.translate.nianZhou_info)
+                        .forResult();
                 },
                 content:function(){
                     player.addToExpansion('draw',event.cards,'log').gaintag.add('yaoLi');
@@ -8795,11 +8798,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 check:function(card){
                     var player = _status.event.player;
-                    if(player.countCards('h')>2) return 5-get.value(card);
+                    if(player.countCards('h')>2) return 7-get.value(card);
                     else return 0;
                 },
                 ai:{
-                    order:3.6,
+                    order:3.4,
                     result:{
                         player:function(player){
                             return player.getExpansions('jian').length<=6?1:0;
@@ -9030,7 +9033,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
                 ai:{
                     shuiJing:true,
-                    order:3.5,
+                    order:3.3,
                     result:{
                         player:1,
                     }
