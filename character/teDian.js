@@ -2373,8 +2373,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     let next = player
                         .chooseControl(choices)
-                        .set("prompt", get.prompt("aiSiTianLiu"))
-                        .set("prompt2", lib.translate["aiSiTianLiu_info"])
+                        .set("prompt", get.prompt("mieChaKuCha"))
+                        .set("prompt2", lib.translate["mieChaKuCha_info"])
                         .set("choiceList", list)
                         .set("ai", function () {
                             return 0;
