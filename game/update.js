@@ -1,6 +1,6 @@
 window.noname_update = {
-	version: "1.3.0",
-	update: "1.3.0",
+	version: "1.3.1",
+	update: "1.3.1",
 	changeLog: [
 		"整合特典角色",
 		"修复阴阳师式神咒束可以圣光",
