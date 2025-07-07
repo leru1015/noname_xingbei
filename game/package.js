@@ -4,6 +4,7 @@ window.noname_package = {
 		yiDuanYeHuo:"异端业火",
 		shenZiChuangLin:"神子创临",
 		zhongMoDaoZhu:'终末祷铸',
+		teDian:'特典',
 		sanBan:'三版',
 		siBan:'四版',
 	},
