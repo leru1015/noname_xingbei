@@ -104,8 +104,13 @@ export default () => {
 			}else{
 				info.push(false);
 			}
-			game.addVideo('init',null,info);
-			event.trigger('gameStart');
+			if(lib.configOL.onlyChooseCharacter){
+				game.pause();
+			}else{
+				game.addVideo('init',null,info);
+				event.trigger('gameStart');
+			}
+
             'step 4'
 			var firstChoose=(_status.firstAct||game.players.randomGet());
 			game.gameDraw(firstChoose);

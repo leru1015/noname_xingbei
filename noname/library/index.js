@@ -4918,6 +4918,15 @@ export class Library {
 						game.saveConfig('connect_AItiLian',bool,this._link.config.mode);
 					},
 				},
+				connect_onlyChooseCharacter:{
+					name:'仅选择角色',
+					init:false,
+					intro:'选择角色后不会开始游戏，适合推新时使用，方便新人通过手机了解其他玩家角色，房主不要关游戏',
+					onclick:function(bool){
+						game.saveConfig('connect_onlyChooseCharacter',bool,this._link.config.mode);
+					},
+					frequent:true,
+				}
 			},
 			config:{
 				update:function(config,map){
