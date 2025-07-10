@@ -4768,7 +4768,7 @@ export class Library {
 						map.connect_choose_number.show();
 						map.connect_BPchoose_number.hide();
 					}else{
-						if(config.connect_choose_mode=='CM02'){
+						if(config.connect_choose_mode=='CM02' || config.connect_choose_mode=='CM01'){
 							map.connect_team_sequence.hide();
 						}else{
 							map.connect_team_sequence.show();
@@ -4809,6 +4809,7 @@ export class Library {
 					init:"多选1",
 					item:{
 						'多选1':'多选1',
+						'CM01':"CM01",
 						'CM02':"CM02",
 						'BP01':"BP01",
 						'BP02':"BP02",
