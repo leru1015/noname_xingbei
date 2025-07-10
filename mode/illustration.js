@@ -9,6 +9,9 @@ export default () => {
         start:function(){
             var createCharacterDialog = function() {
                 var filter, str, noclick, thisiscard, seperate, expandall, onlypack, heightset, characterx;
+                // 在函数开始处添加多选状态管理
+                var selectedPacks = []; // 存储当前选中的角色包
+                
                 for (var i = 0; i < arguments.length; i++) {
                     if (arguments[i] === "thisiscard") {
                         thisiscard = true;
@@ -125,8 +128,19 @@ export default () => {
                                 restoreState(dialog.buttons[i]);
                                 if (dialog.currentgroup && dialog.buttons[i].group != dialog.currentgroup) {
                                     dialog.buttons[i].classList.add("nodisplay");
-                                } else if (dialog.currentcapt2 && dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, true)) {
-                                    dialog.buttons[i].classList.add("nodisplay");
+                                } else if (selectedPacks.length > 0) {
+                                    var showButton = false;
+                                    for (var j = 0; j < selectedPacks.length; j++) {
+                                        if (dialog.buttons[i].capt == dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, selectedPacks[j])) {
+                                            showButton = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!showButton) {
+                                        dialog.buttons[i].classList.add("nodisplay");
+                                    } else {
+                                        dialog.buttons[i].classList.remove("nodisplay");
+                                    }
                                 } else {
                                     dialog.buttons[i].classList.remove("nodisplay");
                                 }
@@ -148,8 +162,19 @@ export default () => {
                                 restoreState(dialog.buttons[i]);
                                 if (dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt)) {
                                     dialog.buttons[i].classList.add("nodisplay");
-                                } else if (dialog.currentcapt2 && dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, true)) {
-                                    dialog.buttons[i].classList.add("nodisplay");
+                                } else if (selectedPacks.length > 0) {
+                                    var showButton = false;
+                                    for (var j = 0; j < selectedPacks.length; j++) {
+                                        if (dialog.buttons[i].capt == dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, selectedPacks[j])) {
+                                            showButton = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!showButton) {
+                                        dialog.buttons[i].classList.add("nodisplay");
+                                    } else {
+                                        dialog.buttons[i].classList.remove("nodisplay");
+                                    }
                                 } else if (dialog.currentgroup && dialog.buttons[i].group != dialog.currentgroup) {
                                     dialog.buttons[i].classList.add("nodisplay");
                                 } else {
@@ -161,59 +186,103 @@ export default () => {
                         if (newlined2) {
                             newlined2.style.display = "none";
                             if (!packsource.onlypack) {
-                                packsource.classList.remove("thundertext");
-                                if (!get.is.phoneLayout() || !lib.config.filternode_button) {
-                                    packsource.innerHTML = "角色包";
+                                var realPackCount = selectedPacks.filter(pack => lib.characterPack[pack] || (pack && pack.indexOf("mode_extension") === 0)).length;
+                                if (realPackCount === 0) {
+                                    packsource.classList.remove("thundertext");
+                                    if (!get.is.phoneLayout() || !lib.config.filternode_button) {
+                                        packsource.innerHTML = "角色包";
+                                    }
+                                } else {
+                                    packsource.classList.add("thundertext");
+                                    if (!get.is.phoneLayout() || !lib.config.filternode_button) {
+                                        packsource.innerHTML = "角色包(" + realPackCount + ")";
+                                    }
                                 }
                             }
                         }
+                        
+                        // 多选角色包逻辑
+                        var packName = this.link;
+                        var packIndex = selectedPacks.indexOf(packName);
+                        
+                        // 判断是否为真正的角色包（排除收藏、最近等特殊分类）
+                        var isRealPack = lib.characterPack[packName] || (packName && packName.indexOf("mode_extension") === 0);
+                        
                         if (this.classList.contains("thundertext")) {
-                            dialog.currentcapt2 = null;
-                            dialog.currentcaptnode2 = null;
+                            // 取消选中
                             this.classList.remove("thundertext");
                             if (this.touchlink) {
                                 this.touchlink.classList.remove("active");
                             }
-                            for (var i = 0; i < dialog.buttons.length; i++) {
-                                restoreState(dialog.buttons[i]);
-                                if (dialog.currentgroup && dialog.buttons[i].group != dialog.currentgroup) {
-                                    dialog.buttons[i].classList.add("nodisplay");
-                                } else if (dialog.currentcapt && dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt)) {
-                                    dialog.buttons[i].classList.add("nodisplay");
+                            if (packIndex !== -1) {
+                                selectedPacks.splice(packIndex, 1);
+                            }
+                            
+                            // 更新角色包按钮显示内容
+                            if (this.parentNode == newlined2) {
+                                var realPackCount = selectedPacks.filter(pack => lib.characterPack[pack] || (pack && pack.indexOf("mode_extension") === 0)).length;
+                                if (realPackCount === 0) {
+                                    packsource.innerHTML = "角色包";
+                                    packsource.classList.remove("thundertext");
                                 } else {
-                                    dialog.buttons[i].classList.remove("nodisplay");
+                                    packsource.innerHTML = "角色包(" + realPackCount + ")";
+                                    packsource.classList.add("thundertext");
                                 }
                             }
                         } else {
-                            if (dialog.currentcaptnode2) {
-                                dialog.currentcaptnode2.classList.remove("thundertext");
-                                if (dialog.currentcaptnode2.touchlink) {
-                                    dialog.currentcaptnode2.touchlink.classList.remove("active");
-                                }
-                            }
-                            dialog.currentcapt2 = this.link;
-                            dialog.currentcaptnode2 = this;
+                            // 选中
                             this.classList.add("thundertext");
                             if (this.touchlink) {
                                 this.touchlink.classList.add("active");
                             } else if (this.parentNode == newlined2) {
-                                packsource.innerHTML = this.innerHTML;
-                                packsource.classList.add("thundertext");
-                            }
-                            for (var i = 0; i < dialog.buttons.length; i++) {
-                                restoreState(dialog.buttons[i]);
-                                if (dialog.currentcapt && dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt)) {
-                                    dialog.buttons[i].classList.add("nodisplay");
-                                } else if (dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, true)) {
-                                    dialog.buttons[i].classList.add("nodisplay");
-                                } else if (dialog.currentgroup && dialog.buttons[i].group != dialog.currentgroup) {
-                                    dialog.buttons[i].classList.add("nodisplay");
+                                var currentRealPackCount = selectedPacks.filter(pack => lib.characterPack[pack] || (pack && pack.indexOf("mode_extension") === 0)).length;
+                                var newRealPackCount = isRealPack ? currentRealPackCount + 1 : currentRealPackCount;
+                                
+                                if (newRealPackCount === 0) {
+                                    packsource.innerHTML = "角色包";
+                                    packsource.classList.remove("thundertext");
+                                } else if (newRealPackCount === 1 && currentRealPackCount === 0) {
+                                    packsource.innerHTML = this.innerHTML;
+                                    packsource.classList.add("thundertext");
                                 } else {
-                                    if (dialog.buttons[i].activate) {
-                                        dialog.buttons[i].activate();
-                                    }
-                                    dialog.buttons[i].classList.remove("nodisplay");
+                                    packsource.innerHTML = "角色包(" + newRealPackCount + ")";
+                                    packsource.classList.add("thundertext");
                                 }
+                            }
+                            if (packIndex === -1) {
+                                selectedPacks.push(packName);
+                            }
+                        }
+                        
+                        // 更新按钮显示
+                        for (var i = 0; i < dialog.buttons.length; i++) {
+                            restoreState(dialog.buttons[i]);
+                            var shouldShow = false;
+                            
+                            if (selectedPacks.length === 0) {
+                                // 没有选中任何角色包时，显示所有按钮（根据其他筛选条件）
+                                shouldShow = true;
+                            } else {
+                                // 检查按钮是否属于任何选中的角色包
+                                for (var j = 0; j < selectedPacks.length; j++) {
+                                    if (dialog.buttons[i].capt == dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt, selectedPacks[j])) {
+                                        shouldShow = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            if (!shouldShow) {
+                                dialog.buttons[i].classList.add("nodisplay");
+                            } else if (dialog.currentcapt && dialog.buttons[i].capt != dialog.getCurrentCapt(dialog.buttons[i].link, dialog.buttons[i].capt)) {
+                                dialog.buttons[i].classList.add("nodisplay");
+                            } else if (dialog.currentgroup && dialog.buttons[i].group != dialog.currentgroup) {
+                                dialog.buttons[i].classList.add("nodisplay");
+                            } else {
+                                if (dialog.buttons[i].activate) {
+                                    dialog.buttons[i].activate();
+                                }
+                                dialog.buttons[i].classList.remove("nodisplay");
                             }
                         }
                     }
@@ -229,7 +298,7 @@ export default () => {
                         }
                     }
                     if (filternode) {
-                        if (filternode.querySelector(".active")) {
+                        if (filternode.querySelector(".active") || selectedPacks.length > 0) {
                             packsource.classList.add("thundertext");
                         } else {
                             packsource.classList.remove("thundertext");
@@ -571,10 +640,11 @@ export default () => {
                     dialog.style.height = (game.layout == "long2" || game.layout == "nova" ? 380 : 350) + 50 + "px";
                     dialog._scrollset = true;
                 }
-                dialog.getCurrentCapt = function (link, capt, noalph) {
-                    var currentcapt = noalph ? this.currentcapt2 : this.currentcapt;
-                    if (this.seperatelist && noalph) {
-                        if (this.seperatelist[currentcapt].includes(link)) return capt;
+                // 修改 getCurrentCapt 方法以支持角色包参数
+                dialog.getCurrentCapt = function (link, capt, packFilter) {
+                    var currentcapt = packFilter || this.currentcapt2 || this.currentcapt;
+                    if (this.seperatelist && !packFilter) {
+                        if (this.seperatelist[currentcapt] && this.seperatelist[currentcapt].includes(link)) return capt;
                         return null;
                     }
                     if (lib.characterDialogGroup[currentcapt]) {
