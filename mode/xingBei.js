@@ -1476,7 +1476,7 @@ export default () => {
 					event.blue_chooseList = [];
 
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色1名", [list, "character"]);
+						var dialog = ui.create.dialog("<span style='color:red;'>红方</span>队长Ban1名角色", [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -1534,7 +1534,7 @@ export default () => {
 									choosing2 = "<span style='color:lightblue;'>蓝方</span>队长";
 								}
 								dialog.content.firstChild.innerHTML =
-									choosing1 + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban角色2名";
+									choosing1 + "Ban了" + get.translation(links)+`，等待` + choosing2 + "Ban2名角色";
 								for (var i = 0; i < dialog.buttons.length; i++) {
 									if ((dialog.buttons[i].link == links[0])||(dialog.buttons[i].link == links[1])) {
 										if (first) {
@@ -2023,7 +2023,7 @@ export default () => {
 					event.num=1;
 					
 					var createDialog = function (list, id, list1, list2) {
-						var dialog = ui.create.dialog("Ban角色1名", [list, "character"]);
+						var dialog = ui.create.dialog("<span style='color:red;'>红方</span>1名Ban角色", [list, "character"]);
 						dialog.classList.add("fullwidth");
 						dialog.classList.add("fullheight");
 						dialog.classList.add("noslide");
@@ -2074,7 +2074,7 @@ export default () => {
 							if (dialog) {
 								if (choosing.side == true) {
 									choosing = "<span style='color:red;'>红方</span>";
-									var choosing2 = "，等待<span style='color:lightblue;'>蓝方</span>Ban角色1名";
+									var choosing2 = "，等待<span style='color:lightblue;'>蓝方</span>Ban1名角色";
 								} else {
 									choosing = "<span style='color:lightblue;'>蓝方</span>";
 									var choosing2 = "";
