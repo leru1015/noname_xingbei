@@ -307,7 +307,8 @@ window.noname_asset_list=
 	"image/splash/style2/tutorial.jpg",
 	"image/splash/style1/illustration.jpg",
 	"image/splash/style2/illustration.jpg",
-
+	"image/splash/style1/offlineChoose.jpg",
+	"image/splash/style2/offlineChoose.jpg",
 ];
 window.noname_skin_list=
 {

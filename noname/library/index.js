@@ -5231,6 +5231,70 @@ export class Library {
 				},
 			},
 		},
+		offlineChoose: {
+			name: "线下选角",
+			config: {
+				update:function(config,map){
+					if(config.choose_mode=='CM02' || config.choose_mode=='CM01'){
+						map.team_sequence.hide();
+					}else{
+						map.team_sequence.show();
+					}
+					if(config.choose_mode=='BP01' || config.choose_mode=='BP02'){
+						map.BPchoose_number.show();
+					}else{
+						map.BPchoose_number.hide();
+					}
+				},
+				versus_mode: {
+					name: "游戏模式",
+					init: "two",
+					item: {
+						"two": "2v2",
+						"three": "3v3",
+						//"four": "4v4",
+					},
+					frequent: true,
+					restart: true,
+				},
+				choose_mode: {
+					name: "选角模式",
+					init: "CM02",
+					item: {
+						'CM01': "CM01",
+						"CM02": "CM02",
+						"BP01": "BP01",
+						"BP02": "BP02",
+					},
+					frequent: true,
+					restart: true,
+				},
+				team_sequence:{
+					name:"队伍顺序",
+					init:"random",
+					item:{
+						random:'随机',
+						crossed:'交叉',
+						near:'临近',
+						CM:"CM",
+					},
+					frequent:true,
+					restart:true,
+				},
+				BPchoose_number:{
+					name:'可选角色数',
+					init:16,
+					item:{
+						12:'12',
+						16:'16',
+						20:'20',
+						24:'24',
+						30:'30',
+					},
+					frequent:true,
+				},
+			}
+		},
 		illustration:{
 			name:'图鉴',
 			config:{

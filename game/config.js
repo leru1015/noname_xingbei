@@ -18,7 +18,7 @@ window.config = {
 		sgscharacters:['shiZhouNian'],
 		sgscards:['xingBei'],
 		sgsmodes:['connect','xingBei'],
-		stockmode:['connect','xingBei','tutorial','illustration'],
+		stockmode:['connect','xingBei','offlineChoose','illustration','tutorial'],
 		stockextension:[],
 		layout:['default','newlayout'],
 		theme:['woodden','music','simple'],
