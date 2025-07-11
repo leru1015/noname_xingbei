@@ -2731,7 +2731,7 @@ export default () => {
 						}
 					},id,link);
 
-					console.log(flag);
+					//console.log(flag);
 					if(flag){
 						game.broadcastAll(
 							function (choosing, id) {
