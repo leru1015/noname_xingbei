@@ -3879,7 +3879,7 @@ export class Library {
 					unfrequent: true,
 				},
 				show_phaseuse_prompt: {
-					name: "出牌阶段提示",
+					name: "行动阶段提示",
 					intro: "在你出牌时显示提示文字",
 					init: true,
 					unfrequent: true,
@@ -7831,7 +7831,7 @@ export class Library {
 			const checkEnable = enable => {
 				if (typeof enable === "function") return enable(event);
 				if (Array.isArray(enable)) return enable.some(i => checkEnable(i));
-				if (enable === "phaseUse") return event.type === "phase";
+				if (enable === "xingDong") return event.type === "phase";
 				if(enable==='wuFaXingDong') return event.firstAction === true;//专门无法行动设置启用参数
 				if(enable==='gongJiOrFaShu') return event.name=='gongJi' || event.name=='faShu' || event.name=='gongJiOrFaShu';//专门攻击或法术设置启用参数
 				if(enable=='faShu') return event.name=='faShu' || event.name=='gongJiOrFaShu';//专门法术设置启用参数
@@ -7965,11 +7965,11 @@ export class Library {
 		cardUsable2: function (card, player, event) {
 			card = get.autoViewAs(card);
 			var info = get.info(card);
-			if (info.updateUsable == "phaseUse") {
+			if (info.updateUsable == "xingDong") {
 				event = event || _status.event;
 				if (event.type == "chooseToUse_button") event = event.getParent();
 				if (player != _status.event.player) return true;
-				if (event.getParent().name != "phaseUse") return true;
+				if (event.getParent().name != "xingDong") return true;
 				if (event.getParent().player != player) return true;
 			}
 			var num = info.usable;
@@ -7984,8 +7984,8 @@ export class Library {
 			event = event || _status.event;
 			if (event.type == "chooseToUse_button") event = event.getParent();
 			if (player != _status.event.player) return true;
-			if (info.updateUsable == "phaseUse") {
-				if (event.getParent().name != "phaseUse") return true;
+			if (info.updateUsable == "xingDong") {
+				if (event.getParent().name != "xingDong") return true;
 				if (event.getParent().player != player) return true;
 			}
 			event.addCount_extra = true;
@@ -9989,8 +9989,8 @@ export class Library {
 				return get.info(event.skill)&&get.info(event.skill).type=='qiDong';
 			},
 			content:function(){
-				trigger.getParent('phaseUse').canTeShu=false;
-				trigger.getParent('phaseUse').qiDongGuo=true;
+				trigger.getParent('xingDong').canTeShu=false;
+				trigger.getParent('xingDong').qiDongGuo=true;
 			},
 		},
 		_wuFaXingDong:{
@@ -9998,7 +9998,7 @@ export class Library {
 				//console.log('--------------------------------');
 				//拥有挑衅直接false
 				//无可启动技跳过启动前后无法行动
-				if(event.name=='phaseUse'){
+				if(event.name=='xingDong'){
 					if(event.canQiDong==false) return false;
 					var next=game.createEvent('gongJiOrFaShu',false);
 					next.setContent('emptyEvent');
@@ -10014,7 +10014,7 @@ export class Library {
 				for(var i=0;i<skills.length;i++){
 					//排除提炼和无法行动（避免判断可触发时循环嵌套）
 					if(skills[i]=='_tiLian' || skills[i]=='_wuFaXingDong') continue;
-					if(event.name=='phaseUse') var enable=lib.filter.filterEnable(next, player, skills[i]);
+					if(event.name=='xingDong') var enable=lib.filter.filterEnable(next, player, skills[i]);
 					else var enable=lib.filter.filterEnable(event, player, skills[i]);
 					if(enable) return false;
 				}
@@ -10035,8 +10035,8 @@ export class Library {
 				"step 0"
 				player.wuFaXingDong();
 				player.addGongJiOrFaShu();
-				event.getParent('phaseUse').canTeShu=false;
-				event.getParent('phaseUse').firstAction=true;
+				event.getParent('xingDong').canTeShu=false;
+				event.getParent('xingDong').firstAction=true;
 			},
 			contentx:function(){
 				"step 0"
@@ -10214,7 +10214,7 @@ export class Library {
 			}
 		},
 		_gouMai:{
-			enable:'phaseUse',
+			enable:'xingDong',
 			type:'teShu',
 			filter:function(event,player){
 				return player.countCards('h')+3<=player.getHandcardLimit();
@@ -10276,7 +10276,7 @@ export class Library {
 			}
 		},
 		_heCheng:{
-			enable:'phaseUse',
+			enable:'xingDong',
 			type:'teShu',
 			filter:function(event,player){
 				var xingShi=get.zhanJi(player.side);
@@ -10393,7 +10393,7 @@ export class Library {
 					markimage:'image/card/xingShi/shuiJing.png',
 				},
 			},
-			enable:'phaseUse',
+			enable:'xingDong',
 			type:'teShu',
 			filter:function(event,player){
 				var nengLiang_num=player.countNengLiangAll();
@@ -10561,6 +10561,7 @@ export class Library {
 						return event.xuRuo==true;
 					},
 					content:function(){
+						event.trigger('xingDongSkip');
 						trigger.cancel();
 					}
 				},

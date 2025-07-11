@@ -4258,7 +4258,7 @@ export const Content = {
 		"step 4";
 		event.trigger("phaseBegin");
 		"step 5";
-		player.phaseUse();
+		player.xingDong();
 		"step 6";
 		//回合结束前
 		event.trigger("phaseEndBefore");
@@ -4447,7 +4447,7 @@ export const Content = {
 		"step 6";
 		event.trigger("phaseUseAfter");
 	},*/
-	phaseUse:function(){
+	xingDong:function(){
 		"step 0";
 		//xingBei设置
 		player.storage.gongJiOrFaShu=1;
@@ -4475,8 +4475,8 @@ export const Content = {
 			const info = lib.skill[i];
 			if (!info) continue;
 			if (info.enable != undefined) {
-				if (typeof info.enable == "string" && info.enable == "phaseUse") bool = true;
-				else if (typeof info.enable == "object" && info.enable.includes("phaseUse")) bool = true;
+				if (typeof info.enable == "string" && info.enable == "xingDong") bool = true;
+				else if (typeof info.enable == "object" && info.enable.includes("xingDong")) bool = true;
 			}
 			if (bool) stat.skill[i] = 0;
 		}
@@ -4484,7 +4484,7 @@ export const Content = {
 			let bool = false;
 			const info = lib.card[i];
 			if (!info) continue;
-			if (info.updateUsable == "phaseUse") stat.card[i] = 0;
+			if (info.updateUsable == "xingDong") stat.card[i] = 0;
 		}
 		"step 1";
 		//event.trigger("phaseUseBefore");

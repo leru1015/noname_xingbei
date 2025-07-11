@@ -464,7 +464,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
 
             san_maoXianJiaTianTang:{
-                enable:'phaseUse',
+                enable:'xingDong',
                 type:'teShu',
                 filter:function(event,player){
                     var side=player.side;

@@ -2578,7 +2578,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             maoXianJiaTianTang:{
-                enable:'phaseUse',
+                enable:'xingDong',
                 type:'teShu',
                 filter:function(event,player){
                     var side=player.side;
@@ -2834,7 +2834,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             tianQiang:{
                 trigger:{player:'gongJiBefore'},
                 filter:function(event,player){
-                    if(event.getParent('phaseUse').tianQiang===false) return false;
+                    if(event.getParent('xingDong').tianQiang===false) return false;
                     return event.yingZhan!=true&&player.zhiLiao>=2;
                 },
                 content:function(){
@@ -2891,7 +2891,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeBiShaBaoShi();
                     'step 1'
                     player.changeZhiLiao(2,5);
-                    event.getParent('phaseUse').tianQiang=false;
+                    event.getParent('xingDong').tianQiang=false;
                     'step 2'
                     player.addGongJi();
                 },
@@ -5445,7 +5445,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length==0) return false;
                     if(event.yingZhan==true) return false;
-                    if(event.getParent('phaseUse').moGuanChongJi==false) return false;
+                    if(event.getParent('xingDong').moGuanChongJi==false) return false;
                     if(event.targets[0].countCards('h')>=event.targets[0].getHandcardLimit()) return false;
                     return true;
                 },
@@ -5469,7 +5469,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.discard(event.cost_data,'chongNengPai').set('showHiddenCards',true);
                     trigger.changeDamageNum(1);
                     trigger.customArgs.moGuanChongJi=true;
-                    trigger.getParent('phaseUse').duoChongSheJi=false;
+                    trigger.getParent('xingDong').duoChongSheJi=false;
                 },
                 group:['moGuanChongJi_mingZhong','moGuanChongJi_weiMingZhong'],
                 subSkill:{
@@ -5519,7 +5519,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:'faShu',
                 filter:function(event,player){
-                    if(event.getParent('phaseUse').leiGuangSanShe==false) return false;
+                    if(event.getParent('xingDong').leiGuangSanShe==false) return false;
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length==0) return false;
                     for(var i=0;i<cards.length;i++){
@@ -5604,7 +5604,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var cards=player.getExpansions('chongNengPai');
                     if(cards.length==0) return false;
                     if(event.yingZhan==true) return false;
-                    if(event.getParent('phaseUse').duoChongSheJi==false) return false;
+                    if(event.getParent('xingDong').duoChongSheJi==false) return false;
                     return true;
                 },
                 async cost(event,trigger,player){
@@ -5625,7 +5625,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     'step 0'
                     player.discard(event.cost_data,'chongNengPai').set('showHiddenCards',true);
-                    trigger.getParent('phaseUse').moGuanChongJi=false;
+                    trigger.getParent('xingDong').moGuanChongJi=false;
                     var bool=game.hasPlayer(function(current){
                         if(current==trigger.oriTarget) return false;
                         return player.canUse('anMie',current);
@@ -5936,7 +5936,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 type:'faShu',
                 enable:'faShu',
                 filter:function(event,player){
-                    if(event.getParent('phaseUse').chongYing==false) return false;
+                    if(event.getParent('xingDong').chongYing==false) return false;
                     return player.countCards('h',card=>lib.skill.chongYing.filterCard(card))>0;
                 },
                 selectCard:1,
@@ -6003,7 +6003,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 trigger:{source:"gongJiMingZhong"},
                 filter:function(event,player){
                     if(!player.isHengZhi()) return false;
-                    if(event.getParent('phaseUse').qiHeiZhiQiang==false) return false;
+                    if(event.getParent('xingDong').qiHeiZhiQiang==false) return false;
                     if(!player.canBiShaShuiJing()) return false;
                     if(event.yingZhan==true) return false;
                     return event.target.countCards('h')==1||event.target.countCards('h')==2;
@@ -6703,7 +6703,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 
                 filterx:function(event,player,num){
                     //无可启动技，跳过启动前后挑衅
-                    if(event.name=='phaseUse'&&num==1){
+                    if(event.name=='xingDong'&&num==1){
 						if(event.canQiDong==false) return false;
 					}
 					return player.hasZhiShiWu('tiaoXinX');
@@ -6715,8 +6715,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				type:'wuFaXingDong',
                 content:function(){
                     player.removeZhiShiWu('tiaoXinX')
-                    var evt=_status.event.getParent('phaseUse');
-					if(evt&&evt.name=='phaseUse'){
+                    var evt=_status.event.getParent('xingDong');
+					if(evt&&evt.name=='xingDong'){
 						evt.skipped=true;
 					}
                     player.removeSkill('tiaoXinX');

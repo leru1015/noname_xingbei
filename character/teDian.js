@@ -2114,7 +2114,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 },
             },
             trick_maoXianJiaTianTang:{
-                enable:'phaseUse',
+                enable:'xingDong',
                 type:'teShu',
                 filter: function(event, player) {
                     return player.canBiShaShuiJing()&&get.zhanJi(player.side).length>0;
