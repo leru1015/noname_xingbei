@@ -8517,12 +8517,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     
                     if(result.bool){
                         lib.skill.tongShengGongSi.removeTongShengGongSiSkill(player,player.storage.tongShengGongSi_target);
-                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');
+                        await player.storage.tongShengGongSi_target.removeZhiShiWu('tongShengGongSi_xiaoGuo');                      
 
                         var target=result.targets[0];
                         player.storage.tongShengGongSi_target=target;
-                        await target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                         lib.skill.tongShengGongSi.addTongShengGongSiSkill(player,target);
+                        await target.addZhiShiWu('tongShengGongSi_xiaoGuo');                       
                     }else{
                         lib.skill.tongShengGongSi.removeTongShengGongSiSkill(player,player.storage.tongShengGongSi_target);
                         await player.storage.tongShengGongSi_target.removeZhiShiWu
@@ -8662,8 +8662,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.storage.tongShengGongSi_use=true;
                     player.storage.tongShengGongSi_target=target;
 
-                    target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                     lib.skill.tongShengGongSi.addTongShengGongSiSkill(player,target);
+                    target.addZhiShiWu('tongShengGongSi_xiaoGuo');
                 },
                 global:'tongShengGongSi_xiaoGuo',
                 group:'tongShengGongSi_hengZhiChongZhi',
@@ -8676,8 +8676,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             return player.storage.tongShengGongSi_use;
                         },
                         content:function(){
+                            'step 0'
                             lib.skill.tongShengGongSi.removeTongShengGongSiSkill(player,player.storage.tongShengGongSi_target);
                             lib.skill.tongShengGongSi.addTongShengGongSiSkill(player,player.storage.tongShengGongSi_target);
+                            'step 1'
+                            player.qiPai();
+                            'step 2'
+                            player.storage.tongShengGongSi_target.qiPai();
+
                         }
                     },
 
