@@ -8429,21 +8429,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             if(list[0]==player){
                                 if(trigger.player==player){
                                     trigger.insertAfter(function(){
-                                        player.faShuDamage(num,source).set('step',4).set('lingHunLianJie',true);
+                                        player.faShuDamage(num,source).set('step',5).set('lingHunLianJie',true);
                                     },{
                                         player:player.storage.lingHunLianJieTarget,
                                         num:event.num,
                                         source:player,
                                     });
                                 }else{
-                                    player.faShuDamage(event.num,player).set('step',4).set('lingHunLianJie',true);
+                                    player.faShuDamage(event.num,player).set('step',5).set('lingHunLianJie',true);
                                 }
                             }else{
                                 if(trigger.player==player){
-                                    player.storage.lingHunLianJieTarget.faShuDamage(event.num,player).set('step',4).set('lingHunLianJie',true);
+                                    player.storage.lingHunLianJieTarget.faShuDamage(event.num,player).set('step',5).set('lingHunLianJie',true);
                                 }else{
                                     trigger.insertAfter(function(){
-                                        player.faShuDamage(num,player).set('step',4).set('lingHunLianJie',true);
+                                        player.faShuDamage(num,player).set('step',5).set('lingHunLianJie',true);
                                     },{
                                         player:player,
                                         num:event.num,
@@ -8874,7 +8874,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             jingHuaShuiYue:{
-                trigger:{global:'chengShouShangHai'},
+                trigger:{global:'chengShouShangHaiBefore'},
                 filter:function(event,player){
                     return event.num==2&&event.faShu==true&&player.getExpansions('jian').length>1;
                 },
@@ -9749,7 +9749,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             wuDong_info:"<span class='tiaoJian'>(摸1张牌[强制]或弃 1 张牌[强制])</span>将牌库顶的1张牌面朝下放置在你角色旁，作为【茧】。",
             duFen_info:"<span class='tiaoJian'>(每当有角色产生1点实际法术伤害时发动⑤，移除1个【茧】)</span>该次伤害额外+1。",
             chaoSheng_info:"<span class='tiaoJian'>(每当你承受伤害时发动⑥，移除1个【茧】)</span>抵御1点该来源的伤害。",
-            jingHuaShuiYue_info:"<span class='tiaoJian'>(每当有角色承受2点实际法术伤害时发动⑤，移除2张同系【茧】[展示])</span>抵御该次伤害，你对他造成2次法术伤害③，每次伤害为1点。",
+            jingHuaShuiYue_info:"<span class='tiaoJian'>(每当有角色承受2点实际法术伤害前发动⑤，移除2张同系【茧】[展示])</span>抵御该次伤害，你对他造成2次法术伤害③，每次伤害为1点。",
             diaoLing_info:"<span class='tiaoJian'>(你每次移除【茧】时，若为法术牌，可展示之[展示])</span>你对目标角色造成1点法术伤害③，再对自己造成2点法术伤害③；此技能发动后，直到你下个回合开始前，对方的士气最少为1[强制]。",
             yongHua_info:"[宝石]<span class='tiaoJian'>(你+1</span><span class='hong'>【蛹】</span><span class='tiaoJian'>)</span>将牌库顶的4张牌面朝下放置在你角色旁，作为【茧】。",
             daoNiZhiDie_info:"[水晶]你弃2张牌，再选择以下1项发动：<br>·对目标角色造成1点法术伤害③，该伤害不能用[治疗]抵御。<br> ·<span class='tiaoJian'>(移除2个【茧】或对自己造成4点法术伤害③)</span>移除1个<span class='hong'>【蛹】</span>。",
