@@ -10561,7 +10561,7 @@ export class Library {
 						return event.xuRuo==true;
 					},
 					content:function(){
-						event.trigger('xingDongSkip');
+						event.trigger('xingDongSkipped');
 						trigger.cancel();
 					}
 				},
