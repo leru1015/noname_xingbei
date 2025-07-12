@@ -2632,7 +2632,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             list.push([zhanJi[i],get.translation(zhanJi[i])]);
                         }
                         var next=player.chooseButton([
-                            `移除我方【战绩区】1星石`,
+                            `不想提炼：移除我方【战绩区】1星石`,
                             [list,'tdnodes'],
                         ]);
                         next.set('forced',true);
