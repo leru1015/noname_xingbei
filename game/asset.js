@@ -201,6 +201,9 @@ window.noname_asset_list=
 	'image/character/jianZhiMoNv.jpg',
 	'image/character/jieRiMoDao.jpg',
 	'image/character/lingXiZhiChao.jpg',
+	'image/character/daiDuoShaoNv.jpg',
+	'image/character/jiDuShaoNv.jpg',
+	'image/character/jianZhiZi.jpg',
 
 	"image/emotion/xingBei_emotion/1.gif",
 	"image/emotion/xingBei_emotion/2.gif",
