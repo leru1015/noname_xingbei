@@ -74,7 +74,7 @@ window.config = {
 	alteredSkills: [],
 	brokenFile: [],
 
-	theme: "woodden",
+	theme: "music",
 	layout: "nova",
 	card_style: "default",
 	cardback_style: "xingBei",
