@@ -10483,8 +10483,9 @@ export class Library {
 			ai:{
 				order:function(item,player){
 					var num=3.15;
+					if((_status.connectMode&&lib.configOL.AItiLian)||(!_status.connectMode&&get.config('AItiLian'))) num+=0.05;
 					num+=(0.05*(player.getNengLiangLimit()-player.countNengLiangAll()));
-					num+=(0.05*get.zhanJi(player.side).length);
+					num+=(0.06*get.zhanJi(player.side).length);
 					return num;
 				},
 				result:{
