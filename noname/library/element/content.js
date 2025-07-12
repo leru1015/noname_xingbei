@@ -8447,7 +8447,15 @@ export const Content = {
 			return;
 		}
 		if (!get.info(card, false).noForceDie) event.forceDie = true;
-		if (cards.length) {
+		if(event.skill) var info=get.info(event.skill);
+		if(info&&info.viewAs&&info.discard==true&&cards.length){
+			var next=player.discard(cards);
+			event.animate=false;
+			event.cards=[];//因为是弃置视为打出，清空卡牌
+			card.cards=[];
+			if(info.showCards) next.set("showCards", info.showCards);
+		}
+		else if (cards.length) {
 			var owner = get.owner(cards[0]) || player;
 			var next = owner.lose(cards, "visible", ui.ordering).set("type", "use");
 			var directDiscard = [];
