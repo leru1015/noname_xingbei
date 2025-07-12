@@ -4445,7 +4445,7 @@ export class Library {
 				},
 				volumn_audio: {
 					name: "音效音量",
-					init: 8,
+					init: 1,
 					item: {
 						0: "〇",
 						1: "一",
@@ -4462,8 +4462,8 @@ export class Library {
 					},
 				},
 				volumn_background: {
-					name: "音乐音量",
-					init: 8,
+					name: "背景音乐",
+					init: 1,
 					item: {
 						0: "〇",
 						1: "一",
