@@ -5727,6 +5727,15 @@ export class Get extends GetCompatible {
 			}
 			result.push(list.randomRemove());
 		}
+		if(result.includes('fengZhiJianSheng')&&result.includes('jianZhiZi')){
+			var num=Math.random();
+			if(num<0.5){
+				result=result.filter(item=>item!='fengZhiJianSheng');
+			}else{
+				result=result.filter(item=>item!='jianZhiZi');
+			}
+			result.push(list.randomRemove());
+		}
 		return result;
 	}
 	zhiLiaoEffect(target,num){
