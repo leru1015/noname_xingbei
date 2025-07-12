@@ -2858,7 +2858,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             trick_shengHuangHuiGuangPao:"[法术]圣煌辉光炮",
             trick_shengHuangHuiGuangPao_info:"<span class='tiaoJian'>(仅【圣煌形态】下可发动，移除1点</span><span class='lan'>【圣煌辉光炮】</span><span class='tiaoJian'>，移除4点</span><span class='hong'>【信仰】</span><span class='tiaoJian'>，并额外移除等同我方落后士气的</span><span class='hong'>【信仰】</span><span class='tiaoJian'>数)</span>所有角色将手牌调整为4张，我方【星杯区】+1[星杯]，然后将一方[士气]调整与另一方相同，我方所有角色各+1[治疗]。",
             trick_ziDongTianChong:"[被动]自动填充",
-            trick_ziDongTianChong_info:"<span class='tiaoJian'>(你的回合结束时，若你未执行【特殊行动】)</span>你选择以下一项发动：<br>·[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1<span class='lan'>【圣煌辉光炮】</span>。 <br>·[宝石]你+2<span class='hong'>【信仰】</span>或一名角色+2[治疗]。",
+            trick_ziDongTianChong_info:"<span class='tiaoJian'>(你的回合结束时，若你未执行【特殊行动】)</span>你选择以下一项发动：<br>·[水晶]你+1<span class='hong'>【信仰】</span>或+1[治疗]，然后+1<span class='lan'>【圣煌辉光炮】</span>。 <br>·[宝石]你+2<span class='hong'>【信仰】</span>或+2[治疗]。",
 
             // trick冒险家
             trick_qiZha:"[响应]欺诈",
