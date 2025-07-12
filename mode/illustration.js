@@ -768,11 +768,31 @@ export default () => {
                         dialog.add([list, "vcard"], noclick);
                     }
                 } else {
-                    if (characterx) {
-                        dialog.add([list, "characterx"], noclick);
-                    } else {
-                        dialog.add([list, "character"], noclick);
-                    }
+                    var banCharacter = function (e) {
+                        if (_status.clicked) {
+                            _status.clicked = false;
+                            return;
+                        }
+                        ui.click.touchpop();
+                        this._banning = "offline";
+                        ui.click.charactercard(this.link, this);
+                        /*
+                        if (lib.config.show_charactercard) {
+                            ui.click.charactercard(this.link, this);
+                        } else {
+                            ui.click.intro.call(this, e);
+                        }*/
+                        _status.clicked = false;
+                        delete this._banning;
+                    };
+                    //debugger;
+                    dialog.add([list, "character"], noclick);
+                    
+                    for (var i = 0; i < dialog.buttons.length; i++) {
+                        dialog.buttons[i].classList.add("noclick");
+                        dialog.buttons[i].listen(banCharacter);
+                        ui.create.rarity(dialog.buttons[i]);
+				    }
                 }
 
                 dialog.add(ui.create.div(".placeholder"));
@@ -825,7 +845,6 @@ export default () => {
                 return dialog;
             }
 
-            ui.create.menu(true);
             var dialog=createCharacterDialog('heightset');
             dialog.classList.add("fullwidth");
 			dialog.classList.add("fullheight");
