@@ -333,7 +333,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     var next=player.chooseTarget(true,'目标角色+1[治疗]').set('ai',function(target){
                         var player=_status.event.player;
-						return get.zhiLiaoEffect2(player,target,1);
+						return get.zhiLiaoEffect2(target,player,1);
 					});
                     'step 1'
 					if(result.bool){
