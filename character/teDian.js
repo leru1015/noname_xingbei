@@ -2636,6 +2636,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             [list,'tdnodes'],
                         ]);
                         next.set('forced',true);
+                        next.set('ai',function(button){
+                            if(button.link=='baoShi') return 0.5;
+                            else return 1;
+                        });
                         var links=await next.forResultLinks();
                         await player.removeZhanJi(links[0],1);
                     }
