@@ -6597,6 +6597,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 subSkill:{
                     weiMingZhong:{
                         trigger:{source:'gongJiWeiMingZhong'},
+                        priority:0.1,
                         filter:function(event,player){
                             return event.customArgs.nuHou;
                         },
