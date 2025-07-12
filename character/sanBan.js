@@ -827,7 +827,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return player.canGongJi()||player.canFaShu();
                 },
                 ai:{
-                    shuiJing:true,
+                    baoShi:true,
                 }
             },
             san_lingGan:{
