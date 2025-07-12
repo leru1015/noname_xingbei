@@ -2819,13 +2819,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         prompt:'嫉妒追访：攻击手牌数大于你的对手[攻击行动]',
                     });
+                },
+                check:function(event,player){
+                    var targets= game.filterPlayer(function(current){
+                        return current.side!=player.side&&current.countCards('h')>player.countCards('h');
+                    });
+                    return targets.length>0;
+                },
+                ai:{
+                    shuiJing:true
                 }
-            },
-            check:function(event,player){
-                var targets= game.filterPlayer(function(current){
-                    return current.side!=player.side&&current.countCards('h')>player.countCards('h');
-                });
-                return targets.length>0;
             },
         },
         
