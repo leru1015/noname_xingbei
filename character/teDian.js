@@ -2983,7 +2983,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return target.countCards('h');
                     }).forResultTargets();
                     var target=targets[0];
-                    await target.chooseToDiscard('h',1,'剑残影：弃1张牌');
+                    await target.chooseToDiscard('h',1,'剑残影：弃1张牌',true);
                     player.storage.extraXingDong.push({
                         xingDong:'gongJi',
                         target:target,
