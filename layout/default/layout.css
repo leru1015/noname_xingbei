@@ -4559,19 +4559,16 @@ div[data-decoration="bronze"]::after {
 	display: none !important;
 }
 .card.fullskin > .name {
-	top: 8px;
-	left: 7px;
-	/*border:1px solid #631515;*/
-	border-radius: 4px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	/*color:#631515;*/
-	border: 1px solid rgb(74, 29, 1);
-	color: rgb(74, 29, 1);
-	text-shadow: none;
-	text-align: center;
-	line-height: 18px;
-	background-color: #ffffff5a;
+    top: 8px;
+    left: 7px;
+    border-radius: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    color: rgb(74, 29, 1);
+    text-shadow: none;
+    text-align: center;
+    line-height: 18px;
+    background-color: rgba(255, 255, 255, 0.38);
 }
 .cardbg,
 .button.character.cardbg {
