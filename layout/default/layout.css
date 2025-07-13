@@ -4571,6 +4571,7 @@ div[data-decoration="bronze"]::after {
 	text-shadow: none;
 	text-align: center;
 	line-height: 18px;
+	background-color: #ffffff5a;
 }
 .cardbg,
 .button.character.cardbg {
