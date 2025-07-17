@@ -853,6 +853,7 @@ export default () => {
             var dialog=createCharacterDialog('heightset');
             dialog.classList.add("fullwidth");
 			dialog.classList.add("fullheight");
+            dialog.classList.add('fixed');
             dialog.open();
             
             lib.init.onfree();
