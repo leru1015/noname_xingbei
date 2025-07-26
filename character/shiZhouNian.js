@@ -7134,7 +7134,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.removeZhiShiWu('douQi');
                     trigger.wuFaYingZhan();
                     'step 1'
-                    player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                    //player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                },
+                group:'qiJueBengJi_gongJiJieShu',
+                subSkill:{
+                    gongJiJieShu:{
+                        trigger:{player:'gongJiAfter'},
+                        direct:true,
+                        filter:function(event,player){
+                            return event.customArgs.qiJueBengJi;
+                        },
+                        content:function(){
+                            player.faShuDamage(player.countZhiShiWu('douQi'),player);
+                        }
+                    },
                 },
                 check:function(event,player){
                     if(event.canYingZhan==false) return false;
