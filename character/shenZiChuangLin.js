@@ -276,6 +276,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         },
                         trigger: {player:['loseAfter','gainAfter'],source:'gainAfter'},
                         direct: true,
+                        lastDo: true,
                         content: function(){
                             if(player.hasCard(function(card){
                                 return card.name=='moRen'||card.name=='yiRen';
