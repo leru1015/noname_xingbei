@@ -12130,7 +12130,7 @@ export const Content = {
 				var list=_status.event.listX;
 				if(target.side==player.side){
 					if(list.includes('_xuRuo')) return '_xuRuo';
-					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi_xiaoGuo']){
 						if(list.includes(xiaoGuo)){
 							return xiaoGuo;
 						}
@@ -12140,12 +12140,13 @@ export const Content = {
 					if(list.includes('_shengDun')){
 						return '_shengDun';
 					}
-					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi_xiaoGuo']){
 						if(list.includes(xiaoGuo)){
 							return xiaoGuo;
 						}
 					}
 				}
+				return list[0];
 			}).set('targetX',target).set('listX',list);
 		}
 		'step 1'
@@ -12186,7 +12187,7 @@ export const Content = {
 				var list=_status.event.listX;
 				if(target.side==player.side){
 					if(list.includes('_xuRuo')) return '_xuRuo';
-					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi']){
+					for(var xiaoGuo of game.jiChuXiaoGuo['fengYinShi_xiaoGuo']){
 						if(list.includes(xiaoGuo)){
 							return xiaoGuo;
 						}
@@ -12196,12 +12197,13 @@ export const Content = {
 					if(list.includes('_shengDun')){
 						return '_shengDun';
 					}
-					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi']){
+					for(var xiaoGuo of game.jiChuXiaoGuo['qiDaoShi_xiaoGuo']){
 						if(list.includes(xiaoGuo)){
 							return xiaoGuo;
 						}
 					}
 				}
+				return list[0];
 			}).set('targetX',target).set('listX',list);
 		}
 		'step 1'
