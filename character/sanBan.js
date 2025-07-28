@@ -6,7 +6,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         characterSort:{
             sanBan:{
                 "3xing":['san_fengZhiJianSheng','san_kuangZhanShi','san_anShaZhe','san_shengNv'],
-                "3.5xing":['san_shengQiangQiShi','san_maoXianJia','san_nvWuShen'],
+                "3.5xing":['san_shengQiangQiShi','san_maoXianJia','san_nvWuShen','san_wenYiFaShi'],
                 "4xing":['san_yingLingRenXing','san_moGong','san_xianZhe','san_moQiang'],
                 "4.5xing":['san_lingHunShuShi','san_yinYouShiRen','san_yongZhe'],
                 "5xing":[],
@@ -26,6 +26,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             san_moQiang:['moQiang_name','huanGroup',4,['san_anZhiJieFang','huanYingXingChen','heiAnShuFu','anZhiZhangBi','chongYing','qiHeiZhiQiang'],['character:moQiang']],
             san_yinYouShiRen:['yinYouShiRen_name','huanGroup','4/5',['san_chenLunXieZouQu','san_buXieHeXian','geYongTianFu','baoFengQianZouQu','san_yongHengYueZhangX','san_xiWangFuGeQu','san_lingGan'],['character:yinYouShiRen']],
             san_yongZhe:['yongZhe_name','xueGroup','4/5',['yongZheZhiXin','san_nuHou','jinPiLiJin','san_mingJingZhiShui','tiaoXin','jinDuanZhiLi','san_siDou','nuQi','zhiXing'],['character:yongZhe']],
+            san_wenYiFaShi:['wenYiFaShi_name','huanGroup','3/4',['buXiu','shengDu','san_wenYi','siWangZhiChu','juDuXinXing'],['character:wenYiFaShi']],
 		},
 
         characterIntro: {
@@ -1041,6 +1042,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     player.tempBanSkill('geYongTianFu','phaseAfter');
                 }
             },
+            
+            san_wenYi:{
+                inherit:'wenYi',
+                group:[],
+            },
         },
 		
 		translate:{
@@ -1071,6 +1077,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             san_yinYouShiRen_prefix: "三版",
             san_yongZhe:"三版勇者",
             san_yongZhe_prefix: "三版",
+            san_wenYiFaShi:"三版瘟疫法师",
+            san_wenYiFaShi_prefix: "三版",
 
             san_shengJian:'[被动]圣剑',
             san_shengJian_info:"若你的主动攻击为本次行动阶段的第3次[攻击行动]，则此攻击强制命中。",
@@ -1144,6 +1152,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             geYongTianFu_info:"游戏开始时你拥有【永恒乐章】。<span class='tiaoJian'>(每当【永恒乐章】被触发时)</span>你+1<span class='hong'>【灵感】</span>。吟游诗人不会触发【永恒乐章】的效果。",
             baoFengQianZouQu:"[响应]暴风前奏曲",
             baoFengQianZouQu_info:"<span class='tiaoJian'>(回合开始前，你移除1点</span><span class='hong'>【灵感】</span><span class='tiaoJian'>)</span>本回合无视你的【歌咏天赋】",
+
+            san_wenYi_info:"<span class='tiaoJian'>(弃1张地系牌[展示])</span>对所有其他角色各造成1点法术伤害③。",
         },
 	};
 });
