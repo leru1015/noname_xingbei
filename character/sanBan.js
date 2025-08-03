@@ -297,7 +297,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     var choiceList=['你+1[治疗]','(移除我方【战绩区】2星石)，你无视上限+2[治疗]'];
                     var choices=['选项一'];
                     var list=get.zhanJi(player.side);
-                    if(list.length>=1){
+                    if(list.length>=2){
                         choices.push('选项二');
                     }
                     player.chooseControl(choices).set('prompt','军神威光：选择一项').set('choiceList',choiceList);
