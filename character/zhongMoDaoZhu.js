@@ -1408,8 +1408,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         if(cards.length+player.countExpansions('yuYan')>6){
                             cards=cards.randomGets(6-player.getExpansions('yuYan').length);
                         }
-                        game.log(player,`将${cards.length}张牌 加入`,`#g【预言】`);
-                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
+                        await lib.skill.yuYan.add(player,cards);
                     }
                     
                 },
@@ -1468,8 +1467,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     }
                     else{
                         let cards=get.cards();
-                        game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
-                        await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
+                        await lib.skill.yuYan.add(player,cards);
                         game.log(player,`将1张牌加入手牌`);
                         await player.gain(card);
                     }
@@ -1514,8 +1512,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         return 8-get.value(card);
                     }).forResultCards();
                     cards=cards.randomSort();
-                    game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
-                    await player.addToExpansion(cards,'draw').set('gaintag',["yuYan"]).set('special',true);
+                    await lib.skill.yuYan.add(player,cards);
 
                     player.addGongJiOrFaShu();
                     player.removeSkill('fangZhu_wuXian');
@@ -1559,6 +1556,62 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 }
             },
             yuYan:{
+                add:async function(player,cards){
+                    game.log(player,`将${cards.length}张牌加入`,`#g【预言】`);
+                    var next=game.createEvent('yuYanAdd',false);
+                    next.setContent('addToExpansion');
+                    next.set('player',player);
+                    next.set('cards',cards);
+                    next.set('gaintag',["yuYan"]);
+                    next.set('animate','draw');
+                    next.getd = function (player, key, position) {
+                        if (!position) position = ui.discardPile;
+                        if (!key) key = "cards";
+                        var cards = [],
+                            event = this;
+                        game.checkGlobalHistory("cardMove", function (evt) {
+                            if (evt.name != "lose" || evt.position != position || evt.getParent() != event) return;
+                            if (player && player != evt.player) return;
+                            cards.addArray(evt[key]);
+                        });
+                        return cards;
+                    };
+                    next.getl = function (player) {
+                        const that = this;
+                        const map = {
+                            player: player,
+                            hs: [],
+                            es: [],
+                            js: [],
+                            ss: [],
+                            xs: [],
+                            cards: [],
+                            cards2: [],
+                            gaintag_map: {},
+                            vcard_map: new Map(),
+                        };
+                        player.checkHistory("lose", function (evt) {
+                            if (evt.parent == that) {
+                                map.hs.addArray(evt.hs);
+                                map.es.addArray(evt.es);
+                                map.js.addArray(evt.js);
+                                map.ss.addArray(evt.ss);
+                                map.xs.addArray(evt.xs);
+                                map.cards.addArray(evt.cards);
+                                map.cards2.addArray(evt.cards2);
+                                for (let key in evt.gaintag_map) {
+                                    if (!map.gaintag_map[key]) map.gaintag_map[key] = [];
+                                    map.gaintag_map[key].addArray(evt.gaintag_map[key]);
+                                }
+                                evt.vcard_map.forEach((value, key) => {
+                                    map.vcard_map.set(key, value);
+                                });
+                            }
+                        });
+                        return map;
+                    };
+                    return next;
+                },
                 intro:{
                     name:'预言',
                     mark:function(dialog,storage,player){
