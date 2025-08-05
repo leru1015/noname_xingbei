@@ -452,7 +452,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             }
 							return cards;
 						},
-                        forced: true,
                         filter: function(event,player){
                             var bool=false;
                             for(var card of event.cards){
