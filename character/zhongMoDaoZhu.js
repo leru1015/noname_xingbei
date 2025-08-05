@@ -272,10 +272,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             },
             shiShu:{},
             shiShuX:{
-                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod'],
+                group:['shiShuX_yiShiWeiJing','shiShuX_yinJiBianJian','shiShuX_mod','shiShuX_cardsDiscardEnd'],
                 subSkill:{
                     mod:{
-                        priority:-1,
                         mod:{
                             cardType:function(card,player,type){
                                 if(card.name=='shiShuCard') return 'gongJi';
@@ -377,7 +376,41 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                             game.log(player,`获得了${gains.length}张牌`);
                             await player.gain(gains, "draw");
                         }
-                    }
+                    },
+                    cardsDiscardEnd:{
+                        trigger:{global:'cardsDiscardEnd'},
+                        direct:true,
+                        getIndex(event, player) {
+							const cards = [];
+							for(let i = 0; i < event.cards.length; i++) {
+                                if(get.name(event.cards[i]) == 'shiShuCard') {
+                                    if(event.cards[i].destroyed) continue;
+                                    cards.push(event.cards[i]);
+                                }
+                            }
+							return cards;
+						},
+                        filter: function(event,player){
+                            var bool=false;
+                            for(var card of event.cards){
+                                if(get.name(card)=='shiShuCard'){
+                                    bool=true;
+                                    break;
+                                }
+                            }
+                            
+                            return bool;
+                        },
+                        content: async function(event, trigger, player){
+                            trigger.cards.remove(event.indexedData);
+                            game.broadcastAll(function(card){
+                                card.fix();
+                                card.remove();
+                                card.destroyed = true;
+                            }, event.indexedData);
+                            game.log(event.indexedData, "被移除了");
+                        }
+                    },
                 }
             },
             guJinHuzheng:{
