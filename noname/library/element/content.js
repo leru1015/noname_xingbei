@@ -4680,6 +4680,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -5147,6 +5148,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -5414,6 +5416,7 @@ export const Content = {
 				event.send();
 			}
 			else{
+				game.delayex();
 				event.result='ai';
 			}
 		}
@@ -6336,6 +6339,7 @@ export const Content = {
 			}
 			delete event.callback;
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		if (event.onfree) {
@@ -6585,6 +6589,7 @@ export const Content = {
 			} else if (event.isOnline()) {
 				event.send();
 			} else {
+				game.delayex();
 				event.result = "ai";
 			}
 		}
@@ -6650,6 +6655,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -6698,6 +6704,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -6883,6 +6890,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -6941,6 +6949,7 @@ export const Content = {
 		} else if (event.isOnline()) {
 			event.send();
 		} else {
+			game.delayex();
 			event.result = "ai";
 		}
 		"step 1";
@@ -7139,6 +7148,7 @@ export const Content = {
 			} else if (event.isOnline()) {
 				event.send();
 			} else {
+				game.delayex();
 				event.result = "ai";
 			}
 		}
@@ -7303,6 +7313,7 @@ export const Content = {
 			} else if (event.isOnline()) {
 				event.send();
 			} else {
+				game.delayex();
 				event.result = "ai";
 			}
 		}
@@ -7495,6 +7506,7 @@ export const Content = {
 			} else if (event.isOnline()) {
 				event.send();
 			} else {
+				game.delayex();
 				event.result = "ai";
 			}
 		}
@@ -12355,6 +12367,7 @@ export const Content = {
 				event.send();
 			}
 			else{
+				game.delayex();
 				event.result='ai';
 			}
 		}
