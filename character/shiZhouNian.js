@@ -624,6 +624,20 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                 content:function(){
                     target.addFengYin('diZhiFengYin_xiaoGuo',cards,player);
                 },
+                fengYinFilter:function(event,player,xiBie){
+                    if(!player.hasExpansions(`${xiBie}ZhiFengYin_xiaoGuo`)){
+                        return false
+                    }
+                    for(var card of event.cards){
+                        if(event.name!='showCards'){
+                            if(card.original != "h") continue;
+                        }
+                        if(get.xiBie(card,player)==xiBie){
+                            return true;
+                        }
+                    }
+                    return false;
+                },
                 subSkill:{
                     xiaoGuo:{
                         marktext:"地",
@@ -638,18 +652,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:1,
                         filter:function(event,player){
-                            if(!player.hasExpansions('diZhiFengYin_xiaoGuo')){
-                                return false
-                            }
-                            for(var card of event.cards){
-                                if(event.name!='showCards'){
-                                    if(card.original != "h") continue;
-                                }
-                                if(get.xiBie(card)=='di'){
-                                    return true;
-                                }
-                            }
-                            return false;
+                            return lib.skill.diZhiFengYin.fengYinFilter(event,player,'di');
                         },
                         content:async function(event,trigger,player){
                             var fengYin=event.name;
@@ -713,18 +716,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:1,
                         filter:function(event,player){
-                            if(!player.hasExpansions('shuiZhiFengYin_xiaoGuo')){
-                                return false
-                            }
-                            for(var card of event.cards){
-                                if(event.name!='showCards'){
-                                    if(card.original != "h") continue;
-                                }
-                                if(get.xiBie(card)=='shui'){
-                                    return true;
-                                };
-                            }
-                            return false;
+                            return lib.skill.diZhiFengYin.fengYinFilter(event,player,'shui');
                         },
                         content:async function(event,trigger,player){
                             var fengYin=event.name;
@@ -788,19 +780,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:1,
                         filter:function(event,player){
-                            if(!player.hasExpansions('huoZhiFengYin_xiaoGuo')){
-                                return false
-                            }
-
-                            for(var card of event.cards){
-                                if(event.name!='showCards'){
-                                    if(card.original != "h") continue;
-                                }
-                                if(get.xiBie(card)=='huo'){
-                                    return true;
-                                };
-                            }
-                            return false;
+                            return lib.skill.diZhiFengYin.fengYinFilter(event,player,'huo');
                         },
                         content:async function(event,trigger,player){
                             var fengYin=event.name;
@@ -864,19 +844,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:1,
                         filter:function(event,player){
-                            if(!player.hasExpansions('fengZhiFengYin_xiaoGuo')){
-                                return false
-                            }
-   
-                            for(var card of event.cards){
-                                if(event.name!='showCards'){
-                                    if(card.original != "h") continue;
-                                }
-                                if(get.xiBie(card)=='feng'){
-                                    return true;
-                                };
-                            }
-                            return false;
+                            return lib.skill.diZhiFengYin.fengYinFilter(event,player,'feng');
                         },
                         content:async function(event,trigger,player){
                             var fengYin=event.name;
@@ -942,19 +910,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                         forced:true,
                         priority:1,
                         filter:function(event,player){
-                            if(!player.hasExpansions('leiZhiFengYin_xiaoGuo')){
-                                return false
-                            }
-
-                            for(var card of event.cards){
-                                if(event.name!='showCards'){
-                                    if(card.original != "h") continue;
-                                }
-                                if(get.xiBie(card)=='lei'){
-                                    return true;
-                                };
-                            }
-                            return false;
+                            return lib.skill.diZhiFengYin.fengYinFilter(event,player,'lei');
                         },
                         content:async function(event,trigger,player){
                             var fengYin=event.name;
