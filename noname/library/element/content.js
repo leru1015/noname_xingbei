@@ -3522,7 +3522,8 @@ export const Content = {
 			return false;
 		};
 		if (info.direct) {
-			if(get.phaseswap()) game.swapPlayerAuto(player);
+			//if(get.phaseswap()) game.swapPlayerAuto(player);
+			//注释掉避免一些机制技能导致控制权切换导致视角闪烁
 			if (player.isOnline()) void 0;
 			event._result = { bool: true };
 			event._direct = true;
