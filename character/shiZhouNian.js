@@ -5917,12 +5917,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     'step 0'
                     if(target.countCards('h')>0){
                         if(player.side==target.side){
-                            target.chooseToDiscard('h').set('ai',function(card){
+                            target.chooseToDiscard('h','充盈：是否弃1张牌').set('ai',function(card){
                                 if(get.type(card)=='faShu'||get.xiBie(card)=='lei') return 6;
                                 return 6-get.value(card);
                             }).set('showCards',true); 
                         }else{
-                            target.chooseToDiscard('h',true).set('ai',function(card){
+                            target.chooseToDiscard('h','充盈：弃1张牌',true).set('ai',function(card){
                                 if(get.type(card)=='faShu'||get.xiBie(card)=='lei') return 0;
                                 return 6-get.value(card);
                             }).set('showCards',true);
