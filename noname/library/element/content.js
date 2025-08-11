@@ -10012,7 +10012,10 @@ export const Content = {
 			if(lib.config.reverse_sort) sort=-sort;
 			cards[num].fix();
 			cards[num].style.transform='';
-			cards[num].addGaintag(event.gaintag);
+			let tags=cards[num].gaintag.slice();
+			tags=tags.filter(tag => tag.startsWith('eternal_'));
+			tags=tags.concat(event.gaintag||[]);
+			cards[num].addGaintag(tags);
 			if(_status.discarded){
 				_status.discarded.remove(cards[num]);
 			}
@@ -10430,7 +10433,10 @@ export const Content = {
 			for (var j = 0; j < cardx.length; j++) {
 				if (cardx[j].gaintag && cardx[j].gaintag.length) {
 					event.gaintag_map[cardx[j].cardid] = cardx[j].gaintag.slice(0);
-					cardx[j].removeGaintag(true);
+					//仅移除非永久标记
+					const tags = cardx[j].gaintag.slice().filter(tag => tag.startsWith("eternal_"));
+					if(tags.length>0) cardx[j].addGaintag(tags);
+					else cardx[j].removeGaintag(true);
 				}
 
 				cardx[j].style.transform += " scale(0.2)";
