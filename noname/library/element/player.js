@@ -12153,6 +12153,8 @@ export class Player extends HTMLDivElement {
 			default:
 				tops = [-171, -57, 57, 171];
 		}
+		//优化触屏布局下处理区多牌显示，将牌调小，并根据调整后的牌大小，调整牌位置
+		if(get.is.phoneLayout()) tops = tops.map(x => x * 0.8);
 		while (uithrowns.length) {
 			var throwns = uithrowns.splice(0, Math.min(uithrowns.length, 4));
 			switch (throwns.length) {
@@ -12160,19 +12162,29 @@ export class Player extends HTMLDivElement {
 					throwns[0]._transthrown = "translate(0px,";
 					break;
 				case 2:
-					throwns[0]._transthrown = "translate(-57px,";
-					throwns[1]._transthrown = "translate(57px,";
+					var px=57;
+					if(get.is.phoneLayout()) px=px*0.8;
+					throwns[0]._transthrown = "translate(-" + px + "px,";
+					throwns[1]._transthrown = "translate(" + px + "px,";
 					break;
 				case 3:
-					throwns[0]._transthrown = "translate(-114px,";
+					var px=114;
+					if(get.is.phoneLayout()) px=px*0.8;
+					throwns[0]._transthrown = "translate(-" + px + "px,";
 					throwns[1]._transthrown = "translate(0,";
-					throwns[2]._transthrown = "translate(114px,";
+					throwns[2]._transthrown = "translate(" + px + "px,";
 					break;
 				case 4:
-					throwns[0]._transthrown = "translate(-171px,";
-					throwns[1]._transthrown = "translate(-57px,";
-					throwns[2]._transthrown = "translate(57px,";
-					throwns[3]._transthrown = "translate(171px,";
+					var px1=171;
+					var px2=57;
+					if(get.is.phoneLayout()) {
+						px1=px1*0.8;
+						px2=px2*0.8;
+					}
+					throwns[0]._transthrown = "translate(-" + px1 + "px,";
+					throwns[1]._transthrown = "translate(-" + px2 + "px,";
+					throwns[2]._transthrown = "translate(" + px2 + "px,";
+					throwns[3]._transthrown = "translate(" + px1 + "px,";
 					break;
 			}
 			var top;
@@ -12186,6 +12198,7 @@ export class Player extends HTMLDivElement {
 			}
 			for (var i = 0; i < throwns.length; i++) {
 				throwns[i].style.transform = throwns[i]._transthrown + top + "px)";
+				if(get.is.phoneLayout()) throwns[i].style.transform += " scale(0.8)";
 				delete throwns[i]._transthrown;
 			}
 		}
