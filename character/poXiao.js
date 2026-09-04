@@ -3334,7 +3334,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
                     return !event.yingZhan && player.hasCard(card=> get.xiBie(card)==get.xiBie(event.card));
                 },
                 async cost(event,trigger,player){
-                    event.result=await player.chooseCard(1,'h', card => get.xiBie(card) == get.xiBie(trigger.card))
+                    event.result = await player.chooseCard(1, 'h', card => get.xiBie(card) == get.xiBie(_status.event.cardx))
+                    .set('cardx',trigger.card)
                     .set('prompt',get.prompt('zhanYiGongMing'))
                     .set('prompt2',lib.translate.zhanYiGongMing_info)
                     .set('complexCard',true)
